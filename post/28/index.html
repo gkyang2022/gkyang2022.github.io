@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！ | Eric's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</h1><div class="post-meta">2025-08-09</div><div class="post-content"><p><img src="/images/20250809/4a471754735566.png" alt="PanSou 资源搜索工具主页截图"></p>
+<hr>
+<h2 id="前言：你的专属资源库，一搜即达！"><a href="#前言：你的专属资源库，一搜即达！" class="headerlink" title="前言：你的专属资源库，一搜即达！"></a>前言：你的专属资源库，一搜即达！</h2><p>哈喽大家好！</p>
+<p>平时我们找资源，是不是经常要在各种网盘、电报群里翻来翻去，找得眼花缭乱？今天，我将给大家分享一个超级实用的开源项目——<strong>PanSou</strong>！它能帮你一键搜索多个网盘和电报群里的资源，部署起来也超级简单，差不多一分钟就能搞定。</p>
+<p>本篇教程将手把手带你完成 PanSou 的部署，让你彻底告别繁琐的手动搜索，轻松搭建一个属于你自己的资源搜索引擎。</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/omYyWqpxhT4?si=FaAvVFz0hVrDJi5U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2 id="🎬-核心操作：PanSou-飞牛-NAS-Docker-Compose-部署"><a href="#🎬-核心操作：PanSou-飞牛-NAS-Docker-Compose-部署" class="headerlink" title="🎬 核心操作：PanSou 飞牛 NAS Docker Compose 部署"></a>🎬 核心操作：PanSou 飞牛 NAS Docker Compose 部署</h2><h3 id="第一步：创建项目文件夹"><a href="#第一步：创建项目文件夹" class="headerlink" title="第一步：创建项目文件夹"></a>第一步：创建项目文件夹</h3><p>今天我们依旧在飞牛 NAS 上进行部署。首先，我们来创建一个项目文件夹。</p>
+<ol>
+<li>登录你的飞牛 NAS，进入<strong>文件管理</strong>界面。</li>
+<li>找一个合适的位置，比如在 <code>docker</code> 文件夹里，新建一个名为 <strong><code>pansou</code></strong> 的文件夹。</li>
+</ol>
+<h3 id="第二步：部署-Docker-Compose"><a href="#第二步：部署-Docker-Compose" class="headerlink" title="第二步：部署 Docker Compose"></a>第二步：部署 Docker Compose</h3><p>文件夹创建完成后，我们就可以开始部署了。这次我们不使用命令行，直接在飞牛的图形化界面进行操作。</p>
+<p><strong>PanSou</strong> 的 GitHub 主页我会在文末附上，如果大家觉得这个项目不错，记得去给作者点个小星星，支持一下！</p>
+<ol>
+<li>打开 Docker，选择 <strong><code>Compose</code></strong>。</li>
+<li>点击 <strong>“新增项目”</strong>。</li>
+<li><strong>项目名称</strong>填写 <code>pansou</code>。</li>
+<li><strong>项目路径</strong>选择我们刚才创建的 <code>pansou</code> 文件夹。</li>
+</ol>
+<p>将以下 Docker Compose 代码粘贴到编辑框中。</p>
+<pre><code class="language-yaml">services:
+  pansou-web:
+    image: ghcr.io/fish2018/pansou-web:latest
+    container_name: pansou-web
+    restart: unless-stopped
+    ports:
+      - &quot;80:80&quot;  # 请替换为你的可用端口
+</code></pre>
+<p><strong>代码修改说明：</strong></p>
+<ul>
+<li><strong>端口映射 (<code>- ports</code>)：</strong> <code>8080:80</code> 表示将宿主机的 <code>8080</code> 端口映射到容器内的 <code>80</code> 端口。请注意，因为飞牛的 Web 页面默认占用了 <code>80</code> 端口，所以我们这里需要修改成其他的可用端口。如果你不确定端口是否被占用，可以修改成 <code>8080</code> 或 <code>8081</code> 等。</li>
+</ul>
+<p>修改完成后，点击 <strong>“确定”</strong>，系统就会开始自动构建了。</p>
+<hr>
+<h3 id="第三步：功能演示与效果展示"><a href="#第三步：功能演示与效果展示" class="headerlink" title="第三步：功能演示与效果展示"></a>第三步：功能演示与效果展示</h3><p>构建完成，我们现在来体验一下 PanSou 的强大功能。</p>
+<p>在浏览器中输入 <code>你的NAS的IP地址:8080</code>，就能看到 PanSou 的主页了。</p>
+<ul>
+<li><strong>页面简洁：</strong> 主页非常简洁，没有任何多余的广告或内容。</li>
+<li><strong>搜索演示：</strong> 在搜索框中输入你想要的资源关键词，点击搜索。</li>
+<li><strong>结果丰富：</strong> 搜索结果会很快显示出来，并分列了不同网盘的搜索结果，还有磁力链接，资源非常丰富。</li>
+</ul>
+<p>通过 PanSou，你可以轻松搜索到你想要的影视、学习资料等，效果还是非常不错的！</p>
+<hr>
+<h2 id="💡-总结与注意事项"><a href="#💡-总结与注意事项" class="headerlink" title="💡 总结与注意事项"></a>💡 总结与注意事项</h2><ul>
+<li><strong>部署简单：</strong> PanSou 的部署过程非常简单，特别适合新手在 NAS 上进行尝试。</li>
+<li><strong>端口占用：</strong> 请务必确保你修改后的端口号没有被其他服务占用，否则容器可能无法正常启动。</li>
+<li><strong>数据安全：</strong> PanSou 作为资源搜索工具，不涉及数据存储，因此无需担心数据丢失问题。</li>
+</ul>
+<p>那么，今天的 PanSou 部署教程就到这里了！如果你也经常需要找资源，强烈建议你试一下。如果你在部署过程中遇到任何问题，欢迎在评论区留言或加入我的电报群组，我们一起交流。</p>
+<p>如果你觉得这篇教程对你有帮助，请大家<strong>点赞、分享和订阅我的频道</strong>！你们的支持是我持续创作的最大动力。感谢大家的阅读，我们下期再见！</p>
+<hr>
+<p><strong>视频相关资源：</strong></p>
+<ul>
+<li><strong>PanSou GitHub 项目地址：</strong> [<a target="_blank" rel="noopener" href="https://github.com/fish2018/pansou]">https://github.com/fish2018/pansou]</a></li>
+<li><strong>你的电报群组：</strong> [<a target="_blank" rel="noopener" href="https://t.me/Eric/_FanGroup]">https://t.me/Eric\_FanGroup]</a></li>
+</ul>
+<!-- end list -->
+
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</p><p><span>文章作者：</span></p><p><span>发布时间：</span>2025-08-09</p><p><span>最后更新：</span>2025-08-28</p><p><span>原始链接：</span><a href="/post/28/">http://example.com/post/28/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="http://example.com/post/28/"></i></span></p><p><span>版权声明：</span>本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！</p></div><br><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/" rel="tag">NAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PanSou/" rel="tag">PanSou</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%B5%84%E6%BA%90%E6%90%9C%E7%B4%A2/" rel="tag">资源搜索</a></li></ul></div><div class="post-nav"><a class="next" href="/post/27/">Typecho 手动部署详细教程</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://twitter.com/username" title="Twitter" target="_blank" style="margin-inline:5px"> <i class="fa fa-twitter-square" style="margin-inline:5px"></i></a><a class="info-icon" href="mailto:admin@domain.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/username" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa fa-youtube-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">容器</a> <a href="/tags/%E5%8D%87%E7%BA%A7/" style="font-size: 15px;">升级</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 15px;">教程</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E5%91%BD%E4%BB%A4/" style="font-size: 15px;">命令</a> <a href="/tags/%E5%85%A5%E9%97%A8/" style="font-size: 15px;">入门</a> <a href="/tags/%E9%95%9C%E5%83%8F/" style="font-size: 15px;">镜像</a> <a href="/tags/Emby/" style="font-size: 15px;">Emby</a> <a href="/tags/Jellyfin/" style="font-size: 15px;">Jellyfin</a> <a href="/tags/%E6%B2%B9%E7%8C%B4/" style="font-size: 15px;">油猴</a> <a href="/tags/%E6%92%AD%E6%94%BE%E5%99%A8/" style="font-size: 15px;">播放器</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 15px;">代理</a> <a href="/tags/Clash/" style="font-size: 15px;">Clash</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">网络</a> <a href="/tags/Homepage/" style="font-size: 15px;">Homepage</a> <a href="/tags/NAS/" style="font-size: 15px;">NAS</a> <a href="/tags/%E4%BB%AA%E8%A1%A8%E7%9B%98/" style="font-size: 15px;">仪表盘</a> <a href="/tags/Mint/" style="font-size: 15px;">Mint</a> <a href="/tags/Telegram/" style="font-size: 15px;">Telegram</a> <a href="/tags/PPA/" style="font-size: 15px;">PPA</a> <a href="/tags/Kodi/" style="font-size: 15px;">Kodi</a> <a href="/tags/%E5%AE%B6%E5%BA%AD%E5%BD%B1%E9%99%A2/" style="font-size: 15px;">家庭影院</a> <a href="/tags/4K/" style="font-size: 15px;">4K</a> <a href="/tags/MoonTV/" style="font-size: 15px;">MoonTV</a> <a href="/tags/OrionTV/" style="font-size: 15px;">OrionTV</a> <a href="/tags/%E7%94%B5%E8%A7%86/" style="font-size: 15px;">电视</a> <a href="/tags/%E6%89%8B%E6%9C%BA/" style="font-size: 15px;">手机</a> <a href="/tags/PanSou/" style="font-size: 15px;">PanSou</a> <a href="/tags/%E8%B5%84%E6%BA%90%E6%90%9C%E7%B4%A2/" style="font-size: 15px;">资源搜索</a> <a href="/tags/Sun-Panel/" style="font-size: 15px;">Sun-Panel</a> <a href="/tags/%E5%AF%BC%E8%88%AA%E4%B8%BB%E9%A1%B5/" style="font-size: 15px;">导航主页</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90/" style="font-size: 15px;">软件推荐</a> <a href="/tags/ZyPlayer/" style="font-size: 15px;">ZyPlayer</a> <a href="/tags/%E5%85%8D%E8%B4%B9%E8%BF%BD%E5%89%A7/" style="font-size: 15px;">免费追剧</a> <a href="/tags/%E5%BD%B1%E8%A7%86%E8%B5%84%E6%BA%90/" style="font-size: 15px;">影视资源</a> <a href="/tags/Typecho/" style="font-size: 15px;">Typecho</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 15px;">部署</a> <a href="/tags/Ubuntu/" style="font-size: 15px;">Ubuntu</a> <a href="/tags/IPTV/" style="font-size: 15px;">IPTV</a> <a href="/tags/CasaOS/" style="font-size: 15px;">CasaOS</a> <a href="/tags/TVBox/" style="font-size: 15px;">TVBox</a> <a href="/tags/%E5%BD%B1%E5%BA%93/" style="font-size: 15px;">影库</a> <a href="/tags/LibreTV/" style="font-size: 15px;">LibreTV</a> <a href="/tags/Cloudflare/" style="font-size: 15px;">Cloudflare</a> <a href="/tags/%E5%BD%B1%E8%A7%86/" style="font-size: 15px;">影视</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">音乐</a> <a href="/tags/%E6%96%B9%E6%A0%BC%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">方格音乐</a> <a href="/tags/%E5%85%8D%E8%B4%B9%E4%B8%8B%E8%BD%BD/" style="font-size: 15px;">免费下载</a> <a href="/tags/%E6%97%A0%E6%8D%9F/" style="font-size: 15px;">无损</a> <a href="/tags/%E7%BE%A4%E6%99%96/" style="font-size: 15px;">群晖</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 15px;">自动化</a> <a href="/tags/%E6%9C%BA%E5%9C%BA/" style="font-size: 15px;">机场</a> <a href="/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" style="font-size: 15px;">科学上网</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/%E9%A3%9E%E7%89%9BOS/" style="font-size: 15px;">飞牛OS</a> <a href="/tags/V2RayA/" style="font-size: 15px;">V2RayA</a> <a href="/tags/Jellyseerr/" style="font-size: 15px;">Jellyseerr</a> <a href="/tags/Jackett/" style="font-size: 15px;">Jackett</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/27/">Typecho 手动部署详细教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/26/">🐳 Docker 容器升级：平滑、安全地更新你的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/post/25/">🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/23/">🚀 告别 TVBox 卡顿，打造你的专属影库</a></li><li class="post-list-item"><a class="post-list-link" href="/post/21/">🚀 Sun-Panel：私有化 NAS 导航主页部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/20/">📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/19/">🚀 自建追剧天堂！MoonTV Docker 部署轻松搞定，告别全网 VIP 限制！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/18/">🎬 Emby & Jellyfin 完美搭配：用油猴插件无缝调用外部播放器</a></li><li class="post-list-item"><a class="post-list-link" href="/post/17/">🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 & Jackett 连接难题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
