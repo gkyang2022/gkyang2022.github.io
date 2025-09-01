@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS | Eric's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</h1><div class="post-meta">2025-09-01</div><div class="post-content"><hr>
+<hr>
+<p>对于NAS玩家来说，实现外网访问是刚需，但获取公网IP却越来越难。不过，只要你拥有一个<strong>IPv6地址</strong>，这个问题就能迎刃而解！今天，我们将分享一个绝妙的方案：<strong>获取一个免费域名，并利用Cloudflare的DDNS服务，实现随时随地访问家里的飞牛NAS</strong>。</p>
+<p>本篇文章将详细为你演示整个流程，从域名注册到DDNS配置，每一步都清晰明了，即使是新手也能轻松掌握。</p>
+<hr>
+<h3 id="📚-目录"><a href="#📚-目录" class="headerlink" title="📚 目录"></a>📚 目录</h3><ol>
+<li><p><strong>引言</strong></p>
+</li>
+<li><p><strong>相关网站</strong> 🔗</p>
+</li>
+<li><p><strong>视频教程</strong> 🎬</p>
+</li>
+<li><p><strong>第一步：免费域名注册与管理</strong> 注册 💻</p>
+</li>
+<li><p><strong>第二步：将域名托管到 Cloudflare</strong> 托管 ☁️</p>
+</li>
+<li><p><strong>第三步：配置飞牛NAS的 DDNS 服务</strong> 配置 ⚙️</p>
+</li>
+<li><p><strong>第四步：配置路由器防火墙规则</strong> 防火墙 🛡️</p>
+</li>
+<li><p><strong>总结</strong> 🚀</p>
+</li>
+</ol>
+<h3 id="相关网站："><a href="#相关网站：" class="headerlink" title="相关网站："></a>相关网站：</h3><ul>
+<li><p><strong>域名注册</strong>：<a target="_blank" rel="noopener" href="https://domain.digitalplat.org/">https://domain.digitalplat.org/</a></p>
+</li>
+<li><p><strong>信息生成</strong>：<a target="_blank" rel="noopener" href="https://www.shenfendaquan.com/">https://www.shenfendaquan.com/</a></p>
+</li>
+<li><p><strong>域名解析</strong>：<a target="_blank" rel="noopener" href="https://www.cloudflare.com/">https://www.cloudflare.com/</a></p>
+</li>
+</ul>
+<h3 id="视频教程："><a href="#视频教程：" class="headerlink" title="视频教程："></a>视频教程：</h3><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/O-eJs-666jg?si=hK8n907S3mSlUYnc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<h3 id="第一步：免费域名注册与管理"><a href="#第一步：免费域名注册与管理" class="headerlink" title="第一步：免费域名注册与管理"></a><strong>第一步：免费域名注册与管理</strong></h3><p>首先，我们需要获取一个免费域名。这里我们推荐一个域名服务商，它能提供免费域名注册。</p>
+<ol>
+<li><strong>访问注册网站</strong>：打开你的浏览器，访问域名注册网站：<strong><a target="_blank" rel="noopener" href="https://domain.digitalplat.org/">https://domain.digitalplat.org/</a></strong>。</li>
+<li><strong>注册账号</strong>：点击“Register a new domain”或“Sign up”进行注册。请确保使用真实的邮箱地址，因为需要进行邮箱验证。地址和电话信息可以使用专门的网站生成美国地址，例如：<strong><a target="_blank" rel="noopener" href="https://www.shenfendaquan.com/">https://www.shenfendaquan.com/</a></strong>。</li>
+<li><strong>完成KYC认证</strong>：注册完成后，你需要进行KYC认证。在下拉菜单中选择 <strong>GitHub</strong>，或使用 <strong>Google账号</strong>进行关联登录。</li>
+<li><strong>增加域名配额（可选）</strong>：默认情况下，你只能申请一个免费域名。但通过给他们的GitHub项目点亮小星星，你可以额外获得一个免费域名配额。完成操作后，返回管理页面点击验证即可。</li>
+<li><strong>注册域名</strong>：现在，点击左侧的“Domain Registration”，选择一个你喜欢的、未被注册的域名进行注册。</li>
+</ol>
+<hr>
+<h3 id="第二步：将域名托管到Cloudflare"><a href="#第二步：将域名托管到Cloudflare" class="headerlink" title="第二步：将域名托管到Cloudflare"></a><strong>第二步：将域名托管到Cloudflare</strong></h3><p>将域名托管到Cloudflare是实现DDNS的关键一步，因为它提供了强大的API和解析服务。</p>
+<ol>
+<li><strong>添加域名到Cloudflare</strong>：打开 <strong>Cloudflare</strong> 官网（<strong><a target="_blank" rel="noopener" href="https://www.cloudflare.com/">https://www.cloudflare.com/</a></strong>），登录你的账号。点击“添加一个新域名”，输入你刚刚注册的域名，并选择**“免费”**计划。</li>
+<li><strong>配置DNS服务器</strong>：Cloudflare会提供两个域名服务器（Name Server）地址。你需要将这两个地址复制，并粘贴到你的域名管理后台的**“Name Server”**设置中。</li>
+<li><strong>等待解析生效</strong>：完成设置后，返回Cloudflare页面，点击“继续”。通常，解析过程需要几分钟。当域名状态显示为“活动”时，表示解析已成功。</li>
+</ol>
+<hr>
+<h3 id="第三步：配置飞牛NAS的DDNS服务"><a href="#第三步：配置飞牛NAS的DDNS服务" class="headerlink" title="第三步：配置飞牛NAS的DDNS服务"></a><strong>第三步：配置飞牛NAS的DDNS服务</strong></h3><p>现在，我们有了域名和Cloudflare账户，可以开始配置飞牛NAS的DDNS服务了。</p>
+<ol>
+<li><strong>确认IPv6地址</strong>：在飞牛NAS的系统设置中，确认你有一个以“2”开头的IPv6地址。如果没有，则无法进行下面的操作。</li>
+<li><strong>创建API令牌</strong>：在Cloudflare右上角点击“配置文件”，选择“API令牌”。点击“创建令牌”，并使用**“使用模板”**选项。在模板中选择你的域名，其他设置保持默认，然后点击“创建令牌”。**请立即复制这个令牌！**它只会显示这一次，如果丢失，需要重新创建。</li>
+<li><strong>飞牛NAS端配置</strong>：回到飞牛NAS，进入“远程访问”下的“DDNS”选项。<ul>
+<li>点击“新增”。</li>
+<li>服务商选择 <strong>“cldf”</strong>。</li>
+<li>域名填写你刚刚注册的免费域名。</li>
+<li>将复制的API令牌粘贴到**“用户名”<strong>和</strong>“密码”**栏位。</li>
+<li>关闭IPv4选项，然后点击“测试”。如果状态显示“成功”，恭喜你，飞牛NAS端的DDNS配置已完成。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="第四步：配置路由器防火墙规则"><a href="#第四步：配置路由器防火墙规则" class="headerlink" title="第四步：配置路由器防火墙规则"></a><strong>第四步：配置路由器防火墙规则</strong></h3><p>为了在外网访问你的NAS服务，你还需要在路由器上为相应的端口建立防火墙规则。</p>
+<ol>
+<li><strong>打开OpenWrt</strong>：登录你的路由器管理界面，进入<strong>OpenWrt</strong>系统，导航至“防火墙”下的“通信规则”。</li>
+<li><strong>添加规则</strong>：点击“添加”，名称可以随意填写。<ul>
+<li><strong>目标地址</strong>：找到并选择你的飞牛NAS的IPv6地址。</li>
+<li><strong>端口</strong>：填写你想要开放的服务端口，例如Jellyfin的<code>8096</code>。如果你有多个服务，可以用空格隔开，如<code>8096 3000</code>。</li>
+<li>保存规则并应用。</li>
+</ul>
+</li>
+<li><strong>验证</strong>：完成所有设置后，你可以回到Cloudflare，查看你的域名解析，会看到一条四A记录（AAAA record）已经自动添加了。现在，你可以使用手机移动网络来测试访问家里的NAS服务了。</li>
+</ol>
+<p>至此，整个流程已全部完成。你可以使用免费域名随时随地访问你的飞牛NAS。如果你有任何问题或建议，欢迎在评论区留言交流。</p>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</p><p><span>文章作者：</span></p><p><span>发布时间：</span>2025-09-01</p><p><span>最后更新：</span>2025-09-01</p><p><span>原始链接：</span><a href="/post/30/">http://example.com/post/30/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="http://example.com/post/30/"></i></span></p><p><span>版权声明：</span>本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！</p></div><br><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DDNS/" rel="tag">DDNS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/" rel="tag">免费域名</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A3%9E%E7%89%9BNAS/" rel="tag">飞牛NAS</a></li></ul></div><div class="post-nav"><a class="next" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://twitter.com/username" title="Twitter" target="_blank" style="margin-inline:5px"> <i class="fa fa-twitter-square" style="margin-inline:5px"></i></a><a class="info-icon" href="mailto:admin@domain.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/username" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa fa-youtube-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E5%91%BD%E4%BB%A4/" style="font-size: 15px;">命令</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 15px;">教程</a> <a href="/tags/%E5%85%A5%E9%97%A8/" style="font-size: 15px;">入门</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">容器</a> <a href="/tags/%E5%8D%87%E7%BA%A7/" style="font-size: 15px;">升级</a> <a href="/tags/DevOps/" style="font-size: 15px;">DevOps</a> <a href="/tags/%E9%95%9C%E5%83%8F/" style="font-size: 15px;">镜像</a> <a href="/tags/Emby/" style="font-size: 15px;">Emby</a> <a href="/tags/Jellyfin/" style="font-size: 15px;">Jellyfin</a> <a href="/tags/%E6%B2%B9%E7%8C%B4/" style="font-size: 15px;">油猴</a> <a href="/tags/%E6%92%AD%E6%94%BE%E5%99%A8/" style="font-size: 15px;">播放器</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 15px;">代理</a> <a href="/tags/Clash/" style="font-size: 15px;">Clash</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">网络</a> <a href="/tags/Homepage/" style="font-size: 15px;">Homepage</a> <a href="/tags/NAS/" style="font-size: 15px;">NAS</a> <a href="/tags/%E4%BB%AA%E8%A1%A8%E7%9B%98/" style="font-size: 15px;">仪表盘</a> <a href="/tags/Kodi/" style="font-size: 15px;">Kodi</a> <a href="/tags/%E5%AE%B6%E5%BA%AD%E5%BD%B1%E9%99%A2/" style="font-size: 15px;">家庭影院</a> <a href="/tags/4K/" style="font-size: 15px;">4K</a> <a href="/tags/Mint/" style="font-size: 15px;">Mint</a> <a href="/tags/Telegram/" style="font-size: 15px;">Telegram</a> <a href="/tags/PPA/" style="font-size: 15px;">PPA</a> <a href="/tags/MoonTV/" style="font-size: 15px;">MoonTV</a> <a href="/tags/OrionTV/" style="font-size: 15px;">OrionTV</a> <a href="/tags/%E7%94%B5%E8%A7%86/" style="font-size: 15px;">电视</a> <a href="/tags/%E6%89%8B%E6%9C%BA/" style="font-size: 15px;">手机</a> <a href="/tags/PanSou/" style="font-size: 15px;">PanSou</a> <a href="/tags/%E8%B5%84%E6%BA%90%E6%90%9C%E7%B4%A2/" style="font-size: 15px;">资源搜索</a> <a href="/tags/Sun-Panel/" style="font-size: 15px;">Sun-Panel</a> <a href="/tags/%E5%AF%BC%E8%88%AA%E4%B8%BB%E9%A1%B5/" style="font-size: 15px;">导航主页</a> <a href="/tags/Typecho/" style="font-size: 15px;">Typecho</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 15px;">部署</a> <a href="/tags/Ubuntu/" style="font-size: 15px;">Ubuntu</a> <a href="/tags/%E8%BD%AF%E4%BB%B6%E6%8E%A8%E8%8D%90/" style="font-size: 15px;">软件推荐</a> <a href="/tags/ZyPlayer/" style="font-size: 15px;">ZyPlayer</a> <a href="/tags/%E5%85%8D%E8%B4%B9%E8%BF%BD%E5%89%A7/" style="font-size: 15px;">免费追剧</a> <a href="/tags/%E5%BD%B1%E8%A7%86%E8%B5%84%E6%BA%90/" style="font-size: 15px;">影视资源</a> <a href="/tags/TVBox/" style="font-size: 15px;">TVBox</a> <a href="/tags/%E5%BD%B1%E5%BA%93/" style="font-size: 15px;">影库</a> <a href="/tags/IPTV/" style="font-size: 15px;">IPTV</a> <a href="/tags/CasaOS/" style="font-size: 15px;">CasaOS</a> <a href="/tags/LibreTV/" style="font-size: 15px;">LibreTV</a> <a href="/tags/Cloudflare/" style="font-size: 15px;">Cloudflare</a> <a href="/tags/%E5%BD%B1%E8%A7%86/" style="font-size: 15px;">影视</a> <a href="/tags/%E5%85%8D%E8%B4%B9%E5%9F%9F%E5%90%8D/" style="font-size: 15px;">免费域名</a> <a href="/tags/DDNS/" style="font-size: 15px;">DDNS</a> <a href="/tags/%E9%A3%9E%E7%89%9BNAS/" style="font-size: 15px;">飞牛NAS</a> <a href="/tags/%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">音乐</a> <a href="/tags/%E6%96%B9%E6%A0%BC%E9%9F%B3%E4%B9%90/" style="font-size: 15px;">方格音乐</a> <a href="/tags/%E5%85%8D%E8%B4%B9%E4%B8%8B%E8%BD%BD/" style="font-size: 15px;">免费下载</a> <a href="/tags/%E6%97%A0%E6%8D%9F/" style="font-size: 15px;">无损</a> <a href="/tags/%E7%BE%A4%E6%99%96/" style="font-size: 15px;">群晖</a> <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/" style="font-size: 15px;">自动化</a> <a href="/tags/%E6%9C%BA%E5%9C%BA/" style="font-size: 15px;">机场</a> <a href="/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/" style="font-size: 15px;">科学上网</a> <a href="/tags/VPN/" style="font-size: 15px;">VPN</a> <a href="/tags/%E9%A3%9E%E7%89%9BOS/" style="font-size: 15px;">飞牛OS</a> <a href="/tags/V2RayA/" style="font-size: 15px;">V2RayA</a> <a href="/tags/Jellyseerr/" style="font-size: 15px;">Jellyseerr</a> <a href="/tags/Jackett/" style="font-size: 15px;">Jackett</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/30/">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</a></li><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/27/">Typecho 手动部署详细教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/26/">🐳 Docker 容器升级：平滑、安全地更新你的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/post/25/">🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/23/">🚀 告别 TVBox 卡顿，打造你的专属影库</a></li><li class="post-list-item"><a class="post-list-link" href="/post/21/">🚀 Sun-Panel：私有化 NAS 导航主页部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/20/">📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/19/">🚀 自建追剧天堂！MoonTV Docker 部署轻松搞定，告别全网 VIP 限制！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/18/">🎬 Emby & Jellyfin 完美搭配：用油猴插件无缝调用外部播放器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
