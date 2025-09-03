@@ -161,83 +161,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
-    <url>/post/26/</url>
-    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
-<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
-<h2 id="一、升级前，你需要知道的几个关键概念"><a href="#一、升级前，你需要知道的几个关键概念" class="headerlink" title="一、升级前，你需要知道的几个关键概念"></a>一、升级前，你需要知道的几个关键概念</h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
-<h3 id="1-容器与镜像：父子关系"><a href="#1-容器与镜像：父子关系" class="headerlink" title="1. 容器与镜像：父子关系"></a>1. 容器与镜像：父子关系</h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
-<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
-<h3 id="2-告别-latest-标签"><a href="#2-告别-latest-标签" class="headerlink" title="2. 告别 latest 标签"></a>2. 告别 <code>latest</code> 标签</h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
-<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
-<h3 id="3-数据卷（Volumes）：升级的生命线"><a href="#3-数据卷（Volumes）：升级的生命线" class="headerlink" title="3. 数据卷（Volumes）：升级的生命线"></a>3. 数据卷（Volumes）：升级的生命线</h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
-<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
-<hr>
-<h2 id="二、简单易行的手动升级方法"><a href="#二、简单易行的手动升级方法" class="headerlink" title="二、简单易行的手动升级方法"></a>二、简单易行的手动升级方法</h2><h3 id="方法一：停止、删除、拉取、运行（单容器升级）"><a href="#方法一：停止、删除、拉取、运行（单容器升级）" class="headerlink" title="方法一：停止、删除、拉取、运行（单容器升级）"></a>方法一：停止、删除、拉取、运行（单容器升级）</h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
-<h4 id="操作步骤详解："><a href="#操作步骤详解：" class="headerlink" title="操作步骤详解："></a>操作步骤详解：</h4><ol>
-<li>找到并停止旧容器</li>
-</ol>
-<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
-<ol start="3">
-<li>拉取新镜像</li>
-</ol>
-<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>运行新容器</li>
-</ol>
-<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法二：使用-Docker-Compose（多容器应用升级）"><a href="#方法二：使用-Docker-Compose（多容器应用升级）" class="headerlink" title="方法二：使用 Docker Compose（多容器应用升级）"></a>方法二：使用 Docker Compose（多容器应用升级）</h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
-<h4 id="操作步骤详解：-1"><a href="#操作步骤详解：-1" class="headerlink" title="操作步骤详解："></a>操作步骤详解：</h4><ol>
-<li>修改 <code>docker-compose.yml</code> 文件</li>
-</ol>
-<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
-<p><strong>更新前示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>更新后示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>拉取新镜像</li>
-</ol>
-<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
-
-<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
-<ol start="3">
-<li>启动并更新服务</li>
-</ol>
-<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
-<hr>
-<h2 id="三、升级的最佳实践与注意事项"><a href="#三、升级的最佳实践与注意事项" class="headerlink" title="三、升级的最佳实践与注意事项"></a>三、升级的最佳实践与注意事项</h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
-<ol>
-<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
-<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
-<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
-<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
-<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>容器</tag>
-        <tag>升级</tag>
-        <tag>DevOps</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker命令百科全书｜容器与镜像管理终极指南</title>
     <url>/post/6/</url>
     <content><![CDATA[<p><img src="/images/202503/f4ae1742638708.jpg"></p>
@@ -314,6 +237,83 @@
         <tag>Docker</tag>
         <tag>容器</tag>
         <tag>镜像</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
+    <url>/post/26/</url>
+    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
+<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
+<h2 id="一、升级前，你需要知道的几个关键概念"><a href="#一、升级前，你需要知道的几个关键概念" class="headerlink" title="一、升级前，你需要知道的几个关键概念"></a>一、升级前，你需要知道的几个关键概念</h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
+<h3 id="1-容器与镜像：父子关系"><a href="#1-容器与镜像：父子关系" class="headerlink" title="1. 容器与镜像：父子关系"></a>1. 容器与镜像：父子关系</h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
+<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
+<h3 id="2-告别-latest-标签"><a href="#2-告别-latest-标签" class="headerlink" title="2. 告别 latest 标签"></a>2. 告别 <code>latest</code> 标签</h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
+<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
+<h3 id="3-数据卷（Volumes）：升级的生命线"><a href="#3-数据卷（Volumes）：升级的生命线" class="headerlink" title="3. 数据卷（Volumes）：升级的生命线"></a>3. 数据卷（Volumes）：升级的生命线</h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
+<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
+<hr>
+<h2 id="二、简单易行的手动升级方法"><a href="#二、简单易行的手动升级方法" class="headerlink" title="二、简单易行的手动升级方法"></a>二、简单易行的手动升级方法</h2><h3 id="方法一：停止、删除、拉取、运行（单容器升级）"><a href="#方法一：停止、删除、拉取、运行（单容器升级）" class="headerlink" title="方法一：停止、删除、拉取、运行（单容器升级）"></a>方法一：停止、删除、拉取、运行（单容器升级）</h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
+<h4 id="操作步骤详解："><a href="#操作步骤详解：" class="headerlink" title="操作步骤详解："></a>操作步骤详解：</h4><ol>
+<li>找到并停止旧容器</li>
+</ol>
+<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
+<ol start="3">
+<li>拉取新镜像</li>
+</ol>
+<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>运行新容器</li>
+</ol>
+<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二：使用-Docker-Compose（多容器应用升级）"><a href="#方法二：使用-Docker-Compose（多容器应用升级）" class="headerlink" title="方法二：使用 Docker Compose（多容器应用升级）"></a>方法二：使用 Docker Compose（多容器应用升级）</h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
+<h4 id="操作步骤详解：-1"><a href="#操作步骤详解：-1" class="headerlink" title="操作步骤详解："></a>操作步骤详解：</h4><ol>
+<li>修改 <code>docker-compose.yml</code> 文件</li>
+</ol>
+<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
+<p><strong>更新前示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>更新后示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>拉取新镜像</li>
+</ol>
+<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
+
+<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
+<ol start="3">
+<li>启动并更新服务</li>
+</ol>
+<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
+<hr>
+<h2 id="三、升级的最佳实践与注意事项"><a href="#三、升级的最佳实践与注意事项" class="headerlink" title="三、升级的最佳实践与注意事项"></a>三、升级的最佳实践与注意事项</h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
+<ol>
+<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
+<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
+<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
+<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
+<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>容器</tag>
+        <tag>升级</tag>
+        <tag>DevOps</tag>
       </tags>
   </entry>
   <entry>
