@@ -2023,3 +2023,28 @@ html[data-dark=true] img {
 .article-tag-list {
   padding-left: 0rem;
 }
+
+/* 所有社交图标的通用样式 */
+.social-icon {
+  margin: 0 5px;
+  font-size: 1.4em;
+  transition: color 0.3s ease;
+  color: #999; /* 默认灰色 */
+}
+
+/* 悬停时变彩色 */
+.fa-telegram:hover {
+  color: #0088cc; /* Telegram 蓝色 */
+}
+
+.fa-envelope:hover {
+  color: #d14836; /* Email 红色 */
+}
+
+.fa-github:hover {
+  color: #333; /* GitHub 黑色 */
+}
+
+.fa-youtube:hover {
+  color: #ff0000; /* YouTube 红色 */
+}
