@@ -317,6 +317,72 @@
       </tags>
   </entry>
   <entry>
+    <title>🎬 Emby &amp; Jellyfin 完美搭配：用油猴插件无缝调用外部播放器</title>
+    <url>/post/18/</url>
+    <content><![CDATA[<blockquote>
+<p>本笔记旨在详细记录如何通过安装 Tampermonkey（油猴）插件和 <code>EmbyToLocalPlayer</code> 脚本，实现在 Emby 和 Jellyfin 网页端无缝调用本地播放器（如 PotPlayer、MPV），从而解决网页播放器可能出现的卡顿、解码不佳等问题，大幅提升观影体验。</p>
+</blockquote>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85-tampermonkey-%E6%B2%B9%E7%8C%B4-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6-content-0019">1. 安装 Tampermonkey (油猴) 浏览器插件</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85-embytolocalplayer-%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC-content-0034">2. 安装 EmbyToLocalPlayer 用户脚本</a></li>
+<li><a href="#3-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E7%A8%8B%E5%BA%8F-content-0107">3. 下载并配置辅助程序</a></li>
+<li><a href="#4-%E8%BF%90%E8%A1%8C%E4%B8%8E%E9%AA%8C%E8%AF%81-content-0209">4. 运行与验证</a></li>
+<li><a href="#5-%E5%A6%82%E4%BD%95%E7%A6%81%E7%94%A8%E4%B8%8E%E6%81%A2%E5%A4%8D-content-0230">5. 如何禁用与恢复</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/uUeJgLvV61k?si=1fW-xRj8p8z3o0_w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2 id="1-安装-Tampermonkey-油猴-浏览器插件-原片-00-19"><a href="#1-安装-Tampermonkey-油猴-浏览器插件-原片-00-19" class="headerlink" title="1. 安装 Tampermonkey (油猴) 浏览器插件 原片 @ 00:19"></a>1. 安装 Tampermonkey (油猴) 浏览器插件 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=19s">原片 @ 00:19</a></h2><p>第一步是为你的浏览器安装强大的用户脚本管理器 <code>Tampermonkey</code>。</p>
+<p>1.  <strong>打开浏览器应用商店</strong>：<br>    *   以 Chrome 为例，进入 Chrome 应用商店。<br>    *   该方法同样适用于其他支持 Chrome 插件的浏览器（如 Edge, Firefox 等）。</p>
+<p>2.  <strong>搜索并安装</strong>：<br>    *   在商店中搜索 <code>Tampermonkey</code>。<br>    *   找到插件并点击安装。<br>3.  <strong>固定插件</strong>：<br>    *   安装完成后，建议在浏览器插件栏中将 <code>Tampermonkey</code> 图标固定，方便后续快速访问和管理。</p>
+<h2 id="2-安装-EmbyToLocalPlayer-用户脚本-原片-00-34"><a href="#2-安装-EmbyToLocalPlayer-用户脚本-原片-00-34" class="headerlink" title="2. 安装 EmbyToLocalPlayer 用户脚本 原片 @ 00:34"></a>2. 安装 EmbyToLocalPlayer 用户脚本 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=34s">原片 @ 00:34</a></h2><p>安装好 <code>Tampermonkey</code> 后，需要获取核心的用户脚本。</p>
+<p>1.  <strong>获取新脚本</strong>：<br>    *   点击浏览器插件栏的 <code>Tampermonkey</code> 图标。<br>    *   在弹出菜单中选择 “获取新脚本”。</p>
+<p>2.  <strong>访问 Greasy Fork</strong>：<br>    *   在打开的页面中，选择 <code>Greasy Fork</code> 作为脚本来源，这是一个知名的用户脚本库。</p>
+<p>3.  <strong>搜索脚本</strong>：<br>    *   在 <code>Greasy Fork</code> 网站的搜索框中输入 <code>Jellyfin</code> 或 <code>Emby</code> 进行搜索。<br>    *   在搜索结果中找到名为 <code>EmbyToLocalPlayer</code> 的脚本。</p>
+<p>4.  <strong>安装脚本</strong>：<br>    *   点击进入脚本页面，然后点击绿色的 “安装此脚本” 按钮。<br>    *   在 <code>Tampermonkey</code> 的确认页面再次点击 “安装”。</p>
+<h2 id="3-下载并配置辅助程序-原片-01-07"><a href="#3-下载并配置辅助程序-原片-01-07" class="headerlink" title="3. 下载并配置辅助程序 原片 @ 01:07"></a>3. 下载并配置辅助程序 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=67s">原片 @ 01:07</a></h2><p>该脚本需要一个在本地运行的辅助程序来接收指令并启动播放器。</p>
+<p>1.  <strong>访问脚本主页</strong>：<br>    *   点击 <code>Tampermonkey</code> 图标，选择 “管理面板”。<br>    *   找到已安装的 <code>EmbyToLocalPlayer</code> 脚本，点击其主页图标，这将带你跳转到该项目的 <code>GitHub</code> 页面。</p>
+<p>2.  <strong>下载辅助程序</strong>：<br>    *   在 <code>GitHub</code> 页面，找到 <code>Releases</code>（发行版）区域。<br>    *   根据你使用的本地播放器下载对应的辅助程序压缩包：<br>        *   <code>EmbyToMPV_xxx.zip</code>：用于调用 <code>MPV</code> 播放器。<br>        *   <code>EmbyToPotPlayer_xxx.zip</code>：用于调用 <code>PotPlayer</code> 播放器。</p>
+<p>3.  <strong>解压与配置</strong>：<br>    *   下载完成后，将压缩包解压到你希望存放的任意位置。<br>    *   打开解压后的文件夹，找到并双击运行 <code>.bat</code> 批处理文件（如 <code>EmbyToPotPlayer.bat</code>）。</p>
+<p>4.  <strong>设置启动方式</strong>：<br>    *   运行 <code>.bat</code> 文件后，命令行窗口会提供两个选项：<br>        *   <strong>选项 1 (手动启动)</strong>：每次需要使用外部播放器时，都必须手动运行此 <code>.bat</code> 文件，并在播放时保持窗口开启。<br>        *   <strong>选项 2 (开机自启并后台运行)</strong>：推荐选项。程序会自动创建开机启动项并在后台静默运行，无需手动干预，更加便捷。<br>    *   根据个人需求输入 <code>1</code> 或 <code>2</code> 并按回车。视频中演示了选择 <code>2</code>。</p>
+<p>5.  <strong>重启浏览器</strong>：完成设置后，需要<strong>完全关闭并重新启动</strong>你的浏览器，以确保所有设置生效。</p>
+<hr>
+<h2 id="4-运行与验证-原片-02-09"><a href="#4-运行与验证-原片-02-09" class="headerlink" title="4. 运行与验证 原片 @ 02:09"></a>4. 运行与验证 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=129s">原片 @ 02:09</a></h2><p>现在，所有设置都已完成，可以进行验证。</p>
+<p>1.  <strong>打开 Emby&#x2F;Jellyfin</strong>：<br>    *   在重启后的浏览器中，打开你的 <code>Emby</code> 或 <code>Jellyfin</code> 媒体服务器主页。<br>    *   此时，你会注意到浏览器右上角的 <code>Tampermonkey</code> 图标上会显示一个红色的数字“1”，这表示脚本已在该页面成功加载并运行。</p>
+<p>2.  <strong>播放视频</strong>：<br>    *   像往常一样，选择任意一部影片并点击播放。<br>    *   此时，网页不会再加载内置播放器，而是会自动调用并启动你本地安装的 <code>PotPlayer</code> 或 <code>MPV</code> 来播放视频。</p>
+<hr>
+<h2 id="5-如何禁用与恢复-原片-02-30"><a href="#5-如何禁用与恢复-原片-02-30" class="headerlink" title="5. 如何禁用与恢复 原片 @ 02:30"></a>5. 如何禁用与恢复 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=150s">原片 @ 02:30</a></h2><p>如果你想临时或永久恢复使用网页播放器，操作非常简单。</p>
+<p>1.  <strong>禁用脚本</strong>：<br>    *   点击 <code>Tampermonkey</code> 图标，进入 “管理面板”。<br>    *   找到 <code>EmbyToLocalPlayer</code> 脚本，点击右侧的开关按钮，将其关闭。</p>
+<p>2.  <strong>刷新页面</strong>：<br>    *   回到 <code>Emby</code> 或 <code>Jellyfin</code> 页面，刷新一下。<br>3.  <strong>恢复网页播放</strong>：<br>    *   再次点击播放视频，此时将恢复使用默认的网页内置播放器。</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Emby</tag>
+        <tag>Jellyfin</tag>
+        <tag>油猴</tag>
+        <tag>播放器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
     <url>/post/12/</url>
     <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
@@ -611,8 +677,8 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>Kodi</tag>
         <tag>Jellyfin</tag>
+        <tag>Kodi</tag>
         <tag>家庭影院</tag>
         <tag>4K</tag>
       </tags>
@@ -752,198 +818,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🎬 Emby &amp; Jellyfin 完美搭配：用油猴插件无缝调用外部播放器</title>
-    <url>/post/18/</url>
-    <content><![CDATA[<blockquote>
-<p>本笔记旨在详细记录如何通过安装 Tampermonkey（油猴）插件和 <code>EmbyToLocalPlayer</code> 脚本，实现在 Emby 和 Jellyfin 网页端无缝调用本地播放器（如 PotPlayer、MPV），从而解决网页播放器可能出现的卡顿、解码不佳等问题，大幅提升观影体验。</p>
-</blockquote>
-<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
-<li><a href="#1-%E5%AE%89%E8%A3%85-tampermonkey-%E6%B2%B9%E7%8C%B4-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6-content-0019">1. 安装 Tampermonkey (油猴) 浏览器插件</a></li>
-<li><a href="#2-%E5%AE%89%E8%A3%85-embytolocalplayer-%E7%94%A8%E6%88%B7%E8%84%9A%E6%9C%AC-content-0034">2. 安装 EmbyToLocalPlayer 用户脚本</a></li>
-<li><a href="#3-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E9%85%8D%E7%BD%AE%E8%BE%85%E5%8A%A9%E7%A8%8B%E5%BA%8F-content-0107">3. 下载并配置辅助程序</a></li>
-<li><a href="#4-%E8%BF%90%E8%A1%8C%E4%B8%8E%E9%AA%8C%E8%AF%81-content-0209">4. 运行与验证</a></li>
-<li><a href="#5-%E5%A6%82%E4%BD%95%E7%A6%81%E7%94%A8%E4%B8%8E%E6%81%A2%E5%A4%8D-content-0230">5. 如何禁用与恢复</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/uUeJgLvV61k?si=1fW-xRj8p8z3o0_w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2 id="1-安装-Tampermonkey-油猴-浏览器插件-原片-00-19"><a href="#1-安装-Tampermonkey-油猴-浏览器插件-原片-00-19" class="headerlink" title="1. 安装 Tampermonkey (油猴) 浏览器插件 原片 @ 00:19"></a>1. 安装 Tampermonkey (油猴) 浏览器插件 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=19s">原片 @ 00:19</a></h2><p>第一步是为你的浏览器安装强大的用户脚本管理器 <code>Tampermonkey</code>。</p>
-<p>1.  <strong>打开浏览器应用商店</strong>：<br>    *   以 Chrome 为例，进入 Chrome 应用商店。<br>    *   该方法同样适用于其他支持 Chrome 插件的浏览器（如 Edge, Firefox 等）。</p>
-<p>2.  <strong>搜索并安装</strong>：<br>    *   在商店中搜索 <code>Tampermonkey</code>。<br>    *   找到插件并点击安装。<br>3.  <strong>固定插件</strong>：<br>    *   安装完成后，建议在浏览器插件栏中将 <code>Tampermonkey</code> 图标固定，方便后续快速访问和管理。</p>
-<h2 id="2-安装-EmbyToLocalPlayer-用户脚本-原片-00-34"><a href="#2-安装-EmbyToLocalPlayer-用户脚本-原片-00-34" class="headerlink" title="2. 安装 EmbyToLocalPlayer 用户脚本 原片 @ 00:34"></a>2. 安装 EmbyToLocalPlayer 用户脚本 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=34s">原片 @ 00:34</a></h2><p>安装好 <code>Tampermonkey</code> 后，需要获取核心的用户脚本。</p>
-<p>1.  <strong>获取新脚本</strong>：<br>    *   点击浏览器插件栏的 <code>Tampermonkey</code> 图标。<br>    *   在弹出菜单中选择 “获取新脚本”。</p>
-<p>2.  <strong>访问 Greasy Fork</strong>：<br>    *   在打开的页面中，选择 <code>Greasy Fork</code> 作为脚本来源，这是一个知名的用户脚本库。</p>
-<p>3.  <strong>搜索脚本</strong>：<br>    *   在 <code>Greasy Fork</code> 网站的搜索框中输入 <code>Jellyfin</code> 或 <code>Emby</code> 进行搜索。<br>    *   在搜索结果中找到名为 <code>EmbyToLocalPlayer</code> 的脚本。</p>
-<p>4.  <strong>安装脚本</strong>：<br>    *   点击进入脚本页面，然后点击绿色的 “安装此脚本” 按钮。<br>    *   在 <code>Tampermonkey</code> 的确认页面再次点击 “安装”。</p>
-<h2 id="3-下载并配置辅助程序-原片-01-07"><a href="#3-下载并配置辅助程序-原片-01-07" class="headerlink" title="3. 下载并配置辅助程序 原片 @ 01:07"></a>3. 下载并配置辅助程序 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=67s">原片 @ 01:07</a></h2><p>该脚本需要一个在本地运行的辅助程序来接收指令并启动播放器。</p>
-<p>1.  <strong>访问脚本主页</strong>：<br>    *   点击 <code>Tampermonkey</code> 图标，选择 “管理面板”。<br>    *   找到已安装的 <code>EmbyToLocalPlayer</code> 脚本，点击其主页图标，这将带你跳转到该项目的 <code>GitHub</code> 页面。</p>
-<p>2.  <strong>下载辅助程序</strong>：<br>    *   在 <code>GitHub</code> 页面，找到 <code>Releases</code>（发行版）区域。<br>    *   根据你使用的本地播放器下载对应的辅助程序压缩包：<br>        *   <code>EmbyToMPV_xxx.zip</code>：用于调用 <code>MPV</code> 播放器。<br>        *   <code>EmbyToPotPlayer_xxx.zip</code>：用于调用 <code>PotPlayer</code> 播放器。</p>
-<p>3.  <strong>解压与配置</strong>：<br>    *   下载完成后，将压缩包解压到你希望存放的任意位置。<br>    *   打开解压后的文件夹，找到并双击运行 <code>.bat</code> 批处理文件（如 <code>EmbyToPotPlayer.bat</code>）。</p>
-<p>4.  <strong>设置启动方式</strong>：<br>    *   运行 <code>.bat</code> 文件后，命令行窗口会提供两个选项：<br>        *   <strong>选项 1 (手动启动)</strong>：每次需要使用外部播放器时，都必须手动运行此 <code>.bat</code> 文件，并在播放时保持窗口开启。<br>        *   <strong>选项 2 (开机自启并后台运行)</strong>：推荐选项。程序会自动创建开机启动项并在后台静默运行，无需手动干预，更加便捷。<br>    *   根据个人需求输入 <code>1</code> 或 <code>2</code> 并按回车。视频中演示了选择 <code>2</code>。</p>
-<p>5.  <strong>重启浏览器</strong>：完成设置后，需要<strong>完全关闭并重新启动</strong>你的浏览器，以确保所有设置生效。</p>
-<hr>
-<h2 id="4-运行与验证-原片-02-09"><a href="#4-运行与验证-原片-02-09" class="headerlink" title="4. 运行与验证 原片 @ 02:09"></a>4. 运行与验证 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=129s">原片 @ 02:09</a></h2><p>现在，所有设置都已完成，可以进行验证。</p>
-<p>1.  <strong>打开 Emby&#x2F;Jellyfin</strong>：<br>    *   在重启后的浏览器中，打开你的 <code>Emby</code> 或 <code>Jellyfin</code> 媒体服务器主页。<br>    *   此时，你会注意到浏览器右上角的 <code>Tampermonkey</code> 图标上会显示一个红色的数字“1”，这表示脚本已在该页面成功加载并运行。</p>
-<p>2.  <strong>播放视频</strong>：<br>    *   像往常一样，选择任意一部影片并点击播放。<br>    *   此时，网页不会再加载内置播放器，而是会自动调用并启动你本地安装的 <code>PotPlayer</code> 或 <code>MPV</code> 来播放视频。</p>
-<hr>
-<h2 id="5-如何禁用与恢复-原片-02-30"><a href="#5-如何禁用与恢复-原片-02-30" class="headerlink" title="5. 如何禁用与恢复 原片 @ 02:30"></a>5. 如何禁用与恢复 <a href="https://www.youtube.com/watch?v=uUeJgLvV61k&t=150s">原片 @ 02:30</a></h2><p>如果你想临时或永久恢复使用网页播放器，操作非常简单。</p>
-<p>1.  <strong>禁用脚本</strong>：<br>    *   点击 <code>Tampermonkey</code> 图标，进入 “管理面板”。<br>    *   找到 <code>EmbyToLocalPlayer</code> 脚本，点击右侧的开关按钮，将其关闭。</p>
-<p>2.  <strong>刷新页面</strong>：<br>    *   回到 <code>Emby</code> 或 <code>Jellyfin</code> 页面，刷新一下。<br>3.  <strong>恢复网页播放</strong>：<br>    *   再次点击播放视频，此时将恢复使用默认的网页内置播放器。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Jellyfin</tag>
-        <tag>Emby</tag>
-        <tag>油猴</tag>
-        <tag>播放器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
-    <url>/post/1/</url>
-    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
-<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
-<h3 id="视频教程"><a href="#视频教程" class="headerlink" title="视频教程"></a><strong>视频教程</strong></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h3 id="第一步：彻底卸载旧版MoonTV"><a href="#第一步：彻底卸载旧版MoonTV" class="headerlink" title="第一步：彻底卸载旧版MoonTV"></a><strong>第一步：彻底卸载旧版MoonTV</strong></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
-<ol>
-<li><p>停止并删除容器</p>
-<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
-<ul>
-<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
-</li>
-<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
-</li>
-<li><p>停止后，将这两个容器都删除。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>删除Compose文件和镜像</strong></p>
-<ul>
-<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
-</li>
-<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>清理部署文件夹</strong></p>
-<ul>
-<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
-</li>
-<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
-<hr>
-<h3 id="第二步：部署最新版MoonTV"><a href="#第二步：部署最新版MoonTV" class="headerlink" title="第二步：部署最新版MoonTV"></a><strong>第二步：部署最新版MoonTV</strong></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
-<ol>
-<li><p><strong>获取新版Compose文件</strong></p>
-<ul>
-<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
-</li>
-<li><p>将该文件的全部内容复制下来。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>创建新容器</strong></p>
-<ul>
-<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
-</li>
-<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
-</li>
-<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
-</li>
-<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
-</li>
-<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
-</li>
-<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>启动部署</strong></p>
-<ul>
-<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
-</li>
-<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="第三步：登录与配置MoonTV"><a href="#第三步：登录与配置MoonTV" class="headerlink" title="第三步：登录与配置MoonTV"></a><strong>第三步：登录与配置MoonTV</strong></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
-<ol>
-<li><p><strong>登录管理面板</strong></p>
-<ul>
-<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
-</li>
-<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>添加源文件</strong></p>
-<ul>
-<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
-</li>
-<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
-</li>
-<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
-<hr>
-<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>飞牛NAS</tag>
-        <tag>moonTV</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MoonTV 部署教程 | 支持生成 TVBox JSON 文件</title>
     <url>/post/50/</url>
     <content><![CDATA[<h3 id="视频教程"><a href="#视频教程" class="headerlink" title="视频教程"></a><strong>视频教程</strong></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
@@ -1074,6 +948,132 @@
         <tag>Vercel</tag>
         <tag>JSON</tag>
         <tag>影视源</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
+    <url>/post/1/</url>
+    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
+<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
+<h3 id="视频教程"><a href="#视频教程" class="headerlink" title="视频教程"></a><strong>视频教程</strong></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3 id="第一步：彻底卸载旧版MoonTV"><a href="#第一步：彻底卸载旧版MoonTV" class="headerlink" title="第一步：彻底卸载旧版MoonTV"></a><strong>第一步：彻底卸载旧版MoonTV</strong></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
+<ol>
+<li><p>停止并删除容器</p>
+<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
+<ul>
+<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
+</li>
+<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
+</li>
+<li><p>停止后，将这两个容器都删除。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>删除Compose文件和镜像</strong></p>
+<ul>
+<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
+</li>
+<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>清理部署文件夹</strong></p>
+<ul>
+<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
+</li>
+<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
+<hr>
+<h3 id="第二步：部署最新版MoonTV"><a href="#第二步：部署最新版MoonTV" class="headerlink" title="第二步：部署最新版MoonTV"></a><strong>第二步：部署最新版MoonTV</strong></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
+<ol>
+<li><p><strong>获取新版Compose文件</strong></p>
+<ul>
+<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
+</li>
+<li><p>将该文件的全部内容复制下来。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>创建新容器</strong></p>
+<ul>
+<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
+</li>
+<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
+</li>
+<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
+</li>
+<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
+</li>
+<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
+</li>
+<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>启动部署</strong></p>
+<ul>
+<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
+</li>
+<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="第三步：登录与配置MoonTV"><a href="#第三步：登录与配置MoonTV" class="headerlink" title="第三步：登录与配置MoonTV"></a><strong>第三步：登录与配置MoonTV</strong></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
+<ol>
+<li><p><strong>登录管理面板</strong></p>
+<ul>
+<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
+</li>
+<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>添加源文件</strong></p>
+<ul>
+<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
+</li>
+<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
+</li>
+<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
+<hr>
+<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>飞牛NAS</tag>
+        <tag>moonTV</tag>
       </tags>
   </entry>
   <entry>
@@ -1684,53 +1684,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
-    <url>/post/15/</url>
-    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
-<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
-<hr>
-<h2 id="📺-视频教程"><a href="#📺-视频教程" class="headerlink" title="📺 视频教程"></a>📺 视频教程</h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2 id="🏠-CasaOS-部署指南"><a href="#🏠-CasaOS-部署指南" class="headerlink" title="🏠 CasaOS 部署指南"></a>🏠 CasaOS 部署指南</h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
-<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
-<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
-<h3 id="配置-LibreTV-CasaOS"><a href="#配置-LibreTV-CasaOS" class="headerlink" title="配置 LibreTV (CasaOS)"></a>配置 LibreTV (CasaOS)</h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
-<hr>
-<h2 id="☁️-Cloudflare-Pages-部署指南"><a href="#☁️-Cloudflare-Pages-部署指南" class="headerlink" title="☁️ Cloudflare Pages 部署指南"></a>☁️ Cloudflare Pages 部署指南</h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
-<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
-<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
-<hr>
-<h2 id="🎉-总结"><a href="#🎉-总结" class="headerlink" title="🎉 总结"></a>🎉 总结</h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
-<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>CasaOS</tag>
-        <tag>LibreTV</tag>
-        <tag>Cloudflare</tag>
-        <tag>影视</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</title>
     <url>/post/30/</url>
     <content><![CDATA[<p>对于NAS玩家来说，实现外网访问是刚需，但获取公网IP却越来越难。不过，只要你拥有一个<strong>IPv6地址</strong>，这个问题就能迎刃而解！今天，我们将分享一个绝妙的方案：<strong>获取一个免费域名，并利用Cloudflare的DDNS服务，实现随时随地访问家里的飞牛NAS</strong>。</p>
@@ -1943,6 +1896,53 @@
         <tag>家庭影院</tag>
         <tag>群晖</tag>
         <tag>自动化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
+    <url>/post/15/</url>
+    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
+<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
+<hr>
+<h2 id="📺-视频教程"><a href="#📺-视频教程" class="headerlink" title="📺 视频教程"></a>📺 视频教程</h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2 id="🏠-CasaOS-部署指南"><a href="#🏠-CasaOS-部署指南" class="headerlink" title="🏠 CasaOS 部署指南"></a>🏠 CasaOS 部署指南</h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
+<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
+<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
+<h3 id="配置-LibreTV-CasaOS"><a href="#配置-LibreTV-CasaOS" class="headerlink" title="配置 LibreTV (CasaOS)"></a>配置 LibreTV (CasaOS)</h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
+<hr>
+<h2 id="☁️-Cloudflare-Pages-部署指南"><a href="#☁️-Cloudflare-Pages-部署指南" class="headerlink" title="☁️ Cloudflare Pages 部署指南"></a>☁️ Cloudflare Pages 部署指南</h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
+<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
+<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
+<hr>
+<h2 id="🎉-总结"><a href="#🎉-总结" class="headerlink" title="🎉 总结"></a>🎉 总结</h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
+<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>CasaOS</tag>
+        <tag>LibreTV</tag>
+        <tag>Cloudflare</tag>
+        <tag>影视</tag>
       </tags>
   </entry>
   <entry>
