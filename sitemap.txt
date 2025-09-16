@@ -1,3 +1,4 @@
+http://example.com/about/index.html
 http://example.com/post/52/
 http://example.com/post/51/
 http://example.com/post/50/
@@ -25,7 +26,6 @@ http://example.com/post/17/
 http://example.com/post/16/
 http://example.com/post/10/
 http://example.com/post/9/
-http://example.com/about/index.html
 http://example.com/
 http://example.com/tags/Linux/
 http://example.com/tags/%E5%91%BD%E4%BB%A4/
