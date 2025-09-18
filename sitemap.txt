@@ -1,3 +1,4 @@
+http://example.com/post/25/
 http://example.com/post/14/
 http://example.com/post/8/
 http://example.com/post/27/
@@ -28,9 +29,9 @@ http://example.com/post/52/
 http://example.com/tags/index.html
 http://example.com/post/13/
 http://example.com/
-http://example.com/tags/Linux/
-http://example.com/tags/%E6%95%99%E7%A8%8B/
 http://example.com/tags/Docker/
+http://example.com/tags/%E6%95%99%E7%A8%8B/
+http://example.com/tags/Linux/
 http://example.com/tags/NAS/
 http://example.com/tags/Kodi/
 http://example.com/tags/Jellyfin/
