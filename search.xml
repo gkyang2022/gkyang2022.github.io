@@ -230,9 +230,6 @@
       <tags>
         <tag>教程</tag>
         <tag>Docker</tag>
-        <tag>容器</tag>
-        <tag>升级</tag>
-        <tag>DevOps</tag>
       </tags>
   </entry>
   <entry>
@@ -309,9 +306,6 @@
 ]]></content>
       <tags>
         <tag>Docker</tag>
-        <tag>容器</tag>
-        <tag>命令</tag>
-        <tag>镜像</tag>
       </tags>
   </entry>
   <entry>
@@ -374,10 +368,7 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>Emby</tag>
-        <tag>Jellyfin</tag>
-        <tag>油猴</tag>
-        <tag>播放器</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -433,82 +424,6 @@
         <tag>代理</tag>
         <tag>Clash</tag>
         <tag>网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
-    <url>/post/51/</url>
-    <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
-<p>该项目支持 <strong>自动更新</strong>，并且兼容 <strong>TVBox 类播放软件</strong>，适合喜欢折腾的朋友。下面就来一步步演示。</p>
-<hr>
-<h2><span id="演示视频">演示视频</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/T8KPvVxpq2o?si=-G3S5-v1irdrafU9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-
-
-<hr>
-<h2><span id="1-前置准备">1. 前置准备</span></h2><ul>
-<li>一台已安装 <strong>飞牛（FeiNiu）系统</strong> 的 NAS  </li>
-<li>已启用 <strong>Docker</strong> 与 <strong>Compose</strong> 插件  </li>
-<li>可用的端口（避免和现有服务冲突）</li>
-</ul>
-<hr>
-<h2><span id="2-创建文件夹">2. 创建文件夹</span></h2><p>在飞牛的 <strong>文件管理</strong> 中，为 IPTV 项目新建一个文件夹，例如 <code>iptv</code>，用来存放配置。</p>
-<hr>
-<h2><span id="3-创建-compose-项目">3. 创建 Compose 项目</span></h2><p>打开 <strong>Docker → Compose</strong>，点击 <strong>新建项目</strong>：</p>
-<ul>
-<li><strong>名称</strong>：填写 <code>IPTV</code>  </li>
-<li><strong>路径</strong>：选择刚刚创建的 <code>iptv</code> 文件夹  </li>
-<li><strong>Compose 文件</strong>：在此处粘贴以下内容</li>
-</ul>
-<p>👉 <strong>在这里插入 compose 文件代码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  iptv-api:</span><br><span class="line">    image: guovern/iptv-api:latest</span><br><span class="line">    container_name: iptv-api</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9000:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config:/iptv-api/config</span><br><span class="line">      - ./output:/iptv-api/output</span><br><span class="line">    environment:</span><br><span class="line">      - APP_HOST=http://0.0.0.0</span><br><span class="line">      - APP_PORT=8000</span><br><span class="line">      - TZ=Asia/Shanghai         # 设置时区为北京时间</span><br><span class="line">      - UPDATE_CRON=0 0 */2 * *  # 每两天凌晨 0 点执行更新</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>⚠️ 注意：请修改其中的 <strong>端口</strong>（避免冲突），以及 <strong>更新周期变量</strong>（默认是每两天的 0 点自动更新，你也可以根据需求调整）。</p>
-</blockquote>
-<p>点击 <strong>确定</strong> 并启动构建。</p>
-<hr>
-<h2><span id="4-查看部署情况">4. 查看部署情况</span></h2><p>部署完成后，可以在 <strong>容器日志</strong> 中查看运行情况。<br>首次启动时，它会拉取并更新频道列表，大约需要等待一小段时间。</p>
-<hr>
-<h2><span id="5-验证-iptv-输出">5. 验证 IPTV 输出</span></h2><p>部署完成后，在浏览器中访问：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如果能看到频道列表，说明 IPTV 已经运行成功 ✅。</p>
-<hr>
-<h2><span id="6-配合-tvbox-使用">6. 配合 TVBox 使用</span></h2><p>在 TVBox 配置中，填入以下地址即可使用：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/m3u</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>设置完成后，你就可以在 TVBox 中播放 IPTV 频道啦 🎉。</p>
-<hr>
-<h2><span id="总结">总结</span></h2><p>这就是在飞牛 NAS 上部署 IPTV 项目的完整步骤。<br>它不仅支持自动更新频道，还能无缝对接 TVBox，非常适合自建家庭娱乐系统的用户。</p>
-<p>如果你在操作过程中遇到问题，可以在评论区留言，或者加入群组一起交流。  </p>
-<p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>IPTV</tag>
-        <tag>TVBox</tag>
-        <tag>飞牛</tag>
-        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -629,55 +544,79 @@
       </tags>
   </entry>
   <entry>
-    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
-    <url>/post/4/</url>
-    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
-<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
+    <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
+    <url>/post/51/</url>
+    <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
+<p>该项目支持 <strong>自动更新</strong>，并且兼容 <strong>TVBox 类播放软件</strong>，适合喜欢折腾的朋友。下面就来一步步演示。</p>
 <hr>
-<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
+<h2><span id="演示视频">演示视频</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
 
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li><code>sudo</code>：获取超级用户权限</li>
-<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
-<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
-<li><code>-y</code>：跳过确认提示（可选参数）</li>
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/T8KPvVxpq2o?si=-G3S5-v1irdrafU9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+
+
+<hr>
+<h2><span id="1-前置准备">1. 前置准备</span></h2><ul>
+<li>一台已安装 <strong>飞牛（FeiNiu）系统</strong> 的 NAS  </li>
+<li>已启用 <strong>Docker</strong> 与 <strong>Compose</strong> 插件  </li>
+<li>可用的端口（避免和现有服务冲突）</li>
 </ul>
 <hr>
-<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
+<h2><span id="2-创建文件夹">2. 创建文件夹</span></h2><p>在飞牛的 <strong>文件管理</strong> 中，为 IPTV 项目新建一个文件夹，例如 <code>iptv</code>，用来存放配置。</p>
+<hr>
+<h2><span id="3-创建-compose-项目">3. 创建 Compose 项目</span></h2><p>打开 <strong>Docker → Compose</strong>，点击 <strong>新建项目</strong>：</p>
 <ul>
-<li>同步所有已启用仓库的最新元数据</li>
-<li>使系统识别新添加的PPA中的软件包</li>
+<li><strong>名称</strong>：填写 <code>IPTV</code>  </li>
+<li><strong>路径</strong>：选择刚刚创建的 <code>iptv</code> 文件夹  </li>
+<li><strong>Compose 文件</strong>：在此处粘贴以下内容</li>
 </ul>
-<hr>
-<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
+<p>👉 <strong>在这里插入 compose 文件代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  iptv-api:</span><br><span class="line">    image: guovern/iptv-api:latest</span><br><span class="line">    container_name: iptv-api</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9000:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config:/iptv-api/config</span><br><span class="line">      - ./output:/iptv-api/output</span><br><span class="line">    environment:</span><br><span class="line">      - APP_HOST=http://0.0.0.0</span><br><span class="line">      - APP_PORT=8000</span><br><span class="line">      - TZ=Asia/Shanghai         # 设置时区为北京时间</span><br><span class="line">      - UPDATE_CRON=0 0 */2 * *  # 每两天凌晨 0 点执行更新</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li>从配置好的源下载.deb安装包</li>
-<li>自动解决依赖关系并完成配置</li>
-</ul>
+<blockquote>
+<p>⚠️ 注意：请修改其中的 <strong>端口</strong>（避免冲突），以及 <strong>更新周期变量</strong>（默认是每两天的 0 点自动更新，你也可以根据需求调整）。</p>
+</blockquote>
+<p>点击 <strong>确定</strong> 并启动构建。</p>
 <hr>
-<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
+<h2><span id="4-查看部署情况">4. 查看部署情况</span></h2><p>部署完成后，可以在 <strong>容器日志</strong> 中查看运行情况。<br>首次启动时，它会拉取并更新频道列表，大约需要等待一小段时间。</p>
+<hr>
+<h2><span id="5-验证-iptv-输出">5. 验证 IPTV 输出</span></h2><p>部署完成后，在浏览器中访问：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
+<p>如果能看到频道列表，说明 IPTV 已经运行成功 ✅。</p>
 <hr>
-<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
-<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
-<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
-<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
-</ol>
+<h2><span id="6-配合-tvbox-使用">6. 配合 TVBox 使用</span></h2><p>在 TVBox 配置中，填入以下地址即可使用：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/m3u</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>设置完成后，你就可以在 TVBox 中播放 IPTV 频道啦 🎉。</p>
 <hr>
-<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
-<hr>
+<h2><span id="总结">总结</span></h2><p>这就是在飞牛 NAS 上部署 IPTV 项目的完整步骤。<br>它不仅支持自动更新频道，还能无缝对接 TVBox，非常适合自建家庭娱乐系统的用户。</p>
+<p>如果你在操作过程中遇到问题，可以在评论区留言，或者加入群组一起交流。  </p>
+<p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>Mint</tag>
-        <tag>Telegram</tag>
-        <tag>PPA</tag>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
+        <tag>IPTV</tag>
+        <tag>TVBox</tag>
+        <tag>飞牛</tag>
       </tags>
   </entry>
   <entry>
@@ -727,10 +666,62 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>Jellyfin</tag>
         <tag>Kodi</tag>
+        <tag>Jellyfin</tag>
         <tag>家庭影院</tag>
         <tag>4K</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
+    <url>/post/4/</url>
+    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
+<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
+<hr>
+<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li><code>sudo</code>：获取超级用户权限</li>
+<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
+<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
+<li><code>-y</code>：跳过确认提示（可选参数）</li>
+</ul>
+<hr>
+<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li>同步所有已启用仓库的最新元数据</li>
+<li>使系统识别新添加的PPA中的软件包</li>
+</ul>
+<hr>
+<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li>从配置好的源下载.deb安装包</li>
+<li>自动解决依赖关系并完成配置</li>
+</ul>
+<hr>
+<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
+
+<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
+<hr>
+<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
+<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
+<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
+<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Mint</tag>
+        <tag>Telegram</tag>
+        <tag>PPA</tag>
       </tags>
   </entry>
   <entry>
@@ -939,8 +930,8 @@
       </categories>
       <tags>
         <tag>Docker</tag>
-        <tag>TVBox</tag>
         <tag>NAS</tag>
+        <tag>TVBox</tag>
         <tag>MoonTV</tag>
         <tag>Compose</tag>
         <tag>Vercel</tag>
@@ -1229,78 +1220,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
-</ul>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
-</ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
-]]></content>
-      <tags>
-        <tag>软件推荐</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Typecho 手动部署详细教程</title>
     <url>/post/27/</url>
     <content><![CDATA[<h2><span id="typecho-手动部署详细教程">Typecho 手动部署详细教程</span></h2><p>本教程将指导你如何在基于 Ubuntu 的 Linux 服务器（如 Mint 桌面版、Ubuntu VPS 等）上，手动安装 Nginx、PHP 和 MariaDB 环境，并部署 Typecho 博客系统。</p>
@@ -1388,6 +1307,78 @@
 ]]></content>
       <tags>
         <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+</ul>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
+</ul>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
+]]></content>
+      <tags>
+        <tag>软件推荐</tag>
       </tags>
   </entry>
   <entry>
@@ -1722,9 +1713,7 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>TVBox</tag>
         <tag>NAS</tag>
-        <tag>影库</tag>
       </tags>
   </entry>
   <entry>
@@ -1806,53 +1795,6 @@
       <tags>
         <tag>教程</tag>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
-    <url>/post/15/</url>
-    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
-<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
-<hr>
-<h2><span id="视频教程">📺 视频教程</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
-<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
-<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
-<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
-<hr>
-<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
-<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
-<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
-<hr>
-<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
-<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>LibreTV</tag>
-        <tag>CasaOS</tag>
-        <tag>Cloudflare</tag>
-        <tag>影视</tag>
       </tags>
   </entry>
   <entry>
@@ -2002,12 +1944,56 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>飞牛</tag>
         <tag>NAS</tag>
+        <tag>飞牛</tag>
         <tag>Lucky</tag>
         <tag>DDNS</tag>
         <tag>反向代理</tag>
         <tag>IPv6</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
+    <url>/post/15/</url>
+    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
+<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
+<hr>
+<h2><span id="视频教程">📺 视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
+<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
+<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
+<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
+<hr>
+<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
+<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
+<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
+<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -2107,9 +2093,44 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>飞牛NAS</tag>
-        <tag>DDNS</tag>
-        <tag>免费域名</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
+    <url>/post/9/</url>
+    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
+<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
+<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
+<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
+<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
+<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
+<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
+</ul>
+<hr>
+<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
+<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
+<ol>
+<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+</li>
+<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+</li>
+<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
+</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
+<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
+<li>在网易云复制主页地址</li>
+<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
+<li>粘贴链接并选择</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
+<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
+<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+]]></content>
+      <tags>
+        <tag>音乐</tag>
+        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -2187,45 +2208,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
-    <url>/post/9/</url>
-    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
-<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
-<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
-<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
-<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
-<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
-<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
-</ul>
-<hr>
-<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
-<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
-<ol>
-<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
-</li>
-<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
-</li>
-<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
-</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
-<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
-<li>在网易云复制主页地址</li>
-<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
-<li>粘贴链接并选择</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
-<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
-<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-]]></content>
-      <tags>
-        <tag>音乐</tag>
-        <tag>方格音乐</tag>
-        <tag>免费下载</tag>
-        <tag>无损</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
     <url>/post/14/</url>
     <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
@@ -2247,10 +2229,71 @@
 <p>祝您网络畅游愉快，影音娱乐无忧！</p>
 ]]></content>
       <tags>
-        <tag>Emby</tag>
         <tag>机场</tag>
         <tag>科学上网</tag>
         <tag>VPN</tag>
+        <tag>Emby</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</title>
+    <url>/post/52/</url>
+    <content><![CDATA[<h2><span id="前言">前言</span></h2><p>在使用 <strong>Docker 部署 qBittorrent</strong> 的时候，有些朋友会遇到一个常见问题：<br>打开 WebUI 页面时，浏览器提示 <strong>“Unauthorized”</strong>，无法输入账号密码进入管理界面。  </p>
+<p>这其实是由于 <strong>WebUI 安全策略</strong> 在某些情况下导致的认证失败。下面我分享一种解决方法，帮助大家快速恢复正常使用。</p>
+<h2><span id><img src="/images/20250916/qBittorrent.png" alt="解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题"></span></h2><h2><span id="问题原因">问题原因</span></h2><p>qBittorrent 的 WebUI 默认启用了几项安全机制：</p>
+<ul>
+<li><strong>CSRF 防护</strong>：阻止跨站请求伪造。  </li>
+<li><strong>Clickjacking 防护</strong>：防止页面被恶意 iframe 嵌套。  </li>
+<li><strong>Host Header 校验</strong>：防止 Host 头部被伪造。</li>
+</ul>
+<p>在 Docker 环境中，尤其是通过反向代理或外部网络访问时，这些保护机制有可能导致认证逻辑失效，从而直接显示 <strong>Unauthorized</strong>。</p>
+<hr>
+<h2><span id="解决办法">解决办法</span></h2><p>解决步骤如下：</p>
+<h3><span id="1-停止-qbittorrent-容器">1. 停止 qBittorrent 容器</span></h3><p>首先需要停止正在运行的容器，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop qbittorrent</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="2-修改配置文件">2. 修改配置文件</span></h3><p>找到并编辑 qBittorrent 的配置文件 <code>qBittorrent.conf</code>。</p>
+<p>配置文件路径通常是挂载到宿主机的某个目录，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/config/qBittorrent/qBittorrent.conf</span><br></pre></td></tr></table></figure>
+
+<p>在文件底部添加以下三行：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">WebUI\<span class="attr">CSRFProtection</span>=<span class="literal">false</span></span><br><span class="line">WebUI\<span class="attr">ClickjackingProtection</span>=<span class="literal">false</span></span><br><span class="line">WebUI\<span class="attr">HostHeaderValidation</span>=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这几行配置会关闭对应的安全校验，从而避免因环境不一致导致的 Unauthorized。</p>
+</blockquote>
+<hr>
+<h3><span id="3-重启容器">3. 重启容器</span></h3><p>保存配置文件后，重新启动容器：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start qbittorrent</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="4-获取新的登录密码">4. 获取新的登录密码</span></h3><p>qBittorrent 每次首次启动时，都会在容器日志中输出新的登录密码。</p>
+<p>可以通过以下命令查看：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker logs qbittorrent</span><br></pre></td></tr></table></figure>
+
+<p>你会看到类似的日志输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">*************************************************************</span><br><span class="line">The WebUI administrator username is: admin</span><br><span class="line"></span><br><span class="line">The WebUI administrator password was not set. A temporary password is provided for this session: 2KU6GntS7</span><br><span class="line">*************************************************************</span><br></pre></td></tr></table></figure>
+
+<p>使用这里提供的 <strong>用户名和密码</strong> 登录 WebUI 即可。</p>
+<hr>
+<h2><span id="注意事项">注意事项</span></h2><ul>
+<li><p>修改配置文件后，<strong>必须重启容器</strong>才能生效。</p>
+</li>
+<li><p>建议登录成功后，立即进入设置界面修改默认密码，以保证安全性。</p>
+</li>
+<li><p>如果你使用 <strong>反向代理 (Nginx&#x2F;Traefik)</strong>，也需要确保请求头正确转发，否则可能依然报错。</p>
+</li>
+</ul>
+<hr>
+<h2><span id="总结">总结</span></h2><p>当遇到 <strong>qBittorrent WebUI Unauthorized</strong> 的问题时，可以通过 <strong>关闭 WebUI 的 CSRF、Clickjacking 和 HostHeader 校验</strong> 来解决。然后从容器日志获取新的密码即可正常登录。</p>
+<p>这是一种 <strong>快速有效</strong> 的解决办法，尤其适合 <strong>Docker 部署环境</strong>。 🚀</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>qBittorrent</tag>
+        <tag>WebUI</tag>
       </tags>
   </entry>
   <entry>
@@ -2321,70 +2364,6 @@
         <tag>教程</tag>
         <tag>Docker</tag>
         <tag>飞牛OS</tag>
-        <tag>V2RayA</tag>
-        <tag>Jellyseerr</tag>
-        <tag>Jackett</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</title>
-    <url>/post/52/</url>
-    <content><![CDATA[<h2><span id="前言">前言</span></h2><p>在使用 <strong>Docker 部署 qBittorrent</strong> 的时候，有些朋友会遇到一个常见问题：<br>打开 WebUI 页面时，浏览器提示 <strong>“Unauthorized”</strong>，无法输入账号密码进入管理界面。  </p>
-<p>这其实是由于 <strong>WebUI 安全策略</strong> 在某些情况下导致的认证失败。下面我分享一种解决方法，帮助大家快速恢复正常使用。</p>
-<h2><span id><img src="/images/20250916/qBittorrent.png" alt="解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题"></span></h2><h2><span id="问题原因">问题原因</span></h2><p>qBittorrent 的 WebUI 默认启用了几项安全机制：</p>
-<ul>
-<li><strong>CSRF 防护</strong>：阻止跨站请求伪造。  </li>
-<li><strong>Clickjacking 防护</strong>：防止页面被恶意 iframe 嵌套。  </li>
-<li><strong>Host Header 校验</strong>：防止 Host 头部被伪造。</li>
-</ul>
-<p>在 Docker 环境中，尤其是通过反向代理或外部网络访问时，这些保护机制有可能导致认证逻辑失效，从而直接显示 <strong>Unauthorized</strong>。</p>
-<hr>
-<h2><span id="解决办法">解决办法</span></h2><p>解决步骤如下：</p>
-<h3><span id="1-停止-qbittorrent-容器">1. 停止 qBittorrent 容器</span></h3><p>首先需要停止正在运行的容器，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop qbittorrent</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="2-修改配置文件">2. 修改配置文件</span></h3><p>找到并编辑 qBittorrent 的配置文件 <code>qBittorrent.conf</code>。</p>
-<p>配置文件路径通常是挂载到宿主机的某个目录，比如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/path/to/config/qBittorrent/qBittorrent.conf</span><br></pre></td></tr></table></figure>
-
-<p>在文件底部添加以下三行：</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line">WebUI\<span class="attr">CSRFProtection</span>=<span class="literal">false</span></span><br><span class="line">WebUI\<span class="attr">ClickjackingProtection</span>=<span class="literal">false</span></span><br><span class="line">WebUI\<span class="attr">HostHeaderValidation</span>=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>这几行配置会关闭对应的安全校验，从而避免因环境不一致导致的 Unauthorized。</p>
-</blockquote>
-<hr>
-<h3><span id="3-重启容器">3. 重启容器</span></h3><p>保存配置文件后，重新启动容器：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start qbittorrent</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="4-获取新的登录密码">4. 获取新的登录密码</span></h3><p>qBittorrent 每次首次启动时，都会在容器日志中输出新的登录密码。</p>
-<p>可以通过以下命令查看：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker logs qbittorrent</span><br></pre></td></tr></table></figure>
-
-<p>你会看到类似的日志输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">*************************************************************</span><br><span class="line">The WebUI administrator username is: admin</span><br><span class="line"></span><br><span class="line">The WebUI administrator password was not set. A temporary password is provided for this session: 2KU6GntS7</span><br><span class="line">*************************************************************</span><br></pre></td></tr></table></figure>
-
-<p>使用这里提供的 <strong>用户名和密码</strong> 登录 WebUI 即可。</p>
-<hr>
-<h2><span id="注意事项">注意事项</span></h2><ul>
-<li><p>修改配置文件后，<strong>必须重启容器</strong>才能生效。</p>
-</li>
-<li><p>建议登录成功后，立即进入设置界面修改默认密码，以保证安全性。</p>
-</li>
-<li><p>如果你使用 <strong>反向代理 (Nginx&#x2F;Traefik)</strong>，也需要确保请求头正确转发，否则可能依然报错。</p>
-</li>
-</ul>
-<hr>
-<h2><span id="总结">总结</span></h2><p>当遇到 <strong>qBittorrent WebUI Unauthorized</strong> 的问题时，可以通过 <strong>关闭 WebUI 的 CSRF、Clickjacking 和 HostHeader 校验</strong> 来解决。然后从容器日志获取新的密码即可正常登录。</p>
-<p>这是一种 <strong>快速有效</strong> 的解决办法，尤其适合 <strong>Docker 部署环境</strong>。 🚀</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>qBittorrent</tag>
-        <tag>WebUI</tag>
       </tags>
   </entry>
   <entry>

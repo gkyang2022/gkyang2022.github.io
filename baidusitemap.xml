@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/post/15/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/30/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/17/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/9/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/23/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/18/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/6/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/post/26/</loc>
+    <lastmod>2025-09-18</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/post/21/</loc>
     <lastmod>2025-09-18</lastmod>
   </url>
@@ -49,15 +81,7 @@
     <lastmod>2025-09-03</lastmod>
   </url>
   <url>
-    <loc>http://example.com/post/30/</loc>
-    <lastmod>2025-09-01</lastmod>
-  </url>
-  <url>
     <loc>http://example.com/post/4/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/post/6/</loc>
     <lastmod>2025-08-28</lastmod>
   </url>
   <url>
@@ -73,14 +97,6 @@
     <lastmod>2025-08-28</lastmod>
   </url>
   <url>
-    <loc>http://example.com/post/15/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/post/18/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
     <loc>http://example.com/post/20/</loc>
     <lastmod>2025-08-28</lastmod>
   </url>
@@ -93,23 +109,7 @@
     <lastmod>2025-08-28</lastmod>
   </url>
   <url>
-    <loc>http://example.com/post/26/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/post/23/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/post/17/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
     <loc>http://example.com/post/16/</loc>
-    <lastmod>2025-08-28</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/post/9/</loc>
     <lastmod>2025-08-28</lastmod>
   </url>
 </urlset> 
