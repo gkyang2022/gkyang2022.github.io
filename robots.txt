@@ -1,4 +1,8 @@
 User-agent: *
-Allow: /
+Disallow: /node_modules/
+Disallow: /vendors/
+Disallow: /gulpfile.js
+Disallow: /package.json
+Disallow: /README.md
 
 Sitemap: https://www.317520.xyz/sitemap.xml
