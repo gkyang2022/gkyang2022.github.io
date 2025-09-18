@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker命令百科全书｜容器与镜像管理终极指南</title>
+    <url>/post/6/</url>
+    <content><![CDATA[<p><img src="/images/202503/f4ae1742638708.jpg"></p>
+<p><strong>分类</strong>：【技术技巧专区】- 系统操作指南  <br>| ⏱️ 阅读时间：12分钟 | 🔖 相关标签：#Docker命令 #容器管理 #镜像清理</p>
+<hr>
+<h2><span id="容器生命周期管理">📦 容器生命周期管理</span></h2><h3><span id="容器启停操作">🚦 容器启停操作</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 优雅停止容器</span></span><br><span class="line">docker stop &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制终止容器</span></span><br><span class="line">docker <span class="built_in">kill</span> &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启容器（保留配置）</span></span><br><span class="line">docker restart &lt;Name/ID&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="容器清理技巧">🧹 容器清理技巧</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止所有运行中的容器</span></span><br><span class="line">docker stop $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有容器（危险！）</span></span><br><span class="line">docker <span class="built_in">rm</span> $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全清理已停止的容器</span></span><br><span class="line">docker container prune</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>注意</strong>：执行批量删除前建议备份重要数据</p>
+<hr>
+<h2><span id="️-镜像管理大全">🖼️ 镜像管理大全</span></h2><h3><span id="镜像查询与删除">🔍 镜像查询与删除</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有镜像（含中间层）</span></span><br><span class="line">docker images -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定镜像</span></span><br><span class="line">docker rmi &lt;image_id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制删除所有镜像（慎用！）</span></span><br><span class="line">docker rmi -f $(docker images -q)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="镜像空间优化">🧽 镜像空间优化</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清理悬空镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除未使用镜像（含tag）</span></span><br><span class="line">docker image prune -a</span><br></pre></td></tr></table></figure>
+
+<p>💡 <strong>小技巧</strong>：定期执行可节省30%+存储空间</p>
+<hr>
+<h2><span id="文件操作秘籍">📁 文件操作秘籍</span></h2><h3><span id="宿主机与容器文件交互">🔄 宿主机与容器文件交互</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 宿主机 → 容器</span></span><br><span class="line">docker <span class="built_in">cp</span> /host/path/file.txt &lt;容器名&gt;:/container/path/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器 → 宿主机 </span></span><br><span class="line">docker <span class="built_in">cp</span> &lt;容器名&gt;:/container/path/file.txt /host/path/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2><span id="️-容器调试实战案例">🛠️ 容器调试实战案例</span></h2><h3><span id="进入容器修改配置">🔧 进入容器修改配置</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以交互模式进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新软件源并安装vim</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install vim -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑配置文件</span></span><br><span class="line">vi /path/to/config.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全退出容器</span></span><br><span class="line">Ctrl+P → Ctrl+Q</span><br></pre></td></tr></table></figure>
+
+<h3><span id="常见错误解决">❌ 常见错误解决</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 出现&quot;command not found&quot;时：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; sh  <span class="comment"># 尝试使用sh替代bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改配置后重启服务</span></span><br><span class="line">docker <span class="built_in">exec</span> &lt;容器ID&gt; service nginx reload</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2><span id="命令速查表带表情分类">📊 命令速查表（带表情分类）</span></h2><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>命令</th>
+<th>说明</th>
+<th>危险等级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🛑 容器停止</td>
+<td><code>docker stop $(ps -aq)</code></td>
+<td>停止所有容器</td>
+<td>⚠️⚠️</td>
+</tr>
+<tr>
+<td>🗑️ 镜像删除</td>
+<td><code>docker rmi $(images -q)</code></td>
+<td>删除所有镜像</td>
+<td>⚠️⚠️⚠️</td>
+</tr>
+<tr>
+<td>📂 文件传输</td>
+<td><code>docker cp</code></td>
+<td>跨系统文件拷贝</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>🐞 容器调试</td>
+<td><code>docker exec -it</code></td>
+<td>进入交互式终端</td>
+<td>⚠️</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><span id="建议与最佳实践">💡 建议与最佳实践</span></h2><ol>
+<li><strong>批量操作前</strong>：始终先执行<code>docker ps -a</code>确认操作对象</li>
+<li><strong>文件编辑</strong>：推荐使用<code>volume</code>挂载替代容器内直接修改</li>
+<li><strong>镜像管理</strong>：使用<code>tag</code>规范版本控制（如v1.0, latest）</li>
+<li><strong>安全防护</strong>：定期扫描镜像漏洞：<code>docker scan &lt;image_name&gt;</code></li>
+</ol>
+<hr>
+<p><strong>立即行动</strong>：  <br>💻 打开终端尝试3个新学到的命令  <br>📚 收藏本文作为Docker速查手册  <br>🔄 分享给你的进步！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>命令</tag>
+        <tag>容器</tag>
+        <tag>镜像</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>60个常用Linux命令详解：从入门到精通</title>
     <url>/post/10/</url>
     <content><![CDATA[<h1><span id="60个常用linux命令详解从入门到精通">🐧 60个常用Linux命令详解：从入门到精通 🚀</span></h1><p>作为一名Linux用户，掌握常用命令是必备技能。本文将详细介绍60个最实用的Linux命令，帮助您提高工作效率！本文适合初学者和中级用户，每个命令都配有清晰示例和解释。</p>
@@ -154,8 +233,8 @@
 <p>希望这篇指南对您有所帮助！如果有任何问题或建议，欢迎在评论区留言讨论。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
         <tag>命令</tag>
+        <tag>Linux</tag>
         <tag>教程</tag>
         <tag>入门</tag>
       </tags>
@@ -230,90 +309,66 @@
 <h2><span id="总结">总结</span></h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
         <tag>容器</tag>
+        <tag>教程</tag>
         <tag>升级</tag>
         <tag>DevOps</tag>
       </tags>
   </entry>
   <entry>
-    <title>Docker命令百科全书｜容器与镜像管理终极指南</title>
-    <url>/post/6/</url>
-    <content><![CDATA[<p><img src="/images/202503/f4ae1742638708.jpg"></p>
-<p><strong>分类</strong>：【技术技巧专区】- 系统操作指南  <br>| ⏱️ 阅读时间：12分钟 | 🔖 相关标签：#Docker命令 #容器管理 #镜像清理</p>
+    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
+    <url>/post/12/</url>
+    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
+<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
+<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
+<p><strong>安装步骤：</strong></p>
+<ul>
+<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
+</li>
+</ul>
 <hr>
-<h2><span id="容器生命周期管理">📦 容器生命周期管理</span></h2><h3><span id="容器启停操作">🚦 容器启停操作</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 优雅停止容器</span></span><br><span class="line">docker stop &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制终止容器</span></span><br><span class="line">docker <span class="built_in">kill</span> &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启容器（保留配置）</span></span><br><span class="line">docker restart &lt;Name/ID&gt;</span><br></pre></td></tr></table></figure>
+<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
+<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
+<p><img src="/images/202504/f3cc1745398622.jpg"></p>
+<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
+<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
+<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
+<ul>
+<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
+<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
+<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
+</ul>
+<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
+<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
+<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
+<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
+<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
+</ul>
+<hr>
+<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
+<hr>
+<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
+<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
+<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
+<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
+<pre><code>
+**提示：**
 
-<hr>
-<h3><span id="容器清理技巧">🧹 容器清理技巧</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止所有运行中的容器</span></span><br><span class="line">docker stop $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有容器（危险！）</span></span><br><span class="line">docker <span class="built_in">rm</span> $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全清理已停止的容器</span></span><br><span class="line">docker container prune</span><br></pre></td></tr></table></figure>
-
-<p>⚠️ <strong>注意</strong>：执行批量删除前建议备份重要数据</p>
-<hr>
-<h2><span id="️-镜像管理大全">🖼️ 镜像管理大全</span></h2><h3><span id="镜像查询与删除">🔍 镜像查询与删除</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有镜像（含中间层）</span></span><br><span class="line">docker images -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定镜像</span></span><br><span class="line">docker rmi &lt;image_id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制删除所有镜像（慎用！）</span></span><br><span class="line">docker rmi -f $(docker images -q)</span><br></pre></td></tr></table></figure>
-
-<h3><span id="镜像空间优化">🧽 镜像空间优化</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清理悬空镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除未使用镜像（含tag）</span></span><br><span class="line">docker image prune -a</span><br></pre></td></tr></table></figure>
-
-<p>💡 <strong>小技巧</strong>：定期执行可节省30%+存储空间</p>
-<hr>
-<h2><span id="文件操作秘籍">📁 文件操作秘籍</span></h2><h3><span id="宿主机与容器文件交互">🔄 宿主机与容器文件交互</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 宿主机 → 容器</span></span><br><span class="line">docker <span class="built_in">cp</span> /host/path/file.txt &lt;容器名&gt;:/container/path/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器 → 宿主机 </span></span><br><span class="line">docker <span class="built_in">cp</span> &lt;容器名&gt;:/container/path/file.txt /host/path/</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2><span id="️-容器调试实战案例">🛠️ 容器调试实战案例</span></h2><h3><span id="进入容器修改配置">🔧 进入容器修改配置</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以交互模式进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新软件源并安装vim</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install vim -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑配置文件</span></span><br><span class="line">vi /path/to/config.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全退出容器</span></span><br><span class="line">Ctrl+P → Ctrl+Q</span><br></pre></td></tr></table></figure>
-
-<h3><span id="常见错误解决">❌ 常见错误解决</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 出现&quot;command not found&quot;时：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; sh  <span class="comment"># 尝试使用sh替代bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改配置后重启服务</span></span><br><span class="line">docker <span class="built_in">exec</span> &lt;容器ID&gt; service nginx reload</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2><span id="命令速查表带表情分类">📊 命令速查表（带表情分类）</span></h2><table>
-<thead>
-<tr>
-<th>类别</th>
-<th>命令</th>
-<th>说明</th>
-<th>危险等级</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>🛑 容器停止</td>
-<td><code>docker stop $(ps -aq)</code></td>
-<td>停止所有容器</td>
-<td>⚠️⚠️</td>
-</tr>
-<tr>
-<td>🗑️ 镜像删除</td>
-<td><code>docker rmi $(images -q)</code></td>
-<td>删除所有镜像</td>
-<td>⚠️⚠️⚠️</td>
-</tr>
-<tr>
-<td>📂 文件传输</td>
-<td><code>docker cp</code></td>
-<td>跨系统文件拷贝</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>🐞 容器调试</td>
-<td><code>docker exec -it</code></td>
-<td>进入交互式终端</td>
-<td>⚠️</td>
-</tr>
-</tbody></table>
-<hr>
-<h2><span id="建议与最佳实践">💡 建议与最佳实践</span></h2><ol>
-<li><strong>批量操作前</strong>：始终先执行<code>docker ps -a</code>确认操作对象</li>
-<li><strong>文件编辑</strong>：推荐使用<code>volume</code>挂载替代容器内直接修改</li>
-<li><strong>镜像管理</strong>：使用<code>tag</code>规范版本控制（如v1.0, latest）</li>
-<li><strong>安全防护</strong>：定期扫描镜像漏洞：<code>docker scan &lt;image_name&gt;</code></li>
-</ol>
-<hr>
-<p><strong>立即行动</strong>：  <br>💻 打开终端尝试3个新学到的命令  <br>📚 收藏本文作为Docker速查手册  <br>🔄 分享给你的进步！</p>
-<hr>
+  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
+  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
+</code></pre>
 ]]></content>
       <tags>
-        <tag>命令</tag>
-        <tag>Docker</tag>
-        <tag>容器</tag>
-        <tag>镜像</tag>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>代理</tag>
+        <tag>Clash</tag>
+        <tag>网络</tag>
       </tags>
   </entry>
   <entry>
@@ -380,61 +435,6 @@
         <tag>Jellyfin</tag>
         <tag>油猴</tag>
         <tag>播放器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
-    <url>/post/12/</url>
-    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
-<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
-<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
-<p><strong>安装步骤：</strong></p>
-<ul>
-<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
-</li>
-</ul>
-<hr>
-<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
-<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
-<p><img src="/images/202504/f3cc1745398622.jpg"></p>
-<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
-<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
-<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
-<ul>
-<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
-<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
-<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
-</ul>
-<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
-<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
-<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
-<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
-<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
-</ul>
-<hr>
-<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
-<hr>
-<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
-<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
-<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
-<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
-<pre><code>
-**提示：**
-
-  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
-  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
-</code></pre>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-        <tag>代理</tag>
-        <tag>Clash</tag>
-        <tag>网络</tag>
       </tags>
   </entry>
   <entry>
@@ -547,8 +547,8 @@
 <p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>Homepage</tag>
         <tag>NAS</tag>
         <tag>仪表盘</tag>
@@ -622,8 +622,8 @@
 <p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
         <tag>IPTV</tag>
         <tag>TVBox</tag>
@@ -680,6 +680,59 @@
         <tag>Mint</tag>
         <tag>Telegram</tag>
         <tag>PPA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🎬 告别卡顿！Kodi 连接 Jellyfin 打造流畅 4K 家庭影院</title>
+    <url>/post/13/</url>
+    <content><![CDATA[<p><img src="/images/202504/991e1745793355.png"></p>
+<p>大家好！欢迎来到我的影音世界！相信不少朋友和我一样，使用 Jellyfin 来精心管理和播放自己的珍藏媒体库。Jellyfin 这款开源媒体服务器功能强大，但有时在面对高码率、高分辨率的影片，尤其是在服务器硬件性能不那么强悍的情况下，播放卡顿、CPU 占用过高等问题确实会影响我们的观影体验。</p>
+<p>今天，我要为大家分享一个绝佳的解决方案——<strong>使用 Kodi 这款强大的媒体中心软件来播放 Jellyfin 媒体库里的内容！</strong> 通过 Kodi，我们可以将视频解码的任务交给本地播放设备，从而大幅提升播放的流畅性和稳定性，让你的家庭影院体验焕然一新！</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/su_0sMzJImM?si=Q984ixBfI0Q5VPoR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="kodi你的跨平台媒体中心">🚀 Kodi：你的跨平台媒体中心</span></h2><p>在深入了解如何操作之前，让我们先简单认识一下 Kodi。Kodi 是一款备受欢迎的 <strong>免费开源媒体中心软件</strong>，它最大的魅力之一在于其 <strong>跨平台性</strong>。无论你使用的是 <strong>Windows、macOS、Linux、Android，甚至是树莓派</strong>，都能轻松安装 Kodi。更棒的是，你还可以将 Kodi 安装在电视盒子上，这意味着你的各种家庭影音设备都能通过 Kodi 无缝连接 Jellyfin 媒体库，享受本地解码带来的流畅体验。</p>
+<h2><span id="️-kodi-连接-jellyfin-媒体库教程">🛠️ Kodi 连接 Jellyfin 媒体库教程</span></h2><p>接下来，我就为大家一步步演示如何在 Kodi 中连接你的 Jellyfin 媒体库：</p>
+<h3><span id="1-下载并安装-kodi">1. 下载并安装 Kodi</span></h3><p>首先，访问 Kodi 的官方网站，根据你使用的设备和操作系统下载对应的 Kodi 安装包并完成安装。</p>
+<h3><span id="2-更改-kodi-语言为中文">2. 更改 Kodi 语言为中文</span></h3><p>首次启动 Kodi 时，界面可能是英文的。要将其更改为中文，请按照以下步骤操作：</p>
+<p>1.  在 Kodi 主界面，点击顶部的 <strong>齿轮图标</strong> 进入“设置”菜单。<br>2.  选择 <strong>“Interface”</strong> （界面设置）。<br>3.  在左侧菜单中，选择 <strong>“Skin”</strong> （皮肤）。<br>4.  在右侧的 “Fonts” （字体）选项中，务必将其更改为 <strong>“Arial”</strong>。这是为了避免更换中文后出现方框乱码。<br>5.  返回上一级菜单，选择 <strong>“Regional”</strong> （区域）。<br>6.  点击右侧的 <strong>“Language”</strong> （语言）选项，在列表中找到并选择 <strong>“Chinese (simple)”</strong> （简体中文）或 <strong>“Chinese (traditional)”</strong> （繁体中文）。Kodi 界面将自动切换为中文。</p>
+<h3><span id="3-安装-jellyfin-插件">3. 安装 Jellyfin 插件</span></h3><p>现在，我们需要安装 Jellyfin 插件，让 Kodi 能够连接到你的 Jellyfin 服务器：</p>
+<p>1.  返回 Kodi 主界面，点击 <strong>“文件管理”</strong>。<br>2.  选择 <strong>“添加源”</strong>。<br>3.  在弹出的窗口中，点击 <strong>“浏览”</strong>。<br>4.  选择 <strong>“添加网络位置…”</strong>。<br>5.  将协议设置为 <strong>“Web 服务器目录 (HTTPS)”</strong>。<br>6.  在地址栏中输入 <code>kodi.jellyfin.org</code>，然后点击 <strong>“确定”</strong>。<br>7.  选中刚才添加的服务器，再次点击 <strong>“确定”</strong>。<br>8.  为这个媒体源输入一个你容易记住的名字，例如 “Jellyfin Repo”，然后点击 <strong>“确定”</strong>。<br>9.  返回 Kodi 主界面，点击 <strong>“插件”</strong>。<br>10. 选择 <strong>“安装插件”</strong>。<br>11. 选择 <strong>“从 ZIP 文件安装”</strong>。<br>12. 在弹出的警告窗口中，如果提示“从未知来源安装插件被禁用”，请点击 <strong>“设置”</strong>，打开 <strong>“未知来源”</strong> 的开关，然后返回到插件安装界面，再次选择 <strong>“从 ZIP 文件安装”</strong>。<br>13. 找到并选择你刚才添加的名为 “Jellyfin Repo” 的媒体源，然后选择名为 <code>repository.jellyfin.zip</code> 的文件，点击 <strong>“确定”</strong> 进行安装。等待安装完成后，会弹出安装成功的提示。<br>14. 接下来，选择 <strong>“从库安装”</strong>。<br>15. 找到并点击 <strong>“Kodi Jellyfin Addons”</strong>。<br>16. 选择 <strong>“视频插件”</strong>，然后找到 <strong>“Jellyfin”</strong> 并点击 <strong>“安装”</strong>。<br>17. 安装完成后，Kodi 通常会自动弹出一个添加服务器的窗口。选择 <strong>“手动添加服务器”</strong>。<br>18. 在这里填入你的 Jellyfin 服务器地址（例如：<code>你的 Jellyfin 服务器 IP:8096</code>），然后输入你的 Jellyfin 登录账号和密码。<br>19. 将 <strong>“连接类型”</strong> 选择为默认的 <strong>“全部”</strong>，然后点击 <strong>“确定”</strong>。Kodi 就会开始与你的 Jellyfin 服务器进行同步。</p>
+<h3><span id="4-畅享你的-jellyfin-媒体库">4. 畅享你的 Jellyfin 媒体库</span></h3><p>同步完成后，返回 Kodi 主界面，你就可以在 “电影”、“电视剧”、“音乐” 等分类中看到已经同步完成的 Jellyfin 媒体库内容了！</p>
+<h2><span id="体验本地解码的强大">🎬 体验本地解码的强大</span></h2><p>现在，让我们来直观地对比一下使用 Kodi 播放 Jellyfin 媒体库的优势。如果你之前直接在 Jellyfin 客户端播放高码率 4K 电影时遇到卡顿，不妨尝试在 Kodi 中播放同一部影片。你会发现，点击播放后几乎是立即开始，播放过程非常流畅，基本上和在本地播放没有区别。拖动进度条进行跳转也非常迅速。</p>
+<p><strong>总结一下，使用 Kodi 播放 Jellyfin 媒体库，你可以：</strong></p>
+<ul>
+<li><strong>告别播放卡顿：</strong> 利用本地设备的强大解码能力，流畅播放高码率影片。</li>
+<li><strong>释放服务器压力：</strong> 将解码任务转移到本地，减轻 Jellyfin 服务器的负担。</li>
+<li><strong>享受更高画质：</strong> 本地解码通常能更好地呈现影片的原始画质。</li>
+</ul>
+<h2><span id="总结">🎉 总结</span></h2><p>如果你正苦于 Jellyfin 播放高码率影片时的卡顿问题，或者希望获得更流畅、更高画质的观影体验，那么使用 Kodi 连接 Jellyfin 媒体库绝对是一个值得尝试的解决方案。它能让你充分利用本地设备的性能，畅享你的影音收藏！</p>
+<p>感谢阅读本文！如果你觉得这个教程对你有帮助，别忘了分享给你的朋友！如果你在使用过程中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Jellyfin</tag>
+        <tag>Kodi</tag>
+        <tag>家庭影院</tag>
+        <tag>4K</tag>
       </tags>
   </entry>
   <entry>
@@ -762,59 +815,6 @@
         <tag>OrionTV</tag>
         <tag>电视</tag>
         <tag>手机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🎬 告别卡顿！Kodi 连接 Jellyfin 打造流畅 4K 家庭影院</title>
-    <url>/post/13/</url>
-    <content><![CDATA[<p><img src="/images/202504/991e1745793355.png"></p>
-<p>大家好！欢迎来到我的影音世界！相信不少朋友和我一样，使用 Jellyfin 来精心管理和播放自己的珍藏媒体库。Jellyfin 这款开源媒体服务器功能强大，但有时在面对高码率、高分辨率的影片，尤其是在服务器硬件性能不那么强悍的情况下，播放卡顿、CPU 占用过高等问题确实会影响我们的观影体验。</p>
-<p>今天，我要为大家分享一个绝佳的解决方案——<strong>使用 Kodi 这款强大的媒体中心软件来播放 Jellyfin 媒体库里的内容！</strong> 通过 Kodi，我们可以将视频解码的任务交给本地播放设备，从而大幅提升播放的流畅性和稳定性，让你的家庭影院体验焕然一新！</p>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/su_0sMzJImM?si=Q984ixBfI0Q5VPoR" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="kodi你的跨平台媒体中心">🚀 Kodi：你的跨平台媒体中心</span></h2><p>在深入了解如何操作之前，让我们先简单认识一下 Kodi。Kodi 是一款备受欢迎的 <strong>免费开源媒体中心软件</strong>，它最大的魅力之一在于其 <strong>跨平台性</strong>。无论你使用的是 <strong>Windows、macOS、Linux、Android，甚至是树莓派</strong>，都能轻松安装 Kodi。更棒的是，你还可以将 Kodi 安装在电视盒子上，这意味着你的各种家庭影音设备都能通过 Kodi 无缝连接 Jellyfin 媒体库，享受本地解码带来的流畅体验。</p>
-<h2><span id="️-kodi-连接-jellyfin-媒体库教程">🛠️ Kodi 连接 Jellyfin 媒体库教程</span></h2><p>接下来，我就为大家一步步演示如何在 Kodi 中连接你的 Jellyfin 媒体库：</p>
-<h3><span id="1-下载并安装-kodi">1. 下载并安装 Kodi</span></h3><p>首先，访问 Kodi 的官方网站，根据你使用的设备和操作系统下载对应的 Kodi 安装包并完成安装。</p>
-<h3><span id="2-更改-kodi-语言为中文">2. 更改 Kodi 语言为中文</span></h3><p>首次启动 Kodi 时，界面可能是英文的。要将其更改为中文，请按照以下步骤操作：</p>
-<p>1.  在 Kodi 主界面，点击顶部的 <strong>齿轮图标</strong> 进入“设置”菜单。<br>2.  选择 <strong>“Interface”</strong> （界面设置）。<br>3.  在左侧菜单中，选择 <strong>“Skin”</strong> （皮肤）。<br>4.  在右侧的 “Fonts” （字体）选项中，务必将其更改为 <strong>“Arial”</strong>。这是为了避免更换中文后出现方框乱码。<br>5.  返回上一级菜单，选择 <strong>“Regional”</strong> （区域）。<br>6.  点击右侧的 <strong>“Language”</strong> （语言）选项，在列表中找到并选择 <strong>“Chinese (simple)”</strong> （简体中文）或 <strong>“Chinese (traditional)”</strong> （繁体中文）。Kodi 界面将自动切换为中文。</p>
-<h3><span id="3-安装-jellyfin-插件">3. 安装 Jellyfin 插件</span></h3><p>现在，我们需要安装 Jellyfin 插件，让 Kodi 能够连接到你的 Jellyfin 服务器：</p>
-<p>1.  返回 Kodi 主界面，点击 <strong>“文件管理”</strong>。<br>2.  选择 <strong>“添加源”</strong>。<br>3.  在弹出的窗口中，点击 <strong>“浏览”</strong>。<br>4.  选择 <strong>“添加网络位置…”</strong>。<br>5.  将协议设置为 <strong>“Web 服务器目录 (HTTPS)”</strong>。<br>6.  在地址栏中输入 <code>kodi.jellyfin.org</code>，然后点击 <strong>“确定”</strong>。<br>7.  选中刚才添加的服务器，再次点击 <strong>“确定”</strong>。<br>8.  为这个媒体源输入一个你容易记住的名字，例如 “Jellyfin Repo”，然后点击 <strong>“确定”</strong>。<br>9.  返回 Kodi 主界面，点击 <strong>“插件”</strong>。<br>10. 选择 <strong>“安装插件”</strong>。<br>11. 选择 <strong>“从 ZIP 文件安装”</strong>。<br>12. 在弹出的警告窗口中，如果提示“从未知来源安装插件被禁用”，请点击 <strong>“设置”</strong>，打开 <strong>“未知来源”</strong> 的开关，然后返回到插件安装界面，再次选择 <strong>“从 ZIP 文件安装”</strong>。<br>13. 找到并选择你刚才添加的名为 “Jellyfin Repo” 的媒体源，然后选择名为 <code>repository.jellyfin.zip</code> 的文件，点击 <strong>“确定”</strong> 进行安装。等待安装完成后，会弹出安装成功的提示。<br>14. 接下来，选择 <strong>“从库安装”</strong>。<br>15. 找到并点击 <strong>“Kodi Jellyfin Addons”</strong>。<br>16. 选择 <strong>“视频插件”</strong>，然后找到 <strong>“Jellyfin”</strong> 并点击 <strong>“安装”</strong>。<br>17. 安装完成后，Kodi 通常会自动弹出一个添加服务器的窗口。选择 <strong>“手动添加服务器”</strong>。<br>18. 在这里填入你的 Jellyfin 服务器地址（例如：<code>你的 Jellyfin 服务器 IP:8096</code>），然后输入你的 Jellyfin 登录账号和密码。<br>19. 将 <strong>“连接类型”</strong> 选择为默认的 <strong>“全部”</strong>，然后点击 <strong>“确定”</strong>。Kodi 就会开始与你的 Jellyfin 服务器进行同步。</p>
-<h3><span id="4-畅享你的-jellyfin-媒体库">4. 畅享你的 Jellyfin 媒体库</span></h3><p>同步完成后，返回 Kodi 主界面，你就可以在 “电影”、“电视剧”、“音乐” 等分类中看到已经同步完成的 Jellyfin 媒体库内容了！</p>
-<h2><span id="体验本地解码的强大">🎬 体验本地解码的强大</span></h2><p>现在，让我们来直观地对比一下使用 Kodi 播放 Jellyfin 媒体库的优势。如果你之前直接在 Jellyfin 客户端播放高码率 4K 电影时遇到卡顿，不妨尝试在 Kodi 中播放同一部影片。你会发现，点击播放后几乎是立即开始，播放过程非常流畅，基本上和在本地播放没有区别。拖动进度条进行跳转也非常迅速。</p>
-<p><strong>总结一下，使用 Kodi 播放 Jellyfin 媒体库，你可以：</strong></p>
-<ul>
-<li><strong>告别播放卡顿：</strong> 利用本地设备的强大解码能力，流畅播放高码率影片。</li>
-<li><strong>释放服务器压力：</strong> 将解码任务转移到本地，减轻 Jellyfin 服务器的负担。</li>
-<li><strong>享受更高画质：</strong> 本地解码通常能更好地呈现影片的原始画质。</li>
-</ul>
-<h2><span id="总结">🎉 总结</span></h2><p>如果你正苦于 Jellyfin 播放高码率影片时的卡顿问题，或者希望获得更流畅、更高画质的观影体验，那么使用 Kodi 连接 Jellyfin 媒体库绝对是一个值得尝试的解决方案。它能让你充分利用本地设备的性能，畅享你的影音收藏！</p>
-<p>感谢阅读本文！如果你觉得这个教程对你有帮助，别忘了分享给你的朋友！如果你在使用过程中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Jellyfin</tag>
-        <tag>Kodi</tag>
-        <tag>家庭影院</tag>
-        <tag>4K</tag>
       </tags>
   </entry>
   <entry>
@@ -1160,11 +1160,104 @@
 
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
         <tag>PanSou</tag>
         <tag>资源搜索</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Typecho 手动部署详细教程</title>
+    <url>/post/27/</url>
+    <content><![CDATA[<h2><span id="typecho-手动部署详细教程">Typecho 手动部署详细教程</span></h2><p>本教程将指导你如何在基于 Ubuntu 的 Linux 服务器（如 Mint 桌面版、Ubuntu VPS 等）上，手动安装 Nginx、PHP 和 MariaDB 环境，并部署 Typecho 博客系统。</p>
+<h3><span id="适用场景"><strong>适用场景</strong></span></h3><ul>
+<li>想要在内存有限的 VPS 上部署 Typecho。</li>
+<li>希望深入了解服务器部署的每个环节。</li>
+<li>将 Typecho 作为学习或测试环境。</li>
+</ul>
+<hr>
+<h3><span id="步骤一安装服务器环境"><strong>步骤一：安装服务器环境</strong></span></h3><p>首先，我们需要安装运行 Typecho 所需的 Web 服务器、数据库和 PHP 环境。</p>
+<h4><span id="1-更新系统软件包列表">1. 更新系统软件包列表</span></h4><p>在开始安装之前，最好先更新你的系统。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
+
+<h4><span id="2-安装-nginx-和-mariadb">2. 安装 Nginx 和 MariaDB</span></h4><p>Nginx 将作为我们的 Web 服务器，MariaDB 将作为我们的数据库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install nginx mariadb-server -y</span><br></pre></td></tr></table></figure>
+
+<h4><span id="3-检查并安装-php-及其扩展">3. 检查并安装 PHP 及其扩展</span></h4><p>Typecho 需要 PHP 及其一些特定的扩展才能正常运行。</p>
+<p>首先，检查你的系统是否已安装 PHP：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">php -v</span><br></pre></td></tr></table></figure>
+
+<p>如果系统已安装 PHP，该命令会输出版本信息。记下这个版本，你需要在后面的 Nginx 配置中用到它（例如 php8.3-fpm.sock）。</p>
+<p>然后，根据你的情况执行安装：</p>
+<p><strong>如果系统没有安装 PHP，或者你想要安装一个特定版本（例如 PHP 8.3），则运行以下命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-curl -y</span><br></pre></td></tr></table></figure>
+
+<p>（请注意，如果你的系统默认仓库不包含 PHP 8.3，你可能需要添加相应的 PPA 仓库。）</p>
+<p><strong>如果你的系统已经有 PHP 且你希望使用它，那么只需要安装必要的扩展：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install php-fpm php-mysql php-gd php-mbstring php-xml php-curl -y</span><br></pre></td></tr></table></figure>
+
+<p><strong>重要提示：</strong> 请确保你安装的 PHP 版本与 Nginx 配置文件中 <code>fastcgi_pass</code> 所指定的版本（例如 <code>php8.3-fpm.sock</code>）一致。</p>
+<h3><span id="步骤二创建数据库"><strong>步骤二：创建数据库</strong></span></h3><p>Typecho 需要一个数据库来存储所有的博客数据。</p>
+<h4><span id="1-登录-mariadb">1. 登录 MariaDB</span></h4><p>以 <code>root</code> 用户身份登录数据库。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mysql -u root -p</span><br></pre></td></tr></table></figure>
+
+<p>（第一次登录时可能不需要密码，直接按回车即可。）</p>
+<h4><span id="2-创建数据库">2. 创建数据库</span></h4><p>创建一个名为 <code>typecho</code> 的数据库。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE typecho <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_unicode_ci;</span><br></pre></td></tr></table></figure>
+
+<p>（如果你想使用其他数据库名，请确保后面的步骤中保持一致。）</p>
+<h4><span id="3-创建数据库用户并授权">3. 创建数据库用户并授权</span></h4><p>创建一个名为 <code>typecho</code> 的用户，并授予它对 <code>typecho</code> 数据库的所有权限。请将 <code>your_strong_password</code> 替换为一个强密码。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;your_strong_password&#x27;</span>;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> typecho.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<p>（请确保 <code>CREATE USER</code> 和 <code>GRANT</code> 命令中的用户名和数据库名完全一致。）</p>
+<h4><span id="4-退出">4. 退出</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">EXIT;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="步骤三下载并配置-typecho"><strong>步骤三：下载并配置 Typecho</strong></span></h3><h4><span id="1-创建-typecho-博客目录">1. 创建 Typecho 博客目录</span></h4><p>在 <code>/var/www/</code> 目录下创建一个名为 <code>typecho_blog</code> 的新文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /var/www/typecho_blog</span><br></pre></td></tr></table></figure>
+
+<h4><span id="2-进入目录并下载文件">2. 进入目录并下载文件</span></h4><p>进入新创建的目录，并直接在里面下载 Typecho 的 zip 安装包。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/www/typecho_blog/</span><br><span class="line"><span class="built_in">sudo</span> wget [https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip](https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip)</span><br></pre></td></tr></table></figure>
+
+<h4><span id="3-解压文件">3. 解压文件</span></h4><p>解压下载的 zip 包。文件将直接解压到当前目录。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> unzip typecho.zip</span><br></pre></td></tr></table></figure>
+
+<h4><span id="4-删除压缩包">4. 删除压缩包</span></h4><p>（可选）为了保持目录整洁，你可以删除下载的 zip 压缩包。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> typecho.zip</span><br></pre></td></tr></table></figure>
+
+<h4><span id="5-设置文件权限">5. 设置文件权限</span></h4><p>这是非常重要的一步。我们将目录的所有者和所属组都设置为 <code>www-data</code>，这是 Nginx 和 PHP-FPM 的运行用户。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R www-data:www-data /var/www/typecho_blog/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> -R 775 /var/www/typecho_blog/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="步骤四配置-nginx"><strong>步骤四：配置 Nginx</strong></span></h3><h4><span id="1-创建-nginx-配置文件">1. 创建 Nginx 配置文件</span></h4><p>为你的 Typecho 站点创建一个新的配置文件。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/nginx/sites-available/typecho.conf</span><br></pre></td></tr></table></figure>
+
+<h4><span id="2-粘贴并修改以下配置">2. 粘贴并修改以下配置</span></h4><p>请将以下内容粘贴到文件中，并将 <code>server_name</code> 替换为你的域名或 IP 地址。注意，<code>fastcgi_pass</code> 的版本号已修正为 <code>php8.3-fpm.sock</code>。</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 你的域名或 IP 地址</span></span><br><span class="line">    <span class="comment"># 例如: server_name example.com [www.example.com](https://www.example.com);</span></span><br><span class="line">    <span class="comment"># 或者: server_name 10.0.0.150;</span></span><br><span class="line">    <span class="attribute">server_name</span> <span class="number">10.0.0.150</span>;</span><br><span class="line">    <span class="attribute">root</span> /var/www/typecho_blog;</span><br><span class="line">    <span class="attribute">index</span> index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$args</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ \.php$</span> &#123;</span><br><span class="line">        <span class="attribute">include</span> snippets/fastcgi-php.conf;</span><br><span class="line">        <span class="attribute">fastcgi_pass</span> unix:/var/run/php/php8.3-fpm.sock;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ /\.ht</span> &#123;</span><br><span class="line">        <span class="attribute">deny</span> all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4><span id="3-启用配置并重启-nginx">3. 启用配置并重启 Nginx</span></h4><p>创建配置文件链接，移除默认配置，检查语法，然后重启服务。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /etc/nginx/sites-available/typecho.conf /etc/nginx/sites-enabled/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /etc/nginx/sites-enabled/default</span><br><span class="line"><span class="built_in">sudo</span> nginx -t</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="步骤五完成安装"><strong>步骤五：完成安装</strong></span></h3><p>现在，你可以通过浏览器访问你的服务器 IP 或域名，即可看到 Typecho 的安装向导。</p>
+<p>根据向导提示，填入你在 <strong>步骤二</strong> 中创建的数据库信息和管理员账户信息，即可完成部署。</p>
+<hr>
+<h3><span id="步骤六完全卸载可选"><strong>步骤六：完全卸载（可选）</strong></span></h3><p>如果你想完全删除这套 Typecho 系统，可以按照以下步骤操作：</p>
+<h4><span id="1-删除-nginx-配置和文件">1. 删除 Nginx 配置和文件</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除 Nginx 配置文件链接</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /etc/nginx/sites-enabled/typecho.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新加载 Nginx 配置</span></span><br><span class="line"><span class="built_in">sudo</span> nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 Typecho 文件目录</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> -rf /var/www/typecho_blog/</span><br></pre></td></tr></table></figure>
+
+<h4><span id="2-删除数据库和用户">2. 删除数据库和用户</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 登录 MariaDB</span></span><br><span class="line"><span class="built_in">sudo</span> mysql -u root -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除数据库和用户</span></span><br><span class="line">DROP DATABASE typecho;</span><br><span class="line">DROP USER <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出</span></span><br><span class="line">EXIT;</span><br></pre></td></tr></table></figure>
+
+<h4><span id="3-卸载所有软件包">3. 卸载所有软件包</span></h4><p>如果你不再需要 Nginx、PHP 和 MariaDB，可以运行以下命令卸载它们：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt purge nginx mariadb-server php-fpm php-mysql php-gd php-mbstring php-xml php-curl -y</span><br><span class="line"><span class="built_in">sudo</span> apt autoremove -y</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <tags>
+        <tag>Typecho</tag>
+        <tag>博客</tag>
+        <tag>部署</tag>
+        <tag>Ubuntu</tag>
       </tags>
   </entry>
   <entry>
@@ -1225,8 +1318,8 @@
 
 <h3><span id="自定义页脚">自定义页脚</span></h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// =========== Config Start ===========</span></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// 距离滚动偏移量</span></span><br><span class="line">  <span class="keyword">const</span> scrollOffset = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 显示风格( auto:自动(默认) | mobile:左上角显示触发按钮-移动端风格 | sidebar:常态显示侧栏)</span></span><br><span class="line">  <span class="keyword">const</span> displayStyle = <span class="string">&#x27;auto&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 移动端宽度定义</span></span><br><span class="line">  <span class="keyword">const</span> mobileWidth = <span class="number">800</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomIdName</span> = <span class="string">&#x27;sun-panel-toc-dom&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 左上角按钮 SVG 图标</span></span><br><span class="line">  <span class="keyword">const</span> svgTocMobileBtn = <span class="string">&#x27;&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)&quot;  viewBox=&quot;0 0 24 24&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M17.5 4.5c-1.95 0-4.05.4-5.5 1.5c-1.45-1.1-3.55-1.5-5.5-1.5c-1.45 0-2.99.22-4.28.79C1.49 5.62 1 6.33 1 7.14v11.28c0 1.3 1.22 2.26 2.48 1.94c.98-.25 2.02-.36 3.02-.36c1.56 0 3.22.26 4.56.92c.6.3 1.28.3 1.87 0c1.34-.67 3-.92 4.56-.92c1 0 2.04.11 3.02.36c1.26.33 2.48-.63 2.48-1.94V7.14c0-.81-.49-1.52-1.22-1.85c-1.28-.57-2.82-.79-4.27-.79M21 17.23c0 .63-.58 1.09-1.2.98c-.75-.14-1.53-.2-2.3-.2c-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5c.92 0 1.83.09 2.7.28c.46.1.8.51.8.98z&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M13.98 11.01c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.54-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39c-.08.01-.16.03-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.7-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03&quot;/&gt;&lt;/svg&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// =========== Config End ===========</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滚动容器的类名</span></span><br><span class="line">  <span class="keyword">const</span> scrollContainerElementClassName = <span class="string">&#x27;.scroll-container&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 一些函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">isMobile</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;mobile&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;pc&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> width = <span class="variable language_">window</span>.<span class="property">innerWidth</span></span><br><span class="line">    <span class="keyword">return</span> width &lt; mobileWidth</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createDom</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 检测是否已经存在TOC DOM，存在则删除</span></span><br><span class="line">    (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="title class_">SunPanelTOCDomIdName</span>)</span><br><span class="line">      <span class="keyword">if</span> (element) &#123;</span><br><span class="line">        element.<span class="title function_">remove</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDom</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="property">id</span> = <span class="title class_">SunPanelTOCDomIdName</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(<span class="title class_">SunPanelTOCDom</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style start =========</span></span><br><span class="line">    <span class="keyword">const</span> style = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;style&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomStyleId</span> = <span class="string">`#<span class="subst">$&#123;SunPanelTOCDomIdName&#125;</span>`</span></span><br><span class="line">    style.<span class="property">textContent</span> = <span class="string">`</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-mobile-btn &#123;</span></span><br><span class="line"><span class="string">        top: 20px !important;</span></span><br><span class="line"><span class="string">        left: 20px !important;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        width: 46px;</span></span><br><span class="line"><span class="string">        height: 46px;</span></span><br><span class="line"><span class="string">        background-color: #2a2a2a6b;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">        border-radius: 0.5rem;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .hidden &#123;</span></span><br><span class="line"><span class="string">        display: none !important;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">        padding: 10px;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        top: 0;</span></span><br><span class="line"><span class="string">        left: 0;</span></span><br><span class="line"><span class="string">        height: 100%;</span></span><br><span class="line"><span class="string">        overflow: hidden;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        flex-direction: column;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        transition: width 0.3s ease, background-color 0.3s ease;</span></span><br><span class="line"><span class="string">        border-top-right-radius: 20px;</span></span><br><span class="line"><span class="string">        border-bottom-right-radius: 20px;</span></span><br><span class="line"><span class="string">        background-color: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-mobile-btn-svg-container&#123;</span></span><br><span class="line"><span class="string">      width:21px;</span></span><br><span class="line"><span class="string">      height:21px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion &#123;</span></span><br><span class="line"><span class="string">        width: 200px !important;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        background-color: rgb(42 42 42 / 90%);</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar .toc-sidebar-box &#123;</span></span><br><span class="line"><span class="string">        width: 500px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-box &#123;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        position: relative;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 20px;</span></span><br><span class="line"><span class="string">        height: 6px;</span></span><br><span class="line"><span class="string">        background-color: white;</span></span><br><span class="line"><span class="string">        border-radius: 4px;</span></span><br><span class="line"><span class="string">        margin: 15px 0;</span></span><br><span class="line"><span class="string">        transition: height 0.3s ease, width 0.3s ease;</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">        white-space: nowrap;</span></span><br><span class="line"><span class="string">        transition: opacity 0.3s ease, transform 0.3s ease, margin-left 0.3s ease;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">        margin-left: 10px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        box-shadow: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        font-size: 20px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      `</span></span><br><span class="line">    <span class="comment">// 添加样式到文档头部</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(style)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style end =========</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加移动端菜单按钮</span></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtn = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="property">id</span> = <span class="string">&#x27;toc-mobile-btn&#x27;</span></span><br><span class="line">    tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;backdrop-blur-[2px]&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(tocMobileBtn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtnSvgcContainer = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">innerHTML</span> = svgTocMobileBtn</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-mobile-btn-svg-container&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="title function_">appendChild</span>(tocMobileBtnSvgcContainer)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建侧边栏容器</span></span><br><span class="line">    <span class="keyword">const</span> sidebar = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebar.<span class="property">id</span> = <span class="string">&#x27;toc-sidebar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sidebarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebarBox.<span class="property">className</span> = <span class="string">&#x27;toc-sidebar-box&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询出所有类名包含 item-group-index- 的元素</span></span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历并打印每个元素的完整类名</span></span><br><span class="line">    items.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      item.<span class="property">classList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (className.<span class="title function_">startsWith</span>(<span class="string">&#x27;item-group-index-&#x27;</span>)) &#123;</span><br><span class="line">          <span class="keyword">const</span> titleBarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarBox.<span class="property">className</span> = <span class="string">&#x27;title-bar-box&#x27;</span></span><br><span class="line">          <span class="comment">// titleBarBox.href = `#$&#123;item.id&#125;`</span></span><br><span class="line">          titleBarBox.<span class="property">dataset</span>.<span class="property">groupClassName</span> = className</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 目录条</span></span><br><span class="line">          <span class="keyword">const</span> titleBarSlip = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarSlip.<span class="property">className</span> = <span class="string">&#x27;title-bar-slip&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 创建一个链接</span></span><br><span class="line">          <span class="keyword">const</span> titleBarTitle = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarTitle.<span class="property">className</span> = <span class="string">&#x27;title-bar-title&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 获取子元素中 class=&quot;group-title&quot; 的内容</span></span><br><span class="line">          <span class="keyword">const</span> titleElement = item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.group-title&#x27;</span>)</span><br><span class="line">          <span class="keyword">const</span> titleText = titleElement ? titleElement.<span class="property">textContent</span> : item.<span class="property">id</span></span><br><span class="line">          titleBarTitle.<span class="property">textContent</span> = titleText</span><br><span class="line"></span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarSlip)</span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarTitle)</span><br><span class="line"></span><br><span class="line">          sidebarBox.<span class="title function_">appendChild</span>(titleBarBox)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    sidebar.<span class="title function_">appendChild</span>(sidebarBox)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将侧边栏添加到页面中</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(sidebar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mobileHideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">hideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">showSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化开始</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">func, wait</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> timeout</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout)</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          func.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">handleResize</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用防抖函数包装你的处理函数</span></span><br><span class="line">    <span class="keyword">const</span> debouncedHandleResize = <span class="title function_">debounce</span>(handleResize, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加事件监听器</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, debouncedHandleResize)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次触发</span></span><br><span class="line">    <span class="title function_">handleResize</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化结束</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听移动端按钮点击</span></span><br><span class="line">    tocMobileBtn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (sidebar.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 显示</span></span><br><span class="line">        <span class="title function_">showSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏失去hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏获得hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">showSidebar</span>()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC点击事件</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.title-bar-box&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">box</span>) =&gt;</span> &#123;</span><br><span class="line">      box.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 检查触发事件的元素是否有 &#x27;data-groupClassName&#x27; 属性</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取 &#x27;data-groupClass&#x27; 属性的值</span></span><br><span class="line">          <span class="keyword">const</span> groupClassName = <span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span></span><br><span class="line">          <span class="comment">// 使用属性值作为选择器查询对应的元素</span></span><br><span class="line">          <span class="keyword">const</span> targetElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">`.<span class="subst">$&#123;groupClassName&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">if</span> (targetElement) &#123;</span><br><span class="line">          <span class="comment">// 获取目标元素的 &#x27;top&#x27; 坐标</span></span><br><span class="line">            <span class="keyword">const</span> targetTop = targetElement.<span class="property">offsetTop</span></span><br><span class="line">            <span class="keyword">const</span> scrollContainerElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(scrollContainerElementClassName)</span><br><span class="line">            <span class="keyword">if</span> (scrollContainerElement) &#123;</span><br><span class="line">              scrollContainerElement.<span class="title function_">scrollTo</span>(&#123;</span><br><span class="line">                <span class="attr">top</span>: targetTop - scrollOffset,</span><br><span class="line">                <span class="attr">behavior</span>: <span class="string">&#x27;smooth&#x27;</span>, <span class="comment">// 平滑滚动</span></span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否已经存在分组，不存在将定时监听</span></span><br><span class="line">  <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="title function_">createDom</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">createDom</span>()</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
         <tag>Sun-Panel</tag>
         <tag>导航主页</tag>
@@ -1645,182 +1738,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
-    <url>/post/7/</url>
-    <content><![CDATA[<p><strong>目录</strong></p>
-<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
-<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
-<p><code>iptv-api</code> 的核心优势在于：</p>
-<ul>
-<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
-<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
-<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
-<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
-</ul>
-<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
-<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
-<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
-<p><img src="/images/202503/4a471742993634.png"></p>
-<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
-<p><img src="/images/202503/fb5c1742993645.png"></p>
-<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
-<ul>
-<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
-</ul>
-<p><img src="/images/202503/10fb1742993656.png"></p>
-<ul>
-<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
-</li>
-<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
-</li>
-</ul>
-<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
-
-<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
-<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
-<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
-<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
-<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
-<ul>
-<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
-<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
-<li>点击“确定”即可播放。</li>
-</ul>
-<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
-<ul>
-<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
-<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
-<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
-</ul>
-<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
-<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>IPTV</tag>
-        <tag>CasaOS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Typecho 手动部署详细教程</title>
-    <url>/post/27/</url>
-    <content><![CDATA[<h2><span id="typecho-手动部署详细教程">Typecho 手动部署详细教程</span></h2><p>本教程将指导你如何在基于 Ubuntu 的 Linux 服务器（如 Mint 桌面版、Ubuntu VPS 等）上，手动安装 Nginx、PHP 和 MariaDB 环境，并部署 Typecho 博客系统。</p>
-<h3><span id="适用场景"><strong>适用场景</strong></span></h3><ul>
-<li>想要在内存有限的 VPS 上部署 Typecho。</li>
-<li>希望深入了解服务器部署的每个环节。</li>
-<li>将 Typecho 作为学习或测试环境。</li>
-</ul>
-<hr>
-<h3><span id="步骤一安装服务器环境"><strong>步骤一：安装服务器环境</strong></span></h3><p>首先，我们需要安装运行 Typecho 所需的 Web 服务器、数据库和 PHP 环境。</p>
-<h4><span id="1-更新系统软件包列表">1. 更新系统软件包列表</span></h4><p>在开始安装之前，最好先更新你的系统。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade -y</span><br></pre></td></tr></table></figure>
-
-<h4><span id="2-安装-nginx-和-mariadb">2. 安装 Nginx 和 MariaDB</span></h4><p>Nginx 将作为我们的 Web 服务器，MariaDB 将作为我们的数据库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install nginx mariadb-server -y</span><br></pre></td></tr></table></figure>
-
-<h4><span id="3-检查并安装-php-及其扩展">3. 检查并安装 PHP 及其扩展</span></h4><p>Typecho 需要 PHP 及其一些特定的扩展才能正常运行。</p>
-<p>首先，检查你的系统是否已安装 PHP：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">php -v</span><br></pre></td></tr></table></figure>
-
-<p>如果系统已安装 PHP，该命令会输出版本信息。记下这个版本，你需要在后面的 Nginx 配置中用到它（例如 php8.3-fpm.sock）。</p>
-<p>然后，根据你的情况执行安装：</p>
-<p><strong>如果系统没有安装 PHP，或者你想要安装一个特定版本（例如 PHP 8.3），则运行以下命令：</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install php8.3-fpm php8.3-mysql php8.3-gd php8.3-mbstring php8.3-xml php8.3-curl -y</span><br></pre></td></tr></table></figure>
-
-<p>（请注意，如果你的系统默认仓库不包含 PHP 8.3，你可能需要添加相应的 PPA 仓库。）</p>
-<p><strong>如果你的系统已经有 PHP 且你希望使用它，那么只需要安装必要的扩展：</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install php-fpm php-mysql php-gd php-mbstring php-xml php-curl -y</span><br></pre></td></tr></table></figure>
-
-<p><strong>重要提示：</strong> 请确保你安装的 PHP 版本与 Nginx 配置文件中 <code>fastcgi_pass</code> 所指定的版本（例如 <code>php8.3-fpm.sock</code>）一致。</p>
-<h3><span id="步骤二创建数据库"><strong>步骤二：创建数据库</strong></span></h3><p>Typecho 需要一个数据库来存储所有的博客数据。</p>
-<h4><span id="1-登录-mariadb">1. 登录 MariaDB</span></h4><p>以 <code>root</code> 用户身份登录数据库。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mysql -u root -p</span><br></pre></td></tr></table></figure>
-
-<p>（第一次登录时可能不需要密码，直接按回车即可。）</p>
-<h4><span id="2-创建数据库">2. 创建数据库</span></h4><p>创建一个名为 <code>typecho</code> 的数据库。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE typecho <span class="keyword">DEFAULT</span> <span class="keyword">CHARACTER SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_unicode_ci;</span><br></pre></td></tr></table></figure>
-
-<p>（如果你想使用其他数据库名，请确保后面的步骤中保持一致。）</p>
-<h4><span id="3-创建数据库用户并授权">3. 创建数据库用户并授权</span></h4><p>创建一个名为 <code>typecho</code> 的用户，并授予它对 <code>typecho</code> 数据库的所有权限。请将 <code>your_strong_password</code> 替换为一个强密码。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;your_strong_password&#x27;</span>;</span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> PRIVILEGES <span class="keyword">ON</span> typecho.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-
-<p>（请确保 <code>CREATE USER</code> 和 <code>GRANT</code> 命令中的用户名和数据库名完全一致。）</p>
-<h4><span id="4-退出">4. 退出</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">EXIT;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="步骤三下载并配置-typecho"><strong>步骤三：下载并配置 Typecho</strong></span></h3><h4><span id="1-创建-typecho-博客目录">1. 创建 Typecho 博客目录</span></h4><p>在 <code>/var/www/</code> 目录下创建一个名为 <code>typecho_blog</code> 的新文件夹。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /var/www/typecho_blog</span><br></pre></td></tr></table></figure>
-
-<h4><span id="2-进入目录并下载文件">2. 进入目录并下载文件</span></h4><p>进入新创建的目录，并直接在里面下载 Typecho 的 zip 安装包。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /var/www/typecho_blog/</span><br><span class="line"><span class="built_in">sudo</span> wget [https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip](https://github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip)</span><br></pre></td></tr></table></figure>
-
-<h4><span id="3-解压文件">3. 解压文件</span></h4><p>解压下载的 zip 包。文件将直接解压到当前目录。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> unzip typecho.zip</span><br></pre></td></tr></table></figure>
-
-<h4><span id="4-删除压缩包">4. 删除压缩包</span></h4><p>（可选）为了保持目录整洁，你可以删除下载的 zip 压缩包。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> typecho.zip</span><br></pre></td></tr></table></figure>
-
-<h4><span id="5-设置文件权限">5. 设置文件权限</span></h4><p>这是非常重要的一步。我们将目录的所有者和所属组都设置为 <code>www-data</code>，这是 Nginx 和 PHP-FPM 的运行用户。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R www-data:www-data /var/www/typecho_blog/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> -R 775 /var/www/typecho_blog/</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="步骤四配置-nginx"><strong>步骤四：配置 Nginx</strong></span></h3><h4><span id="1-创建-nginx-配置文件">1. 创建 Nginx 配置文件</span></h4><p>为你的 Typecho 站点创建一个新的配置文件。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/nginx/sites-available/typecho.conf</span><br></pre></td></tr></table></figure>
-
-<h4><span id="2-粘贴并修改以下配置">2. 粘贴并修改以下配置</span></h4><p>请将以下内容粘贴到文件中，并将 <code>server_name</code> 替换为你的域名或 IP 地址。注意，<code>fastcgi_pass</code> 的版本号已修正为 <code>php8.3-fpm.sock</code>。</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 你的域名或 IP 地址</span></span><br><span class="line">    <span class="comment"># 例如: server_name example.com [www.example.com](https://www.example.com);</span></span><br><span class="line">    <span class="comment"># 或者: server_name 10.0.0.150;</span></span><br><span class="line">    <span class="attribute">server_name</span> <span class="number">10.0.0.150</span>;</span><br><span class="line">    <span class="attribute">root</span> /var/www/typecho_blog;</span><br><span class="line">    <span class="attribute">index</span> index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$args</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ \.php$</span> &#123;</span><br><span class="line">        <span class="attribute">include</span> snippets/fastcgi-php.conf;</span><br><span class="line">        <span class="attribute">fastcgi_pass</span> unix:/var/run/php/php8.3-fpm.sock;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ /\.ht</span> &#123;</span><br><span class="line">        <span class="attribute">deny</span> all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4><span id="3-启用配置并重启-nginx">3. 启用配置并重启 Nginx</span></h4><p>创建配置文件链接，移除默认配置，检查语法，然后重启服务。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /etc/nginx/sites-available/typecho.conf /etc/nginx/sites-enabled/</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /etc/nginx/sites-enabled/default</span><br><span class="line"><span class="built_in">sudo</span> nginx -t</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart nginx</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="步骤五完成安装"><strong>步骤五：完成安装</strong></span></h3><p>现在，你可以通过浏览器访问你的服务器 IP 或域名，即可看到 Typecho 的安装向导。</p>
-<p>根据向导提示，填入你在 <strong>步骤二</strong> 中创建的数据库信息和管理员账户信息，即可完成部署。</p>
-<hr>
-<h3><span id="步骤六完全卸载可选"><strong>步骤六：完全卸载（可选）</strong></span></h3><p>如果你想完全删除这套 Typecho 系统，可以按照以下步骤操作：</p>
-<h4><span id="1-删除-nginx-配置和文件">1. 删除 Nginx 配置和文件</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除 Nginx 配置文件链接</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> /etc/nginx/sites-enabled/typecho.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新加载 Nginx 配置</span></span><br><span class="line"><span class="built_in">sudo</span> nginx -s reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 Typecho 文件目录</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">rm</span> -rf /var/www/typecho_blog/</span><br></pre></td></tr></table></figure>
-
-<h4><span id="2-删除数据库和用户">2. 删除数据库和用户</span></h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 登录 MariaDB</span></span><br><span class="line"><span class="built_in">sudo</span> mysql -u root -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除数据库和用户</span></span><br><span class="line">DROP DATABASE typecho;</span><br><span class="line">DROP USER <span class="string">&#x27;typecho&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出</span></span><br><span class="line">EXIT;</span><br></pre></td></tr></table></figure>
-
-<h4><span id="3-卸载所有软件包">3. 卸载所有软件包</span></h4><p>如果你不再需要 Nginx、PHP 和 MariaDB，可以运行以下命令卸载它们：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt purge nginx mariadb-server php-fpm php-mysql php-gd php-mbstring php-xml php-curl -y</span><br><span class="line"><span class="built_in">sudo</span> apt autoremove -y</span><br></pre></td></tr></table></figure>
-
-<hr>
-]]></content>
-      <tags>
-        <tag>Typecho</tag>
-        <tag>博客</tag>
-        <tag>部署</tag>
-        <tag>Ubuntu</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</title>
     <url>/post/53/</url>
     <content><![CDATA[<!-- 正文内容开始 -->
@@ -1849,11 +1766,14 @@
 </style>
 
 <div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/T8KPvVxpq2o?si=-G3S5-v1irdrafU9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/88tcM8BjdGA?si=ATTW_uqp0bfzJyd2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 
 <h2><span id="1-准备一个域名">1. 准备一个域名</span></h2><p>如果你手里还没有域名，可以先去申请一个免费的域名。申请完成后，登录 <strong>Cloudflare</strong>，并为该域名创建一个 <strong>API Token</strong>：</p>
+<blockquote>
+<p><a href="https://317520.xyz/post/54/">免费域名申请教程</a></p>
+</blockquote>
 <ol>
 <li>打开 Cloudflare → 右上角 <strong>配置文件 → API 令牌</strong>  </li>
 <li>点击 <strong>创建令牌</strong>，选择第一个 <strong>使用模板</strong>  </li>
@@ -1973,42 +1893,133 @@
       </tags>
   </entry>
   <entry>
-    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
-    <url>/post/9/</url>
-    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
-<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
-<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
-<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
-<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
-<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
-<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
-</ul>
+    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
+    <url>/post/7/</url>
+    <content><![CDATA[<p><strong>目录</strong></p>
+<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
 <hr>
-<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
-<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
-<ol>
-<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
+<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
+<p><code>iptv-api</code> 的核心优势在于：</p>
+<ul>
+<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
+<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
+<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
+<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
+</ul>
+<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
+<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
+<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
+<p><img src="/images/202503/4a471742993634.png"></p>
+<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
+<p><img src="/images/202503/fb5c1742993645.png"></p>
+<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
+<ul>
+<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
+</ul>
+<p><img src="/images/202503/10fb1742993656.png"></p>
+<ul>
+<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
 </li>
-<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
 </li>
-<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
-</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
-<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
-<li>在网易云复制主页地址</li>
-<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
-<li>粘贴链接并选择</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
-<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
-<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+</ul>
+<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
+<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
+<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
+<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
+<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
+<ul>
+<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
+<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
+<li>点击“确定”即可播放。</li>
+</ul>
+<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
+<ul>
+<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
+<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
+<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
+</ul>
+<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
+<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
+<hr>
 ]]></content>
       <tags>
-        <tag>音乐</tag>
-        <tag>方格音乐</tag>
-        <tag>免费下载</tag>
-        <tag>无损</tag>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+        <tag>IPTV</tag>
+        <tag>CasaOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
+    <url>/post/15/</url>
+    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
+<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
+<hr>
+<h2><span id="视频教程">📺 视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
+<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
+<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
+<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
+<hr>
+<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
+<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
+<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
+<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>CasaOS</tag>
+        <tag>LibreTV</tag>
+        <tag>Cloudflare</tag>
+        <tag>影视</tag>
       </tags>
   </entry>
   <entry>
@@ -2114,6 +2125,73 @@
       </tags>
   </entry>
   <entry>
+    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
+    <url>/post/9/</url>
+    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
+<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
+<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
+<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
+<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
+<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
+<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
+</ul>
+<hr>
+<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
+<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
+<ol>
+<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+</li>
+<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+</li>
+<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
+</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
+<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
+<li>在网易云复制主页地址</li>
+<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
+<li>粘贴链接并选择</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
+<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
+<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+]]></content>
+      <tags>
+        <tag>音乐</tag>
+        <tag>方格音乐</tag>
+        <tag>免费下载</tag>
+        <tag>无损</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
+    <url>/post/14/</url>
+    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
+<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
+<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
+<hr>
+<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
+<hr>
+<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
+<hr>
+<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
+<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
+<hr>
+<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
+<hr>
+<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
+<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
+<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
+<p>祝您网络畅游愉快，影音娱乐无忧！</p>
+]]></content>
+      <tags>
+        <tag>Emby</tag>
+        <tag>机场</tag>
+        <tag>科学上网</tag>
+        <tag>VPN</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</title>
     <url>/post/16/</url>
     <content><![CDATA[<p>大家好！在本系列教程的最后一部分，我们将聚焦于如何在你的群晖 NAS 上使用 Docker 来安装构建一套全自动追剧观影系统的核心应用程序。通过 Docker，我们可以更方便地部署和管理这些工具，让你的 NAS 变身智能影音中心！</p>
@@ -2180,86 +2258,11 @@
 <p>感谢阅读！希望这篇文章对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>家庭影院</tag>
         <tag>群晖</tag>
         <tag>自动化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
-    <url>/post/15/</url>
-    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
-<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
-<hr>
-<h2><span id="视频教程">📺 视频教程</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
-<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
-<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
-<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
-<hr>
-<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
-<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
-<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
-<hr>
-<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
-<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>CasaOS</tag>
-        <tag>LibreTV</tag>
-        <tag>Cloudflare</tag>
-        <tag>影视</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
-    <url>/post/14/</url>
-    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
-<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
-<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
-<hr>
-<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
-<hr>
-<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
-<hr>
-<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
-<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
-<hr>
-<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
-<hr>
-<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
-<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
-<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
-<p>祝您网络畅游愉快，影音娱乐无忧！</p>
-]]></content>
-      <tags>
-        <tag>Emby</tag>
-        <tag>机场</tag>
-        <tag>科学上网</tag>
-        <tag>VPN</tag>
       </tags>
   </entry>
   <entry>
@@ -2317,8 +2320,8 @@
 <p>这是一种 <strong>快速有效</strong> 的解决办法，尤其适合 <strong>Docker 部署环境</strong>。 🚀</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>qBittorrent</tag>
         <tag>WebUI</tag>
       </tags>
@@ -2388,8 +2391,8 @@
 <p>感谢阅读！希望对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>飞牛OS</tag>
         <tag>V2RayA</tag>
         <tag>Jellyseerr</tag>
