@@ -658,351 +658,6 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-        <tag>Kodi</tag>
-        <tag>Jellyfin</tag>
-        <tag>家庭影院</tag>
-        <tag>4K</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
-    <url>/post/4/</url>
-    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
-<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
-<hr>
-<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li><code>sudo</code>：获取超级用户权限</li>
-<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
-<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
-<li><code>-y</code>：跳过确认提示（可选参数）</li>
-</ul>
-<hr>
-<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li>同步所有已启用仓库的最新元数据</li>
-<li>使系统识别新添加的PPA中的软件包</li>
-</ul>
-<hr>
-<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li>从配置好的源下载.deb安装包</li>
-<li>自动解决依赖关系并完成配置</li>
-</ul>
-<hr>
-<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
-
-<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
-<hr>
-<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
-<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
-<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
-<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
-    <url>/post/20/</url>
-    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
-<h3><span id="目录">目录</span></h3><ul>
-<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
-<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
-<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
- <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
-<ul>
-<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
-<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
-<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
-</ul>
-<hr>
-<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
-<ul>
-<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
-</ul>
-<hr>
-<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
-<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
-<ul>
-<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
-<li>进入 <code>Releases</code> 页面。</li>
-<li>下载最新版本的 <code>.apk</code> 文件。</li>
-</ul>
-<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
-<ul>
-<li>完成应用安装。</li>
-<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
-</ul>
-<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
-<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
-<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
-<hr>
-<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
-<ul>
-<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
-<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
-</ul>
-<hr>
-<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
-<ul>
-<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
-<li>也可以加入相关的技术交流群组。</li>
-<li>视频作者表示，如有需要，可以提供远程协助。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</title>
-    <url>/post/28/</url>
-    <content><![CDATA[<p><img src="/images/20250809/4a471754735566.png" alt="PanSou 资源搜索工具主页截图"></p>
-<hr>
-<h2><span id="前言你的专属资源库一搜即达">前言：你的专属资源库，一搜即达！</span></h2><p>哈喽大家好！</p>
-<p>平时我们找资源，是不是经常要在各种网盘、电报群里翻来翻去，找得眼花缭乱？今天，我将给大家分享一个超级实用的开源项目——<strong>PanSou</strong>！它能帮你一键搜索多个网盘和电报群里的资源，部署起来也超级简单，差不多一分钟就能搞定。</p>
-<p>本篇教程将手把手带你完成 PanSou 的部署，让你彻底告别繁琐的手动搜索，轻松搭建一个属于你自己的资源搜索引擎。</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/omYyWqpxhT4?si=FaAvVFz0hVrDJi5U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="核心操作pansou-飞牛-nas-docker-compose-部署">🎬 核心操作：PanSou 飞牛 NAS Docker Compose 部署</span></h2><h3><span id="第一步创建项目文件夹">第一步：创建项目文件夹</span></h3><p>今天我们依旧在飞牛 NAS 上进行部署。首先，我们来创建一个项目文件夹。</p>
-<ol>
-<li>登录你的飞牛 NAS，进入<strong>文件管理</strong>界面。</li>
-<li>找一个合适的位置，比如在 <code>docker</code> 文件夹里，新建一个名为 <strong><code>pansou</code></strong> 的文件夹。</li>
-</ol>
-<h3><span id="第二步部署-docker-compose">第二步：部署 Docker Compose</span></h3><p>文件夹创建完成后，我们就可以开始部署了。这次我们不使用命令行，直接在飞牛的图形化界面进行操作。</p>
-<p><strong>PanSou</strong> 的 GitHub 主页我会在文末附上，如果大家觉得这个项目不错，记得去给作者点个小星星，支持一下！</p>
-<ol>
-<li>打开 Docker，选择 <strong><code>Compose</code></strong>。</li>
-<li>点击 <strong>“新增项目”</strong>。</li>
-<li><strong>项目名称</strong>填写 <code>pansou</code>。</li>
-<li><strong>项目路径</strong>选择我们刚才创建的 <code>pansou</code> 文件夹。</li>
-</ol>
-<p>将以下 Docker Compose 代码粘贴到编辑框中。</p>
-<pre><code class="language-yaml">services:
-  pansou-web:
-    image: ghcr.io/fish2018/pansou-web:latest
-    container_name: pansou-web
-    restart: unless-stopped
-    ports:
-      - &quot;80:80&quot;  # 请替换为你的可用端口
-</code></pre>
-<p><strong>代码修改说明：</strong></p>
-<ul>
-<li><strong>端口映射 (<code>- ports</code>)：</strong> <code>8080:80</code> 表示将宿主机的 <code>8080</code> 端口映射到容器内的 <code>80</code> 端口。请注意，因为飞牛的 Web 页面默认占用了 <code>80</code> 端口，所以我们这里需要修改成其他的可用端口。如果你不确定端口是否被占用，可以修改成 <code>8080</code> 或 <code>8081</code> 等。</li>
-</ul>
-<p>修改完成后，点击 <strong>“确定”</strong>，系统就会开始自动构建了。</p>
-<hr>
-<h3><span id="第三步功能演示与效果展示">第三步：功能演示与效果展示</span></h3><p>构建完成，我们现在来体验一下 PanSou 的强大功能。</p>
-<p>在浏览器中输入 <code>你的NAS的IP地址:8080</code>，就能看到 PanSou 的主页了。</p>
-<ul>
-<li><strong>页面简洁：</strong> 主页非常简洁，没有任何多余的广告或内容。</li>
-<li><strong>搜索演示：</strong> 在搜索框中输入你想要的资源关键词，点击搜索。</li>
-<li><strong>结果丰富：</strong> 搜索结果会很快显示出来，并分列了不同网盘的搜索结果，还有磁力链接，资源非常丰富。</li>
-</ul>
-<p>通过 PanSou，你可以轻松搜索到你想要的影视、学习资料等，效果还是非常不错的！</p>
-<hr>
-<h2><span id="总结与注意事项">💡 总结与注意事项</span></h2><ul>
-<li><strong>部署简单：</strong> PanSou 的部署过程非常简单，特别适合新手在 NAS 上进行尝试。</li>
-<li><strong>端口占用：</strong> 请务必确保你修改后的端口号没有被其他服务占用，否则容器可能无法正常启动。</li>
-<li><strong>数据安全：</strong> PanSou 作为资源搜索工具，不涉及数据存储，因此无需担心数据丢失问题。</li>
-</ul>
-<p>那么，今天的 PanSou 部署教程就到这里了！如果你也经常需要找资源，强烈建议你试一下。如果你在部署过程中遇到任何问题，欢迎在评论区留言或加入我的电报群组，我们一起交流。</p>
-<p>如果你觉得这篇教程对你有帮助，请大家<strong>点赞、分享和订阅我的频道</strong>！你们的支持是我持续创作的最大动力。感谢大家的阅读，我们下期再见！</p>
-<hr>
-<p><strong>视频相关资源：</strong></p>
-<ul>
-<li><strong>PanSou GitHub 项目地址：</strong> [<a href="https://github.com/fish2018/pansou]">https://github.com/fish2018/pansou]</a></li>
-<li><strong>你的电报群组：</strong> [<a href="https://t.me/Eric/_FanGroup]">https://t.me/Eric\_FanGroup]</a></li>
-</ul>
-<!-- end list -->
-
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>教程</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
-    <url>/post/1/</url>
-    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
-<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
-<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
-<ol>
-<li><p>停止并删除容器</p>
-<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
-<ul>
-<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
-</li>
-<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
-</li>
-<li><p>停止后，将这两个容器都删除。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>删除Compose文件和镜像</strong></p>
-<ul>
-<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
-</li>
-<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>清理部署文件夹</strong></p>
-<ul>
-<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
-</li>
-<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
-<hr>
-<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
-<ol>
-<li><p><strong>获取新版Compose文件</strong></p>
-<ul>
-<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
-</li>
-<li><p>将该文件的全部内容复制下来。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>创建新容器</strong></p>
-<ul>
-<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
-</li>
-<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
-</li>
-<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
-</li>
-<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
-</li>
-<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
-</li>
-<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>启动部署</strong></p>
-<ul>
-<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
-</li>
-<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
-<ol>
-<li><p><strong>登录管理面板</strong></p>
-<ul>
-<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
-</li>
-<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>添加源文件</strong></p>
-<ul>
-<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
-</li>
-<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
-</li>
-<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
-<hr>
-<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -1133,6 +788,347 @@
       </tags>
   </entry>
   <entry>
+    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
+    <url>/post/4/</url>
+    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
+<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
+<hr>
+<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li><code>sudo</code>：获取超级用户权限</li>
+<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
+<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
+<li><code>-y</code>：跳过确认提示（可选参数）</li>
+</ul>
+<hr>
+<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li>同步所有已启用仓库的最新元数据</li>
+<li>使系统识别新添加的PPA中的软件包</li>
+</ul>
+<hr>
+<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li>从配置好的源下载.deb安装包</li>
+<li>自动解决依赖关系并完成配置</li>
+</ul>
+<hr>
+<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
+
+<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
+<hr>
+<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
+<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
+<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
+<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
+    <url>/post/20/</url>
+    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
+<h3><span id="目录">目录</span></h3><ul>
+<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
+<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
+<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
+<ul>
+<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
+<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
+<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
+</ul>
+<hr>
+<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
+<ul>
+<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
+</ul>
+<hr>
+<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
+<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
+<ul>
+<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
+<li>进入 <code>Releases</code> 页面。</li>
+<li>下载最新版本的 <code>.apk</code> 文件。</li>
+</ul>
+<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
+<ul>
+<li>完成应用安装。</li>
+<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
+</ul>
+<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
+<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
+<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
+<hr>
+<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
+<ul>
+<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
+<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
+</ul>
+<hr>
+<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
+<ul>
+<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
+<li>也可以加入相关的技术交流群组。</li>
+<li>视频作者表示，如有需要，可以提供远程协助。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
+    <url>/post/1/</url>
+    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
+<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
+<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
+<ol>
+<li><p>停止并删除容器</p>
+<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
+<ul>
+<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
+</li>
+<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
+</li>
+<li><p>停止后，将这两个容器都删除。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>删除Compose文件和镜像</strong></p>
+<ul>
+<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
+</li>
+<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>清理部署文件夹</strong></p>
+<ul>
+<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
+</li>
+<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
+<hr>
+<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
+<ol>
+<li><p><strong>获取新版Compose文件</strong></p>
+<ul>
+<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
+</li>
+<li><p>将该文件的全部内容复制下来。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>创建新容器</strong></p>
+<ul>
+<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
+</li>
+<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
+</li>
+<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
+</li>
+<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
+</li>
+<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
+</li>
+<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>启动部署</strong></p>
+<ul>
+<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
+</li>
+<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
+<ol>
+<li><p><strong>登录管理面板</strong></p>
+<ul>
+<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
+</li>
+<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>添加源文件</strong></p>
+<ul>
+<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
+</li>
+<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
+</li>
+<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
+<hr>
+<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</title>
+    <url>/post/28/</url>
+    <content><![CDATA[<p><img src="/images/20250809/4a471754735566.png" alt="PanSou 资源搜索工具主页截图"></p>
+<hr>
+<h2><span id="前言你的专属资源库一搜即达">前言：你的专属资源库，一搜即达！</span></h2><p>哈喽大家好！</p>
+<p>平时我们找资源，是不是经常要在各种网盘、电报群里翻来翻去，找得眼花缭乱？今天，我将给大家分享一个超级实用的开源项目——<strong>PanSou</strong>！它能帮你一键搜索多个网盘和电报群里的资源，部署起来也超级简单，差不多一分钟就能搞定。</p>
+<p>本篇教程将手把手带你完成 PanSou 的部署，让你彻底告别繁琐的手动搜索，轻松搭建一个属于你自己的资源搜索引擎。</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/omYyWqpxhT4?si=FaAvVFz0hVrDJi5U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="核心操作pansou-飞牛-nas-docker-compose-部署">🎬 核心操作：PanSou 飞牛 NAS Docker Compose 部署</span></h2><h3><span id="第一步创建项目文件夹">第一步：创建项目文件夹</span></h3><p>今天我们依旧在飞牛 NAS 上进行部署。首先，我们来创建一个项目文件夹。</p>
+<ol>
+<li>登录你的飞牛 NAS，进入<strong>文件管理</strong>界面。</li>
+<li>找一个合适的位置，比如在 <code>docker</code> 文件夹里，新建一个名为 <strong><code>pansou</code></strong> 的文件夹。</li>
+</ol>
+<h3><span id="第二步部署-docker-compose">第二步：部署 Docker Compose</span></h3><p>文件夹创建完成后，我们就可以开始部署了。这次我们不使用命令行，直接在飞牛的图形化界面进行操作。</p>
+<p><strong>PanSou</strong> 的 GitHub 主页我会在文末附上，如果大家觉得这个项目不错，记得去给作者点个小星星，支持一下！</p>
+<ol>
+<li>打开 Docker，选择 <strong><code>Compose</code></strong>。</li>
+<li>点击 <strong>“新增项目”</strong>。</li>
+<li><strong>项目名称</strong>填写 <code>pansou</code>。</li>
+<li><strong>项目路径</strong>选择我们刚才创建的 <code>pansou</code> 文件夹。</li>
+</ol>
+<p>将以下 Docker Compose 代码粘贴到编辑框中。</p>
+<pre><code class="language-yaml">services:
+  pansou-web:
+    image: ghcr.io/fish2018/pansou-web:latest
+    container_name: pansou-web
+    restart: unless-stopped
+    ports:
+      - &quot;80:80&quot;  # 请替换为你的可用端口
+</code></pre>
+<p><strong>代码修改说明：</strong></p>
+<ul>
+<li><strong>端口映射 (<code>- ports</code>)：</strong> <code>8080:80</code> 表示将宿主机的 <code>8080</code> 端口映射到容器内的 <code>80</code> 端口。请注意，因为飞牛的 Web 页面默认占用了 <code>80</code> 端口，所以我们这里需要修改成其他的可用端口。如果你不确定端口是否被占用，可以修改成 <code>8080</code> 或 <code>8081</code> 等。</li>
+</ul>
+<p>修改完成后，点击 <strong>“确定”</strong>，系统就会开始自动构建了。</p>
+<hr>
+<h3><span id="第三步功能演示与效果展示">第三步：功能演示与效果展示</span></h3><p>构建完成，我们现在来体验一下 PanSou 的强大功能。</p>
+<p>在浏览器中输入 <code>你的NAS的IP地址:8080</code>，就能看到 PanSou 的主页了。</p>
+<ul>
+<li><strong>页面简洁：</strong> 主页非常简洁，没有任何多余的广告或内容。</li>
+<li><strong>搜索演示：</strong> 在搜索框中输入你想要的资源关键词，点击搜索。</li>
+<li><strong>结果丰富：</strong> 搜索结果会很快显示出来，并分列了不同网盘的搜索结果，还有磁力链接，资源非常丰富。</li>
+</ul>
+<p>通过 PanSou，你可以轻松搜索到你想要的影视、学习资料等，效果还是非常不错的！</p>
+<hr>
+<h2><span id="总结与注意事项">💡 总结与注意事项</span></h2><ul>
+<li><strong>部署简单：</strong> PanSou 的部署过程非常简单，特别适合新手在 NAS 上进行尝试。</li>
+<li><strong>端口占用：</strong> 请务必确保你修改后的端口号没有被其他服务占用，否则容器可能无法正常启动。</li>
+<li><strong>数据安全：</strong> PanSou 作为资源搜索工具，不涉及数据存储，因此无需担心数据丢失问题。</li>
+</ul>
+<p>那么，今天的 PanSou 部署教程就到这里了！如果你也经常需要找资源，强烈建议你试一下。如果你在部署过程中遇到任何问题，欢迎在评论区留言或加入我的电报群组，我们一起交流。</p>
+<p>如果你觉得这篇教程对你有帮助，请大家<strong>点赞、分享和订阅我的频道</strong>！你们的支持是我持续创作的最大动力。感谢大家的阅读，我们下期再见！</p>
+<hr>
+<p><strong>视频相关资源：</strong></p>
+<ul>
+<li><strong>PanSou GitHub 项目地址：</strong> [<a href="https://github.com/fish2018/pansou]">https://github.com/fish2018/pansou]</a></li>
+<li><strong>你的电报群组：</strong> [<a href="https://t.me/Eric/_FanGroup]">https://t.me/Eric\_FanGroup]</a></li>
+</ul>
+<!-- end list -->
+
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>🚀 Sun-Panel：私有化 NAS 导航主页部署教程</title>
     <url>/post/21/</url>
     <content><![CDATA[<p>本笔记介绍了如何通过 Docker 部署一个名为 <code>Sun-Panel</code> 的私有化 NAS 导航主页。该教程以“非牛系统”为例，采用“迷你行模式”进行快速部署，整个过程仅需复制粘贴两行代码。</p>
@@ -1193,6 +1189,78 @@
         <tag>Docker</tag>
         <tag>教程</tag>
         <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+</ul>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
+</ul>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -1283,78 +1351,6 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
-</ul>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
-</ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -1493,6 +1489,87 @@
 </ul>
 <p>如果大家在操作过程中有其他疑问，欢迎在评论区留言交流，也可以分享你的折腾经验。觉得本文有用的话，别忘了点赞收藏，让更多需要的朋友看到！</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
+    <url>/post/7/</url>
+    <content><![CDATA[<p><strong>目录</strong></p>
+<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
+<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
+<p><code>iptv-api</code> 的核心优势在于：</p>
+<ul>
+<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
+<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
+<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
+<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
+</ul>
+<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
+<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
+<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
+<p><img src="/images/202503/4a471742993634.png"></p>
+<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
+<p><img src="/images/202503/fb5c1742993645.png"></p>
+<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
+<ul>
+<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
+</ul>
+<p><img src="/images/202503/10fb1742993656.png"></p>
+<ul>
+<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
+</li>
+<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
+</li>
+</ul>
+<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
+<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
+<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
+<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
+<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
+<ul>
+<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
+<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
+<li>点击“确定”即可播放。</li>
+</ul>
+<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
+<ul>
+<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
+<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
+<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
+</ul>
+<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
+<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+      </tags>
   </entry>
   <entry>
     <title>🚀 告别 TVBox 卡顿，打造你的专属影库</title>
@@ -1690,87 +1767,6 @@
       <tags>
         <tag>教程</tag>
         <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
-    <url>/post/7/</url>
-    <content><![CDATA[<p><strong>目录</strong></p>
-<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
-<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
-<p><code>iptv-api</code> 的核心优势在于：</p>
-<ul>
-<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
-<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
-<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
-<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
-</ul>
-<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
-<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
-<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
-<p><img src="/images/202503/4a471742993634.png"></p>
-<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
-<p><img src="/images/202503/fb5c1742993645.png"></p>
-<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
-<ul>
-<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
-</ul>
-<p><img src="/images/202503/10fb1742993656.png"></p>
-<ul>
-<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
-</li>
-<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
-</li>
-</ul>
-<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
-
-<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
-<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
-<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
-<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
-<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
-<ul>
-<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
-<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
-<li>点击“确定”即可播放。</li>
-</ul>
-<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
-<ul>
-<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
-<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
-<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
-</ul>
-<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
-<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -2068,6 +2064,42 @@
       </tags>
   </entry>
   <entry>
+    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
+    <url>/post/9/</url>
+    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
+<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
+<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
+<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
+<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
+<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
+<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
+</ul>
+<hr>
+<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
+<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
+<ol>
+<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+</li>
+<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+</li>
+<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
+</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
+<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
+<li>在网易云复制主页地址</li>
+<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
+<li>粘贴链接并选择</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
+<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
+<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</title>
     <url>/post/16/</url>
     <content><![CDATA[<p>大家好！在本系列教程的最后一部分，我们将聚焦于如何在你的群晖 NAS 上使用 Docker 来安装构建一套全自动追剧观影系统的核心应用程序。通过 Docker，我们可以更方便地部署和管理这些工具，让你的 NAS 变身智能影音中心！</p>
@@ -2136,43 +2168,6 @@
       <tags>
         <tag>Docker</tag>
         <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
-    <url>/post/9/</url>
-    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
-<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
-<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
-<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
-<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
-<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
-<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
-</ul>
-<hr>
-<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
-<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
-<ol>
-<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
-</li>
-<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
-</li>
-<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
-</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
-<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
-<li>在网易云复制主页地址</li>
-<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
-<li>粘贴链接并选择</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
-<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
-<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
-        <tag>音乐</tag>
       </tags>
   </entry>
   <entry>
@@ -2254,8 +2249,6 @@
       <tags>
         <tag>Docker</tag>
         <tag>教程</tag>
-        <tag>qBittorrent</tag>
-        <tag>WebUI</tag>
       </tags>
   </entry>
   <entry>
@@ -2325,7 +2318,6 @@
       <tags>
         <tag>Docker</tag>
         <tag>教程</tag>
-        <tag>飞牛OS</tag>
       </tags>
   </entry>
   <entry>
