@@ -372,58 +372,6 @@
       </tags>
   </entry>
   <entry>
-    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
-    <url>/post/12/</url>
-    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
-<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
-<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
-<p><strong>安装步骤：</strong></p>
-<ul>
-<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
-</li>
-</ul>
-<hr>
-<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
-<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
-<p><img src="/images/202504/f3cc1745398622.jpg"></p>
-<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
-<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
-<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
-<ul>
-<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
-<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
-<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
-</ul>
-<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
-<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
-<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
-<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
-<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
-</ul>
-<hr>
-<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
-<hr>
-<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
-<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
-<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
-<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
-<pre><code>
-**提示：**
-
-  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
-  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
-</code></pre>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
     <url>/post/25/</url>
     <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
@@ -536,6 +484,58 @@
         <tag>教程</tag>
         <tag>Docker</tag>
         <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
+    <url>/post/12/</url>
+    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
+<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
+<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
+<p><strong>安装步骤：</strong></p>
+<ul>
+<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
+</li>
+</ul>
+<hr>
+<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
+<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
+<p><img src="/images/202504/f3cc1745398622.jpg"></p>
+<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
+<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
+<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
+<ul>
+<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
+<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
+<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
+</ul>
+<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
+<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
+<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
+<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
+<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
+</ul>
+<hr>
+<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
+<hr>
+<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
+<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
+<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
+<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
+<pre><code>
+**提示：**
+
+  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
+  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
+</code></pre>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
