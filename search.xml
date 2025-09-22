@@ -1,6 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
+    <url>/post/26/</url>
+    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
+<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
+<h2><span id="一-升级前你需要知道的几个关键概念">一、升级前，你需要知道的几个关键概念</span></h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
+<h3><span id="1-容器与镜像父子关系">1. 容器与镜像：父子关系</span></h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
+<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
+<h3><span id="2-告别-latest-标签">2. 告别 <code>latest</code> 标签</span></h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
+<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
+<h3><span id="3-数据卷volumes升级的生命线">3. 数据卷（Volumes）：升级的生命线</span></h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
+<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
+<hr>
+<h2><span id="二-简单易行的手动升级方法">二、简单易行的手动升级方法</span></h2><h3><span id="方法一停止-删除-拉取-运行单容器升级">方法一：停止、删除、拉取、运行（单容器升级）</span></h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
+<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
+<li>找到并停止旧容器</li>
+</ol>
+<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
+<ol start="3">
+<li>拉取新镜像</li>
+</ol>
+<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>运行新容器</li>
+</ol>
+<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="方法二使用-docker-compose多容器应用升级">方法二：使用 Docker Compose（多容器应用升级）</span></h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
+<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
+<li>修改 <code>docker-compose.yml</code> 文件</li>
+</ol>
+<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
+<p><strong>更新前示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>更新后示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>拉取新镜像</li>
+</ol>
+<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
+
+<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
+<ol start="3">
+<li>启动并更新服务</li>
+</ol>
+<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
+<hr>
+<h2><span id="三-升级的最佳实践与注意事项">三、升级的最佳实践与注意事项</span></h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
+<ol>
+<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
+<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
+<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
+<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
+<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
+</ol>
+<h2><span id="总结">总结</span></h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker命令百科全书｜容器与镜像管理终极指南</title>
+    <url>/post/6/</url>
+    <content><![CDATA[<p><img src="/images/202503/f4ae1742638708.jpg"></p>
+<p><strong>分类</strong>：【技术技巧专区】- 系统操作指南  <br>| ⏱️ 阅读时间：12分钟 | 🔖 相关标签：#Docker命令 #容器管理 #镜像清理</p>
+<hr>
+<h2><span id="容器生命周期管理">📦 容器生命周期管理</span></h2><h3><span id="容器启停操作">🚦 容器启停操作</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 优雅停止容器</span></span><br><span class="line">docker stop &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制终止容器</span></span><br><span class="line">docker <span class="built_in">kill</span> &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启容器（保留配置）</span></span><br><span class="line">docker restart &lt;Name/ID&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="容器清理技巧">🧹 容器清理技巧</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止所有运行中的容器</span></span><br><span class="line">docker stop $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有容器（危险！）</span></span><br><span class="line">docker <span class="built_in">rm</span> $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全清理已停止的容器</span></span><br><span class="line">docker container prune</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>注意</strong>：执行批量删除前建议备份重要数据</p>
+<hr>
+<h2><span id="️-镜像管理大全">🖼️ 镜像管理大全</span></h2><h3><span id="镜像查询与删除">🔍 镜像查询与删除</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有镜像（含中间层）</span></span><br><span class="line">docker images -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定镜像</span></span><br><span class="line">docker rmi &lt;image_id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制删除所有镜像（慎用！）</span></span><br><span class="line">docker rmi -f $(docker images -q)</span><br></pre></td></tr></table></figure>
+
+<h3><span id="镜像空间优化">🧽 镜像空间优化</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清理悬空镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除未使用镜像（含tag）</span></span><br><span class="line">docker image prune -a</span><br></pre></td></tr></table></figure>
+
+<p>💡 <strong>小技巧</strong>：定期执行可节省30%+存储空间</p>
+<hr>
+<h2><span id="文件操作秘籍">📁 文件操作秘籍</span></h2><h3><span id="宿主机与容器文件交互">🔄 宿主机与容器文件交互</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 宿主机 → 容器</span></span><br><span class="line">docker <span class="built_in">cp</span> /host/path/file.txt &lt;容器名&gt;:/container/path/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器 → 宿主机 </span></span><br><span class="line">docker <span class="built_in">cp</span> &lt;容器名&gt;:/container/path/file.txt /host/path/</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2><span id="️-容器调试实战案例">🛠️ 容器调试实战案例</span></h2><h3><span id="进入容器修改配置">🔧 进入容器修改配置</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以交互模式进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新软件源并安装vim</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install vim -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑配置文件</span></span><br><span class="line">vi /path/to/config.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全退出容器</span></span><br><span class="line">Ctrl+P → Ctrl+Q</span><br></pre></td></tr></table></figure>
+
+<h3><span id="常见错误解决">❌ 常见错误解决</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 出现&quot;command not found&quot;时：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; sh  <span class="comment"># 尝试使用sh替代bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改配置后重启服务</span></span><br><span class="line">docker <span class="built_in">exec</span> &lt;容器ID&gt; service nginx reload</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2><span id="命令速查表带表情分类">📊 命令速查表（带表情分类）</span></h2><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>命令</th>
+<th>说明</th>
+<th>危险等级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🛑 容器停止</td>
+<td><code>docker stop $(ps -aq)</code></td>
+<td>停止所有容器</td>
+<td>⚠️⚠️</td>
+</tr>
+<tr>
+<td>🗑️ 镜像删除</td>
+<td><code>docker rmi $(images -q)</code></td>
+<td>删除所有镜像</td>
+<td>⚠️⚠️⚠️</td>
+</tr>
+<tr>
+<td>📂 文件传输</td>
+<td><code>docker cp</code></td>
+<td>跨系统文件拷贝</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>🐞 容器调试</td>
+<td><code>docker exec -it</code></td>
+<td>进入交互式终端</td>
+<td>⚠️</td>
+</tr>
+</tbody></table>
+<hr>
+<h2><span id="建议与最佳实践">💡 建议与最佳实践</span></h2><ol>
+<li><strong>批量操作前</strong>：始终先执行<code>docker ps -a</code>确认操作对象</li>
+<li><strong>文件编辑</strong>：推荐使用<code>volume</code>挂载替代容器内直接修改</li>
+<li><strong>镜像管理</strong>：使用<code>tag</code>规范版本控制（如v1.0, latest）</li>
+<li><strong>安全防护</strong>：定期扫描镜像漏洞：<code>docker scan &lt;image_name&gt;</code></li>
+</ol>
+<hr>
+<p><strong>立即行动</strong>：  <br>💻 打开终端尝试3个新学到的命令  <br>📚 收藏本文作为Docker速查手册  <br>🔄 分享给你的进步！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>60个常用Linux命令详解：从入门到精通</title>
     <url>/post/10/</url>
     <content><![CDATA[<h1><span id="60个常用linux命令详解从入门到精通">🐧 60个常用Linux命令详解：从入门到精通 🚀</span></h1><p>作为一名Linux用户，掌握常用命令是必备技能。本文将详细介绍60个最实用的Linux命令，帮助您提高工作效率！本文适合初学者和中级用户，每个命令都配有清晰示例和解释。</p>
@@ -154,398 +304,8 @@
 <p>希望这篇指南对您有所帮助！如果有任何问题或建议，欢迎在评论区留言讨论。</p>
 ]]></content>
       <tags>
+        <tag>教程</tag>
         <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
-    <url>/post/26/</url>
-    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
-<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
-<h2><span id="一-升级前你需要知道的几个关键概念">一、升级前，你需要知道的几个关键概念</span></h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
-<h3><span id="1-容器与镜像父子关系">1. 容器与镜像：父子关系</span></h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
-<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
-<h3><span id="2-告别-latest-标签">2. 告别 <code>latest</code> 标签</span></h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
-<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
-<h3><span id="3-数据卷volumes升级的生命线">3. 数据卷（Volumes）：升级的生命线</span></h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
-<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
-<hr>
-<h2><span id="二-简单易行的手动升级方法">二、简单易行的手动升级方法</span></h2><h3><span id="方法一停止-删除-拉取-运行单容器升级">方法一：停止、删除、拉取、运行（单容器升级）</span></h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
-<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
-<li>找到并停止旧容器</li>
-</ol>
-<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
-<ol start="3">
-<li>拉取新镜像</li>
-</ol>
-<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>运行新容器</li>
-</ol>
-<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<h3><span id="方法二使用-docker-compose多容器应用升级">方法二：使用 Docker Compose（多容器应用升级）</span></h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
-<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
-<li>修改 <code>docker-compose.yml</code> 文件</li>
-</ol>
-<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
-<p><strong>更新前示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>更新后示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>拉取新镜像</li>
-</ol>
-<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
-
-<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
-<ol start="3">
-<li>启动并更新服务</li>
-</ol>
-<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
-<hr>
-<h2><span id="三-升级的最佳实践与注意事项">三、升级的最佳实践与注意事项</span></h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
-<ol>
-<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
-<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
-<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
-<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
-<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
-</ol>
-<h2><span id="总结">总结</span></h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker命令百科全书｜容器与镜像管理终极指南</title>
-    <url>/post/6/</url>
-    <content><![CDATA[<p><img src="/images/202503/f4ae1742638708.jpg"></p>
-<p><strong>分类</strong>：【技术技巧专区】- 系统操作指南  <br>| ⏱️ 阅读时间：12分钟 | 🔖 相关标签：#Docker命令 #容器管理 #镜像清理</p>
-<hr>
-<h2><span id="容器生命周期管理">📦 容器生命周期管理</span></h2><h3><span id="容器启停操作">🚦 容器启停操作</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 优雅停止容器</span></span><br><span class="line">docker stop &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制终止容器</span></span><br><span class="line">docker <span class="built_in">kill</span> &lt;Name/ID&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启容器（保留配置）</span></span><br><span class="line">docker restart &lt;Name/ID&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="容器清理技巧">🧹 容器清理技巧</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止所有运行中的容器</span></span><br><span class="line">docker stop $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有容器（危险！）</span></span><br><span class="line">docker <span class="built_in">rm</span> $(docker ps -aq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全清理已停止的容器</span></span><br><span class="line">docker container prune</span><br></pre></td></tr></table></figure>
-
-<p>⚠️ <strong>注意</strong>：执行批量删除前建议备份重要数据</p>
-<hr>
-<h2><span id="️-镜像管理大全">🖼️ 镜像管理大全</span></h2><h3><span id="镜像查询与删除">🔍 镜像查询与删除</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 列出所有镜像（含中间层）</span></span><br><span class="line">docker images -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定镜像</span></span><br><span class="line">docker rmi &lt;image_id&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 强制删除所有镜像（慎用！）</span></span><br><span class="line">docker rmi -f $(docker images -q)</span><br></pre></td></tr></table></figure>
-
-<h3><span id="镜像空间优化">🧽 镜像空间优化</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清理悬空镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除未使用镜像（含tag）</span></span><br><span class="line">docker image prune -a</span><br></pre></td></tr></table></figure>
-
-<p>💡 <strong>小技巧</strong>：定期执行可节省30%+存储空间</p>
-<hr>
-<h2><span id="文件操作秘籍">📁 文件操作秘籍</span></h2><h3><span id="宿主机与容器文件交互">🔄 宿主机与容器文件交互</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 宿主机 → 容器</span></span><br><span class="line">docker <span class="built_in">cp</span> /host/path/file.txt &lt;容器名&gt;:/container/path/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器 → 宿主机 </span></span><br><span class="line">docker <span class="built_in">cp</span> &lt;容器名&gt;:/container/path/file.txt /host/path/</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2><span id="️-容器调试实战案例">🛠️ 容器调试实战案例</span></h2><h3><span id="进入容器修改配置">🔧 进入容器修改配置</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以交互模式进入容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新软件源并安装vim</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install vim -y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑配置文件</span></span><br><span class="line">vi /path/to/config.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安全退出容器</span></span><br><span class="line">Ctrl+P → Ctrl+Q</span><br></pre></td></tr></table></figure>
-
-<h3><span id="常见错误解决">❌ 常见错误解决</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 出现&quot;command not found&quot;时：</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;容器ID&gt; sh  <span class="comment"># 尝试使用sh替代bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改配置后重启服务</span></span><br><span class="line">docker <span class="built_in">exec</span> &lt;容器ID&gt; service nginx reload</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2><span id="命令速查表带表情分类">📊 命令速查表（带表情分类）</span></h2><table>
-<thead>
-<tr>
-<th>类别</th>
-<th>命令</th>
-<th>说明</th>
-<th>危险等级</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>🛑 容器停止</td>
-<td><code>docker stop $(ps -aq)</code></td>
-<td>停止所有容器</td>
-<td>⚠️⚠️</td>
-</tr>
-<tr>
-<td>🗑️ 镜像删除</td>
-<td><code>docker rmi $(images -q)</code></td>
-<td>删除所有镜像</td>
-<td>⚠️⚠️⚠️</td>
-</tr>
-<tr>
-<td>📂 文件传输</td>
-<td><code>docker cp</code></td>
-<td>跨系统文件拷贝</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>🐞 容器调试</td>
-<td><code>docker exec -it</code></td>
-<td>进入交互式终端</td>
-<td>⚠️</td>
-</tr>
-</tbody></table>
-<hr>
-<h2><span id="建议与最佳实践">💡 建议与最佳实践</span></h2><ol>
-<li><strong>批量操作前</strong>：始终先执行<code>docker ps -a</code>确认操作对象</li>
-<li><strong>文件编辑</strong>：推荐使用<code>volume</code>挂载替代容器内直接修改</li>
-<li><strong>镜像管理</strong>：使用<code>tag</code>规范版本控制（如v1.0, latest）</li>
-<li><strong>安全防护</strong>：定期扫描镜像漏洞：<code>docker scan &lt;image_name&gt;</code></li>
-</ol>
-<hr>
-<p><strong>立即行动</strong>：  <br>💻 打开终端尝试3个新学到的命令  <br>📚 收藏本文作为Docker速查手册  <br>🔄 分享给你的进步！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
-    <url>/post/12/</url>
-    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
-<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
-<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
-<p><strong>安装步骤：</strong></p>
-<ul>
-<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
-</li>
-</ul>
-<hr>
-<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
-<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
-<p><img src="/images/202504/f3cc1745398622.jpg"></p>
-<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
-<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
-<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
-<ul>
-<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
-<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
-<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
-</ul>
-<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
-<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
-<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
-<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
-<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
-</ul>
-<hr>
-<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
-<hr>
-<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
-<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
-<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
-<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
-<pre><code>
-**提示：**
-
-  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
-  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
-</code></pre>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
-    <url>/post/25/</url>
-    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
-<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
-<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
-<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
-<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
-<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
-<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
-<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
-<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
-<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
-<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
-<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
-<ul>
-<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
-<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
-</ul>
-<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>代码修改说明：</strong></p>
-<ol>
-<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
-<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
-</ol>
-<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
-<hr>
-<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
-<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
-<ul>
-<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
-<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
-</ul>
-<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
-<ul>
-<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
-<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
-<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
-</ul>
-<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
-<hr>
-<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
-<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
-<ul>
-<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
-<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
-<li><strong>密码设置（重点）：</strong><ul>
-<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
-<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
-</ul>
-</li>
-<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
-<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
-</ul>
-<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
-<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
-<ul>
-<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
-<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
-<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
-</ul>
-<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
-<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
-<ul>
-<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
-<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
-<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
-</ul>
-<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
-<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
-</ul>
-<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
-<hr>
-<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
-<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
-<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
-<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
-<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
-</ul>
-<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
-    <url>/post/51/</url>
-    <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
-<p>该项目支持 <strong>自动更新</strong>，并且兼容 <strong>TVBox 类播放软件</strong>，适合喜欢折腾的朋友。下面就来一步步演示。</p>
-<hr>
-<h2><span id="演示视频">演示视频</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/T8KPvVxpq2o?si=-G3S5-v1irdrafU9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-
-
-<hr>
-<h2><span id="1-前置准备">1. 前置准备</span></h2><ul>
-<li>一台已安装 <strong>飞牛（FeiNiu）系统</strong> 的 NAS  </li>
-<li>已启用 <strong>Docker</strong> 与 <strong>Compose</strong> 插件  </li>
-<li>可用的端口（避免和现有服务冲突）</li>
-</ul>
-<hr>
-<h2><span id="2-创建文件夹">2. 创建文件夹</span></h2><p>在飞牛的 <strong>文件管理</strong> 中，为 IPTV 项目新建一个文件夹，例如 <code>iptv</code>，用来存放配置。</p>
-<hr>
-<h2><span id="3-创建-compose-项目">3. 创建 Compose 项目</span></h2><p>打开 <strong>Docker → Compose</strong>，点击 <strong>新建项目</strong>：</p>
-<ul>
-<li><strong>名称</strong>：填写 <code>IPTV</code>  </li>
-<li><strong>路径</strong>：选择刚刚创建的 <code>iptv</code> 文件夹  </li>
-<li><strong>Compose 文件</strong>：在此处粘贴以下内容</li>
-</ul>
-<p>👉 <strong>在这里插入 compose 文件代码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  iptv-api:</span><br><span class="line">    image: guovern/iptv-api:latest</span><br><span class="line">    container_name: iptv-api</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9000:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config:/iptv-api/config</span><br><span class="line">      - ./output:/iptv-api/output</span><br><span class="line">    environment:</span><br><span class="line">      - APP_HOST=http://0.0.0.0</span><br><span class="line">      - APP_PORT=8000</span><br><span class="line">      - TZ=Asia/Shanghai         # 设置时区为北京时间</span><br><span class="line">      - UPDATE_CRON=0 0 */2 * *  # 每两天凌晨 0 点执行更新</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>⚠️ 注意：请修改其中的 <strong>端口</strong>（避免冲突），以及 <strong>更新周期变量</strong>（默认是每两天的 0 点自动更新，你也可以根据需求调整）。</p>
-</blockquote>
-<p>点击 <strong>确定</strong> 并启动构建。</p>
-<hr>
-<h2><span id="4-查看部署情况">4. 查看部署情况</span></h2><p>部署完成后，可以在 <strong>容器日志</strong> 中查看运行情况。<br>首次启动时，它会拉取并更新频道列表，大约需要等待一小段时间。</p>
-<hr>
-<h2><span id="5-验证-iptv-输出">5. 验证 IPTV 输出</span></h2><p>部署完成后，在浏览器中访问：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>如果能看到频道列表，说明 IPTV 已经运行成功 ✅。</p>
-<hr>
-<h2><span id="6-配合-tvbox-使用">6. 配合 TVBox 使用</span></h2><p>在 TVBox 配置中，填入以下地址即可使用：</p>
- <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/m3u</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>设置完成后，你就可以在 TVBox 中播放 IPTV 频道啦 🎉。</p>
-<hr>
-<h2><span id="总结">总结</span></h2><p>这就是在飞牛 NAS 上部署 IPTV 项目的完整步骤。<br>它不仅支持自动更新频道，还能无缝对接 TVBox，非常适合自建家庭娱乐系统的用户。</p>
-<p>如果你在操作过程中遇到问题，可以在评论区留言，或者加入群组一起交流。  </p>
-<p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -612,51 +372,54 @@
       </tags>
   </entry>
   <entry>
-    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
-    <url>/post/4/</url>
-    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
-<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
-<hr>
-<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
+    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
+    <url>/post/12/</url>
+    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
+<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
+<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
+<p><strong>安装步骤：</strong></p>
 <ul>
-<li><code>sudo</code>：获取超级用户权限</li>
-<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
-<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
-<li><code>-y</code>：跳过确认提示（可选参数）</li>
+<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
+</li>
 </ul>
 <hr>
-<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析</strong>：</p>
+<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
+<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
+<p><img src="/images/202504/f3cc1745398622.jpg"></p>
+<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
+<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
+<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
 <ul>
-<li>同步所有已启用仓库的最新元数据</li>
-<li>使系统识别新添加的PPA中的软件包</li>
+<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
+<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
+<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
+</ul>
+<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
+<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
+<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
+<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
+<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
 </ul>
 <hr>
-<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
+<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
+<hr>
+<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
+<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
+<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
+<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
+<pre><code>
+**提示：**
 
-<p><strong>命令解析</strong>：</p>
-<ul>
-<li>从配置好的源下载.deb安装包</li>
-<li>自动解决依赖关系并完成配置</li>
-</ul>
-<hr>
-<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
-
-<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
-<hr>
-<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
-<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
-<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
-<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
-<hr>
+  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
+  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
+</code></pre>
 ]]></content>
       <tags>
+        <tag>教程</tag>
         <tag>Linux</tag>
       </tags>
   </entry>
@@ -710,81 +473,52 @@
       </tags>
   </entry>
   <entry>
-    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
-    <url>/post/20/</url>
-    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
-<h3><span id="目录">目录</span></h3><ul>
-<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
-<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
-<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
-</ul>
+    <title>在Linux Mint上通过PPA安装Telegram的完整教程</title>
+    <url>/post/4/</url>
+    <content><![CDATA[<p><img src="/images/202503/ab2d1742394181.jpeg"></p>
+<h2><span id="为什么需要ppa安装">为什么需要PPA安装？</span></h2><p>Linux Mint虽然拥有庞大的官方软件库，但默认源中并未收录Telegram桌面客户端。通过**PPA（个人软件包存档）**机制，我们可以安全地获取由开发者维护的最新版本客户端。</p>
 <hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
+<h2><span id="逐步安装指南">📥 逐步安装指南</span></h2><h3><span id="步骤1添加telegram官方ppa仓库">步骤1：添加Telegram官方PPA仓库</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository ppa:atareao/telegram -y</span><br></pre></td></tr></table></figure>
 
-<div class="video-container">
- <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
+<p><strong>命令解析</strong>：</p>
+<ul>
+<li><code>sudo</code>：获取超级用户权限</li>
+<li><code>add-apt-repository</code>：管理系统软件源的核心命令</li>
+<li><code>ppa:atareao/telegram</code>：Telegram官方维护的PPA地址</li>
+<li><code>-y</code>：跳过确认提示（可选参数）</li>
+</ul>
+<hr>
+<h3><span id="步骤2刷新软件源缓存">步骤2：刷新软件源缓存</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
+<p><strong>命令解析</strong>：</p>
 <ul>
-<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
-<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
-<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
+<li>同步所有已启用仓库的最新元数据</li>
+<li>使系统识别新添加的PPA中的软件包</li>
 </ul>
 <hr>
-<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
+<h3><span id="步骤3执行正式安装">步骤3：执行正式安装</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install telegram</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令解析</strong>：</p>
 <ul>
-<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
+<li>从配置好的源下载.deb安装包</li>
+<li>自动解决依赖关系并完成配置</li>
 </ul>
 <hr>
-<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
-<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
-<ul>
-<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
-<li>进入 <code>Releases</code> 页面。</li>
-<li>下载最新版本的 <code>.apk</code> 文件。</li>
-</ul>
-<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
-<ul>
-<li>完成应用安装。</li>
-<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
-</ul>
-<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
-<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
-<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
+<h2><span id="安装验证与启动">🎯 安装验证与启动</span></h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">telegram</span><br></pre></td></tr></table></figure>
+
+<p>或通过开始菜单 &gt; 互联网 &gt; Telegram 启动：</p>
 <hr>
-<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
-<ul>
-<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
-<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
-</ul>
+<h2><span id="️-重要注意事项">⚠️ 重要注意事项</span></h2><ol>
+<li>系统首次使用PPA需要：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install software-properties-common</span><br></pre></td></tr></table></figure></li>
+<li>后续更新命令：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update &amp;&amp; <span class="built_in">sudo</span> apt upgrade</span><br></pre></td></tr></table></figure></li>
+<li>移除PPA方法（如需回滚）：<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository --remove ppa:atareao/telegram</span><br></pre></td></tr></table></figure></li>
+</ol>
 <hr>
-<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
-<ul>
-<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
-<li>也可以加入相关的技术交流群组。</li>
-<li>视频作者表示，如有需要，可以提供远程协助。</li>
-</ul>
+<h2><span id="结语">结语</span></h2><p>通过PPA安装方式，既能保证软件来源的可靠性，又能及时获取功能更新。这种安装模式适用于大多数Linux Mint专属仓库未收录的流行软件。</p>
+<hr>
 ]]></content>
       <tags>
-        <tag>教程</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -915,11 +649,17 @@
       </tags>
   </entry>
   <entry>
-    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
-    <url>/post/1/</url>
-    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
-<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
-<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
+    <url>/post/20/</url>
+    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
+<h3><span id="目录">目录</span></h3><ul>
+<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
+<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
+<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
+</ul>
+<hr>
 <style>
   .video-container {
     position: relative;
@@ -937,105 +677,167 @@
 </style>
 
 <div class="video-container">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 <hr>
-<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
-<ol>
-<li><p>停止并删除容器</p>
-<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
+<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
 <ul>
-<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
-</li>
-<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
-</li>
-<li><p>停止后，将这两个容器都删除。</p>
-</li>
+<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
+<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
+<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
 </ul>
-</li>
-<li><p><strong>删除Compose文件和镜像</strong></p>
-<ul>
-<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
-</li>
-<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>清理部署文件夹</strong></p>
-<ul>
-<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
-</li>
-<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
 <hr>
-<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
-<ol>
-<li><p><strong>获取新版Compose文件</strong></p>
+<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
 <ul>
-<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
-</li>
-<li><p>将该文件的全部内容复制下来。</p>
-</li>
+<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
 </ul>
-</li>
-<li><p><strong>创建新容器</strong></p>
-<ul>
-<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
-</li>
-<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
-</li>
-<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
-</li>
-<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
-</li>
-<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
-</li>
-<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>启动部署</strong></p>
-<ul>
-<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
-</li>
-<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
-</li>
-</ul>
-</li>
-</ol>
 <hr>
-<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
-<ol>
-<li><p><strong>登录管理面板</strong></p>
+<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
+<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
 <ul>
-<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
-</li>
-<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
-</li>
+<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
+<li>进入 <code>Releases</code> 页面。</li>
+<li>下载最新版本的 <code>.apk</code> 文件。</li>
 </ul>
-</li>
-<li><p><strong>添加源文件</strong></p>
+<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
 <ul>
-<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
-</li>
-<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
-</li>
-<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
-</li>
+<li>完成应用安装。</li>
+<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
 </ul>
-</li>
-</ol>
-<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
+<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
+<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
+<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
 <hr>
-<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
+<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
+<ul>
+<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
+<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
+</ul>
+<hr>
+<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
+<ul>
+<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
+<li>也可以加入相关的技术交流群组。</li>
+<li>视频作者表示，如有需要，可以提供远程协助。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
+    <url>/post/25/</url>
+    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
+<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
+<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
+<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
+<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
+<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
+<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
+<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
+<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
+<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
+<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
+<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
+<ul>
+<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
+<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
+</ul>
+<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>代码修改说明：</strong></p>
+<ol>
+<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
+<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
+</ol>
+<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
+<hr>
+<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
+<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
+<ul>
+<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
+<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
+</ul>
+<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
+<ul>
+<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
+<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
+<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
+</ul>
+<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
+<hr>
+<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
+<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
+<ul>
+<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
+<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
+<li><strong>密码设置（重点）：</strong><ul>
+<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
+<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
+</ul>
+</li>
+<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
+<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
+</ul>
+<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
+<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
+<ul>
+<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
+<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
+<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
+</ul>
+<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
+<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
+<ul>
+<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
+<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
+<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
+</ul>
+<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
+<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
+</ul>
+<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
+<hr>
+<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
+<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
+<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
+<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
+<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
+</ul>
+<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
 ]]></content>
       <tags>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -1097,8 +899,8 @@
 
 <h3><span id="自定义页脚">自定义页脚</span></h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// =========== Config Start ===========</span></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// 距离滚动偏移量</span></span><br><span class="line">  <span class="keyword">const</span> scrollOffset = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 显示风格( auto:自动(默认) | mobile:左上角显示触发按钮-移动端风格 | sidebar:常态显示侧栏)</span></span><br><span class="line">  <span class="keyword">const</span> displayStyle = <span class="string">&#x27;auto&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 移动端宽度定义</span></span><br><span class="line">  <span class="keyword">const</span> mobileWidth = <span class="number">800</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomIdName</span> = <span class="string">&#x27;sun-panel-toc-dom&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 左上角按钮 SVG 图标</span></span><br><span class="line">  <span class="keyword">const</span> svgTocMobileBtn = <span class="string">&#x27;&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)&quot;  viewBox=&quot;0 0 24 24&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M17.5 4.5c-1.95 0-4.05.4-5.5 1.5c-1.45-1.1-3.55-1.5-5.5-1.5c-1.45 0-2.99.22-4.28.79C1.49 5.62 1 6.33 1 7.14v11.28c0 1.3 1.22 2.26 2.48 1.94c.98-.25 2.02-.36 3.02-.36c1.56 0 3.22.26 4.56.92c.6.3 1.28.3 1.87 0c1.34-.67 3-.92 4.56-.92c1 0 2.04.11 3.02.36c1.26.33 2.48-.63 2.48-1.94V7.14c0-.81-.49-1.52-1.22-1.85c-1.28-.57-2.82-.79-4.27-.79M21 17.23c0 .63-.58 1.09-1.2.98c-.75-.14-1.53-.2-2.3-.2c-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5c.92 0 1.83.09 2.7.28c.46.1.8.51.8.98z&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M13.98 11.01c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.54-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39c-.08.01-.16.03-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.7-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03&quot;/&gt;&lt;/svg&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// =========== Config End ===========</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滚动容器的类名</span></span><br><span class="line">  <span class="keyword">const</span> scrollContainerElementClassName = <span class="string">&#x27;.scroll-container&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 一些函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">isMobile</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;mobile&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;pc&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> width = <span class="variable language_">window</span>.<span class="property">innerWidth</span></span><br><span class="line">    <span class="keyword">return</span> width &lt; mobileWidth</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createDom</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 检测是否已经存在TOC DOM，存在则删除</span></span><br><span class="line">    (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="title class_">SunPanelTOCDomIdName</span>)</span><br><span class="line">      <span class="keyword">if</span> (element) &#123;</span><br><span class="line">        element.<span class="title function_">remove</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDom</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="property">id</span> = <span class="title class_">SunPanelTOCDomIdName</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(<span class="title class_">SunPanelTOCDom</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style start =========</span></span><br><span class="line">    <span class="keyword">const</span> style = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;style&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomStyleId</span> = <span class="string">`#<span class="subst">$&#123;SunPanelTOCDomIdName&#125;</span>`</span></span><br><span class="line">    style.<span class="property">textContent</span> = <span class="string">`</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-mobile-btn &#123;</span></span><br><span class="line"><span class="string">        top: 20px !important;</span></span><br><span class="line"><span class="string">        left: 20px !important;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        width: 46px;</span></span><br><span class="line"><span class="string">        height: 46px;</span></span><br><span class="line"><span class="string">        background-color: #2a2a2a6b;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">        border-radius: 0.5rem;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .hidden &#123;</span></span><br><span class="line"><span class="string">        display: none !important;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">        padding: 10px;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        top: 0;</span></span><br><span class="line"><span class="string">        left: 0;</span></span><br><span class="line"><span class="string">        height: 100%;</span></span><br><span class="line"><span class="string">        overflow: hidden;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        flex-direction: column;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        transition: width 0.3s ease, background-color 0.3s ease;</span></span><br><span class="line"><span class="string">        border-top-right-radius: 20px;</span></span><br><span class="line"><span class="string">        border-bottom-right-radius: 20px;</span></span><br><span class="line"><span class="string">        background-color: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-mobile-btn-svg-container&#123;</span></span><br><span class="line"><span class="string">      width:21px;</span></span><br><span class="line"><span class="string">      height:21px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion &#123;</span></span><br><span class="line"><span class="string">        width: 200px !important;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        background-color: rgb(42 42 42 / 90%);</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar .toc-sidebar-box &#123;</span></span><br><span class="line"><span class="string">        width: 500px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-box &#123;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        position: relative;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 20px;</span></span><br><span class="line"><span class="string">        height: 6px;</span></span><br><span class="line"><span class="string">        background-color: white;</span></span><br><span class="line"><span class="string">        border-radius: 4px;</span></span><br><span class="line"><span class="string">        margin: 15px 0;</span></span><br><span class="line"><span class="string">        transition: height 0.3s ease, width 0.3s ease;</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">        white-space: nowrap;</span></span><br><span class="line"><span class="string">        transition: opacity 0.3s ease, transform 0.3s ease, margin-left 0.3s ease;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">        margin-left: 10px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        box-shadow: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        font-size: 20px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      `</span></span><br><span class="line">    <span class="comment">// 添加样式到文档头部</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(style)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style end =========</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加移动端菜单按钮</span></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtn = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="property">id</span> = <span class="string">&#x27;toc-mobile-btn&#x27;</span></span><br><span class="line">    tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;backdrop-blur-[2px]&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(tocMobileBtn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtnSvgcContainer = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">innerHTML</span> = svgTocMobileBtn</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-mobile-btn-svg-container&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="title function_">appendChild</span>(tocMobileBtnSvgcContainer)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建侧边栏容器</span></span><br><span class="line">    <span class="keyword">const</span> sidebar = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebar.<span class="property">id</span> = <span class="string">&#x27;toc-sidebar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sidebarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebarBox.<span class="property">className</span> = <span class="string">&#x27;toc-sidebar-box&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询出所有类名包含 item-group-index- 的元素</span></span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历并打印每个元素的完整类名</span></span><br><span class="line">    items.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      item.<span class="property">classList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (className.<span class="title function_">startsWith</span>(<span class="string">&#x27;item-group-index-&#x27;</span>)) &#123;</span><br><span class="line">          <span class="keyword">const</span> titleBarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarBox.<span class="property">className</span> = <span class="string">&#x27;title-bar-box&#x27;</span></span><br><span class="line">          <span class="comment">// titleBarBox.href = `#$&#123;item.id&#125;`</span></span><br><span class="line">          titleBarBox.<span class="property">dataset</span>.<span class="property">groupClassName</span> = className</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 目录条</span></span><br><span class="line">          <span class="keyword">const</span> titleBarSlip = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarSlip.<span class="property">className</span> = <span class="string">&#x27;title-bar-slip&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 创建一个链接</span></span><br><span class="line">          <span class="keyword">const</span> titleBarTitle = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarTitle.<span class="property">className</span> = <span class="string">&#x27;title-bar-title&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 获取子元素中 class=&quot;group-title&quot; 的内容</span></span><br><span class="line">          <span class="keyword">const</span> titleElement = item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.group-title&#x27;</span>)</span><br><span class="line">          <span class="keyword">const</span> titleText = titleElement ? titleElement.<span class="property">textContent</span> : item.<span class="property">id</span></span><br><span class="line">          titleBarTitle.<span class="property">textContent</span> = titleText</span><br><span class="line"></span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarSlip)</span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarTitle)</span><br><span class="line"></span><br><span class="line">          sidebarBox.<span class="title function_">appendChild</span>(titleBarBox)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    sidebar.<span class="title function_">appendChild</span>(sidebarBox)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将侧边栏添加到页面中</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(sidebar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mobileHideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">hideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">showSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化开始</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">func, wait</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> timeout</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout)</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          func.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">handleResize</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用防抖函数包装你的处理函数</span></span><br><span class="line">    <span class="keyword">const</span> debouncedHandleResize = <span class="title function_">debounce</span>(handleResize, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加事件监听器</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, debouncedHandleResize)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次触发</span></span><br><span class="line">    <span class="title function_">handleResize</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化结束</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听移动端按钮点击</span></span><br><span class="line">    tocMobileBtn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (sidebar.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 显示</span></span><br><span class="line">        <span class="title function_">showSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏失去hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏获得hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">showSidebar</span>()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC点击事件</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.title-bar-box&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">box</span>) =&gt;</span> &#123;</span><br><span class="line">      box.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 检查触发事件的元素是否有 &#x27;data-groupClassName&#x27; 属性</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取 &#x27;data-groupClass&#x27; 属性的值</span></span><br><span class="line">          <span class="keyword">const</span> groupClassName = <span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span></span><br><span class="line">          <span class="comment">// 使用属性值作为选择器查询对应的元素</span></span><br><span class="line">          <span class="keyword">const</span> targetElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">`.<span class="subst">$&#123;groupClassName&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">if</span> (targetElement) &#123;</span><br><span class="line">          <span class="comment">// 获取目标元素的 &#x27;top&#x27; 坐标</span></span><br><span class="line">            <span class="keyword">const</span> targetTop = targetElement.<span class="property">offsetTop</span></span><br><span class="line">            <span class="keyword">const</span> scrollContainerElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(scrollContainerElementClassName)</span><br><span class="line">            <span class="keyword">if</span> (scrollContainerElement) &#123;</span><br><span class="line">              scrollContainerElement.<span class="title function_">scrollTo</span>(&#123;</span><br><span class="line">                <span class="attr">top</span>: targetTop - scrollOffset,</span><br><span class="line">                <span class="attr">behavior</span>: <span class="string">&#x27;smooth&#x27;</span>, <span class="comment">// 平滑滚动</span></span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否已经存在分组，不存在将定时监听</span></span><br><span class="line">  <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="title function_">createDom</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">createDom</span>()</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -1186,8 +988,8 @@
 
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -1279,78 +1081,6 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
-</ul>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
-</ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -1489,87 +1219,6 @@
 </ul>
 <p>如果大家在操作过程中有其他疑问，欢迎在评论区留言交流，也可以分享你的折腾经验。觉得本文有用的话，别忘了点赞收藏，让更多需要的朋友看到！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
-    <url>/post/7/</url>
-    <content><![CDATA[<p><strong>目录</strong></p>
-<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
-<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
-<p><code>iptv-api</code> 的核心优势在于：</p>
-<ul>
-<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
-<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
-<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
-<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
-</ul>
-<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
-<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
-<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
-<p><img src="/images/202503/4a471742993634.png"></p>
-<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
-<p><img src="/images/202503/fb5c1742993645.png"></p>
-<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
-<ul>
-<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
-</ul>
-<p><img src="/images/202503/10fb1742993656.png"></p>
-<ul>
-<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
-</li>
-<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
-</li>
-</ul>
-<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
-
-<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
-<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
-<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
-<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
-<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
-<ul>
-<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
-<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
-<li>点击“确定”即可播放。</li>
-</ul>
-<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
-<ul>
-<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
-<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
-<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
-</ul>
-<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
-<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-      </tags>
   </entry>
   <entry>
     <title>🚀 告别 TVBox 卡顿，打造你的专属影库</title>
@@ -1770,6 +1419,159 @@
       </tags>
   </entry>
   <entry>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+</ul>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://www.317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
+</ul>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
+    <url>/post/7/</url>
+    <content><![CDATA[<p><strong>目录</strong></p>
+<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
+<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
+<p><code>iptv-api</code> 的核心优势在于：</p>
+<ul>
+<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
+<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
+<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
+<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
+</ul>
+<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
+<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
+<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
+<p><img src="/images/202503/4a471742993634.png"></p>
+<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
+<p><img src="/images/202503/fb5c1742993645.png"></p>
+<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
+<ul>
+<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
+</ul>
+<p><img src="/images/202503/10fb1742993656.png"></p>
+<ul>
+<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
+</li>
+<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
+</li>
+</ul>
+<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
+<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
+<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
+<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
+<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
+<ul>
+<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
+<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
+<li>点击“确定”即可播放。</li>
+</ul>
+<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
+<ul>
+<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
+<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
+<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
+</ul>
+<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
+<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</title>
     <url>/post/53/</url>
     <content><![CDATA[<!-- 正文内容开始 -->
@@ -1920,50 +1722,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
-    <url>/post/15/</url>
-    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
-<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
-<hr>
-<h2><span id="视频教程">📺 视频教程</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
-<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
-<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
-<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
-<hr>
-<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
-<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
-<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
-<hr>
-<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
-<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</title>
     <url>/post/30/</url>
     <content><![CDATA[<p>对于NAS玩家来说，实现外网访问是刚需，但获取公网IP却越来越难。不过，只要你拥有一个<strong>IPv6地址</strong>，这个问题就能迎刃而解！今天，我们将分享一个绝妙的方案：<strong>获取一个免费域名，并利用Cloudflare的DDNS服务，实现随时随地访问家里的飞牛NAS</strong>。</p>
@@ -2064,6 +1822,233 @@
       </tags>
   </entry>
   <entry>
+    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
+    <url>/post/9/</url>
+    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
+<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
+<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
+<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
+<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
+<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
+<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
+</ul>
+<hr>
+<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
+<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
+<ol>
+<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+</li>
+<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+</li>
+<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
+</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
+<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
+<li>在网易云复制主页地址</li>
+<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
+<li>粘贴链接并选择</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
+<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
+<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
+    <url>/post/1/</url>
+    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
+<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
+<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
+<ol>
+<li><p>停止并删除容器</p>
+<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
+<ul>
+<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
+</li>
+<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
+</li>
+<li><p>停止后，将这两个容器都删除。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>删除Compose文件和镜像</strong></p>
+<ul>
+<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
+</li>
+<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>清理部署文件夹</strong></p>
+<ul>
+<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
+</li>
+<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
+<hr>
+<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
+<ol>
+<li><p><strong>获取新版Compose文件</strong></p>
+<ul>
+<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
+</li>
+<li><p>将该文件的全部内容复制下来。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>创建新容器</strong></p>
+<ul>
+<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
+</li>
+<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
+</li>
+<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
+</li>
+<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
+</li>
+<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
+</li>
+<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>启动部署</strong></p>
+<ul>
+<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
+</li>
+<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
+<ol>
+<li><p><strong>登录管理面板</strong></p>
+<ul>
+<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
+</li>
+<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>添加源文件</strong></p>
+<ul>
+<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
+</li>
+<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
+</li>
+<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
+<hr>
+<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
+    <url>/post/15/</url>
+    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
+<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
+<hr>
+<h2><span id="视频教程">📺 视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
+<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
+<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
+<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
+<hr>
+<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
+<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
+<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
+<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
+    <url>/post/14/</url>
+    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
+<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
+<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
+<hr>
+<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
+<hr>
+<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
+<hr>
+<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
+<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
+<hr>
+<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
+<hr>
+<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
+<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
+<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
+<p>祝您网络畅游愉快，影音娱乐无忧！</p>
+]]></content>
+  </entry>
+  <entry>
     <title>🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</title>
     <url>/post/16/</url>
     <content><![CDATA[<p>大家好！在本系列教程的最后一部分，我们将聚焦于如何在你的群晖 NAS 上使用 Docker 来安装构建一套全自动追剧观影系统的核心应用程序。通过 Docker，我们可以更方便地部署和管理这些工具，让你的 NAS 变身智能影音中心！</p>
@@ -2130,67 +2115,9 @@
 <p>感谢阅读！希望这篇文章对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
-    <url>/post/9/</url>
-    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
-<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
-<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
-<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
-<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
-<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
-<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
-</ul>
-<hr>
-<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
-<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
-<ol>
-<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
-</li>
-<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
-</li>
-<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
-</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
-<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
-<li>在网易云复制主页地址</li>
-<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
-<li>粘贴链接并选择</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
-<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
-<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
-    <url>/post/14/</url>
-    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
-<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
-<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
-<hr>
-<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
-<hr>
-<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
-<hr>
-<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
-<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
-<hr>
-<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
-<hr>
-<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
-<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
-<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
-<p>祝您网络畅游愉快，影音娱乐无忧！</p>
-]]></content>
   </entry>
   <entry>
     <title>解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</title>
@@ -2247,8 +2174,8 @@
 <p>这是一种 <strong>快速有效</strong> 的解决办法，尤其适合 <strong>Docker 部署环境</strong>。 🚀</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -2316,8 +2243,81 @@
 <p>感谢阅读！希望对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
+    <url>/post/51/</url>
+    <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
+<p>该项目支持 <strong>自动更新</strong>，并且兼容 <strong>TVBox 类播放软件</strong>，适合喜欢折腾的朋友。下面就来一步步演示。</p>
+<hr>
+<h2><span id="演示视频">演示视频</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/T8KPvVxpq2o?si=-G3S5-v1irdrafU9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+
+
+<hr>
+<h2><span id="1-前置准备">1. 前置准备</span></h2><ul>
+<li>一台已安装 <strong>飞牛（FeiNiu）系统</strong> 的 NAS  </li>
+<li>已启用 <strong>Docker</strong> 与 <strong>Compose</strong> 插件  </li>
+<li>可用的端口（避免和现有服务冲突）</li>
+</ul>
+<hr>
+<h2><span id="2-创建文件夹">2. 创建文件夹</span></h2><p>在飞牛的 <strong>文件管理</strong> 中，为 IPTV 项目新建一个文件夹，例如 <code>iptv</code>，用来存放配置。</p>
+<hr>
+<h2><span id="3-创建-compose-项目">3. 创建 Compose 项目</span></h2><p>打开 <strong>Docker → Compose</strong>，点击 <strong>新建项目</strong>：</p>
+<ul>
+<li><strong>名称</strong>：填写 <code>IPTV</code>  </li>
+<li><strong>路径</strong>：选择刚刚创建的 <code>iptv</code> 文件夹  </li>
+<li><strong>Compose 文件</strong>：在此处粘贴以下内容</li>
+</ul>
+<p>👉 <strong>在这里插入 compose 文件代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  iptv-api:</span><br><span class="line">    image: guovern/iptv-api:latest</span><br><span class="line">    container_name: iptv-api</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9000:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config:/iptv-api/config</span><br><span class="line">      - ./output:/iptv-api/output</span><br><span class="line">    environment:</span><br><span class="line">      - APP_HOST=http://0.0.0.0</span><br><span class="line">      - APP_PORT=8000</span><br><span class="line">      - TZ=Asia/Shanghai         # 设置时区为北京时间</span><br><span class="line">      - UPDATE_CRON=0 0 */2 * *  # 每两天凌晨 0 点执行更新</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ 注意：请修改其中的 <strong>端口</strong>（避免冲突），以及 <strong>更新周期变量</strong>（默认是每两天的 0 点自动更新，你也可以根据需求调整）。</p>
+</blockquote>
+<p>点击 <strong>确定</strong> 并启动构建。</p>
+<hr>
+<h2><span id="4-查看部署情况">4. 查看部署情况</span></h2><p>部署完成后，可以在 <strong>容器日志</strong> 中查看运行情况。<br>首次启动时，它会拉取并更新频道列表，大约需要等待一小段时间。</p>
+<hr>
+<h2><span id="5-验证-iptv-输出">5. 验证 IPTV 输出</span></h2><p>部署完成后，在浏览器中访问：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果能看到频道列表，说明 IPTV 已经运行成功 ✅。</p>
+<hr>
+<h2><span id="6-配合-tvbox-使用">6. 配合 TVBox 使用</span></h2><p>在 TVBox 配置中，填入以下地址即可使用：</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://你的服务器IP:端口/m3u</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>设置完成后，你就可以在 TVBox 中播放 IPTV 频道啦 🎉。</p>
+<hr>
+<h2><span id="总结">总结</span></h2><p>这就是在飞牛 NAS 上部署 IPTV 项目的完整步骤。<br>它不仅支持自动更新频道，还能无缝对接 TVBox，非常适合自建家庭娱乐系统的用户。</p>
+<p>如果你在操作过程中遇到问题，可以在评论区留言，或者加入群组一起交流。  </p>
+<p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
