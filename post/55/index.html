@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>MoonTV 移动端客户端：让你的追剧体验如虎添翼！ | Eric's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/tags/"><i class="fa fa-tag"> 标签</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</h1><div class="post-meta">2025-09-23</div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">前言：告别网页端，掌上追剧更轻松</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">项目地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">视频教程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">🎬 核心操作：MoonTV 移动端安装与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第一步：了解项目与下载客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第二步：客户端安装与配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第三步：客户端功能体验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">总结：让你的 NAS 影视库“动”起来！</span></a></li></ol></div></div><div class="post-content"><h2><span id="前言告别网页端掌上追剧更轻松">前言：告别网页端，掌上追剧更轻松</span></h2><p>哈喽大家好！</p>
+<p>你是不是也和我一样，在 NAS 上部署了 MoonTV，享受着强大的聚合追剧功能？但每次想在手机上观看时，都得打开浏览器输入网址，体验上总觉得有些不便。</p>
+<p>今天，我将为大家分享一个超级实用的开源客户端——<strong>MoonTV 移动端</strong>！它完美支持 <strong>安卓和 iOS</strong>，让你在手机上也能拥有丝滑流畅的追剧体验。下面，我就来手把手带大家安装和使用这款客户端，让你的追剧体验如虎添翼！</p>
+<hr>
+<h2><span id="项目地址">项目地址</span></h2><p><a target="_blank" rel="noopener" href="https://github.com/MoonTechLab/Selene">Selene</a></p>
+<h2><span id="视频教程">视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/c7tMJzytpdQ?si=Ud6x-qZMOAXRZ4s_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+
+<h2><span id="核心操作moontv-移动端安装与使用">🎬 核心操作：MoonTV 移动端安装与使用</span></h2><h3><span id="第一步了解项目与下载客户端">第一步：了解项目与下载客户端</span></h3><p>这款客户端非常新，项目主页上说明它专门以 <strong>MoonTV 100 版本</strong>为后端，这意味着它可能无法兼容其他的衍生版本。我在本地使用 Katelya 进行了测试，虽然能进入页面，但无法获取到播放地址。因此，在安装前请确保你的后端是正确的 MoonTV 100 版本。</p>
+<ol>
+<li><p><strong>访问项目主页</strong>：前往该项目的 GitHub 主页。如果觉得这个项目不错，记得给作者点上一个小星星，支持一下开源社区！</p>
+</li>
+<li><p><strong>下载最新版</strong>：找到 <code>Releases</code> 页面，在这里你可以下载到最新的版本。通常会提供两个文件：</p>
+<ul>
+<li><strong>Android (安卓端)</strong>：后缀名为 <code>.apk</code>。</li>
+<li><strong>iOS (苹果端)</strong>：通常是 <code>.ipa</code> 文件，可能需要通过 TestFlight 或其他方式进行安装。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第二步客户端安装与配置">第二步：客户端安装与配置</span></h3><p>下载完成后，就可以在你的手机或模拟器上进行安装了。</p>
+<ol>
+<li><p><strong>安装应用</strong>：</p>
+<ul>
+<li><strong>安卓</strong>：直接点击 <code>.apk</code> 文件进行安装。</li>
+<li><strong>iOS</strong>：根据作者提供的安装指引进行操作。</li>
+</ul>
+</li>
+<li><p><strong>登录服务器</strong>：安装并打开应用后，会看到登录页面。在这里，你需要填写你的 MoonTV 服务器信息：</p>
+<ul>
+<li><strong>服务器地址</strong>：输入你的 MoonTV 服务器地址（例如 <code>http://你的NAS_IP地址:端口</code>）。</li>
+<li><strong>用户名和密码</strong>：填写你在 MoonTV 后端设置的用户名和密码。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第三步客户端功能体验">第三步：客户端功能体验</span></h3><p>登录成功后，你会进入一个非常简洁的客户端界面。</p>
+<ul>
+<li><strong>分类同步</strong>：客户端的分类与你的 MoonTV 网页端是完全同步的，你可以轻松找到想看的影视内容。</li>
+<li><strong>无直播功能</strong>：目前客户端暂不支持直播功能，主要聚焦于点播追剧。</li>
+<li><strong>支持更换源地址</strong>：你也可以在客户端内更换不同的源地址，增加了使用的灵活性。</li>
+</ul>
+<p>总体来说，这款客户端能够提供非常不错的移动端追剧体验，尤其是在操作流畅度和界面美观度上。</p>
+<hr>
+<h2><span id="总结让你的-nas-影视库动起来">总结：让你的 NAS 影视库“动”起来！</span></h2><p>总的来说，这款 MoonTV 客户端是一款非常实用的工具，它弥补了 MoonTV 在移动端体验上的不足。如果你经常需要在手机上追剧，那么这款应用绝对值得一试。</p>
+<p>今天的分享就到这里了，感谢大家的阅读！</p>
+<p>如果你在安装或使用过程中遇到任何问题，欢迎在评论区留言讨论。如果你觉得这篇教程对你有帮助，也请大家<strong>点赞、分享、订阅我的频道</strong>，你的支持是我持续创作的最大动力！我们下期再见！</p>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/" rel="tag">NAS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li></ul></div><div class="post-nav"><a class="next" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://t.me/gkyan78" title="Telegram" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-telegram" style="margin-inline:5px"></i></a><a class="info-icon" href="yy562198@gmail.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-envelope" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/gkyang2022" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-github" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-youtube" style="margin-inline:5px"></i></a></div></div><div class="widget-wrap"><div class="widget nofancybox"><a href="https://xn--mes358acgm99l.com/#/register?code=fdBRebys" target="_blank" rel="noopener noreferrer"><img src="/images/ad/jsjc.png" alt="广告" style="width:100%;"/></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/55/">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/post/53/">在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/52/">解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/51/">IPTV 一键部署教程|自动更新 · 支持 TVBox</a></li><li class="post-list-item"><a class="post-list-link" href="/post/50/">MoonTV 部署教程 | 支持生成 TVBox JSON 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/post/1/">MoonTV最新版保姆级部署教程：解决旧版失效问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/30/">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</a></li><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/27/">Typecho 手动部署详细教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
