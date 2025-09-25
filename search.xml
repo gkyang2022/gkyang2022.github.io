@@ -372,6 +372,173 @@
       </tags>
   </entry>
   <entry>
+    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
+    <url>/post/12/</url>
+    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
+<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
+<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
+<p><strong>安装步骤：</strong></p>
+<ul>
+<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
+</li>
+<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
+</li>
+</ul>
+<hr>
+<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
+<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
+<p><img src="/images/202504/f3cc1745398622.jpg"></p>
+<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
+<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
+<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
+<ul>
+<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
+<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
+<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
+</ul>
+<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
+<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
+<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
+<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
+<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
+</ul>
+<hr>
+<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
+<hr>
+<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
+<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
+<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
+<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
+<pre><code>
+**提示：**
+
+  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
+  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
+</code></pre>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
+    <url>/post/25/</url>
+    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
+<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
+<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
+<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
+<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
+<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
+<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
+<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
+<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
+<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
+<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
+<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
+<ul>
+<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
+<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
+</ul>
+<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>代码修改说明：</strong></p>
+<ol>
+<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
+<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
+</ol>
+<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
+<hr>
+<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
+<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
+<ul>
+<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
+<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
+</ul>
+<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
+<ul>
+<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
+<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
+<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
+</ul>
+<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
+<hr>
+<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
+<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
+<ul>
+<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
+<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
+<li><strong>密码设置（重点）：</strong><ul>
+<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
+<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
+</ul>
+</li>
+<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
+<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
+</ul>
+<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
+<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
+<ul>
+<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
+<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
+<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
+</ul>
+<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
+<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
+<ul>
+<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
+<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
+<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
+</ul>
+<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
+<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
+</ul>
+<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
+<hr>
+<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
+<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
+<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
+<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
+<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
+</ul>
+<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
     <url>/post/51/</url>
     <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
@@ -442,58 +609,6 @@
         <tag>教程</tag>
         <tag>Docker</tag>
         <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>FlClash Linux 代理教程：一键解锁你的网络自由！</title>
-    <url>/post/12/</url>
-    <content><![CDATA[<p><img src="/images/202504/f3cc1745398622.jpg"><br>大家好！欢迎来到我的博客！今天，我要为大家介绍一款强大的 Linux 代理工具——<strong>FlClash</strong>。如果你是一位 Linux 用户，正在寻找一款强大、可定制且易于使用的代理解决方案，那么 FlClash 绝对值得你拥有。本文将手把手地教你如何在 Linux 上安装和配置 FlClash，助你畅游网络世界。</p>
-<h2><span id="下载与安装-flclash">📥 下载与安装 FlClash</span></h2><p>首先，我们需要前往 FlClash 的 GitHub Releases 页面 ([请替换为实际 GitHub Releases 链接])。在这里，你可以看到 FlClash 对多平台的广泛支持，包括 Android、Windows、macOS 以及我们今天的主角——Linux。</p>
-<p>在 Releases 页面，找到最新的稳定版本（通常会标明 “Latest”），并选择与你的 Linux 系统架构相符的安装包。常见的 Linux 安装包格式包括 <code>.deb</code> (Debian&#x2F;Ubuntu) 和 <code>.rpm</code> (Fedora&#x2F;CentOS)。</p>
-<p><strong>安装步骤：</strong></p>
-<ul>
-<li><p><strong>Debian&#x2F;Ubuntu 用户：</strong> 下载 <code>.deb</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> dpkg -i flclash-amd64.deb  <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br><span class="line">    <span class="built_in">sudo</span> apt --fix-broken install   <span class="comment"># 如果有依赖问题，执行此命令</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>Fedora&#x2F;CentOS 用户：</strong> 下载 <code>.rpm</code> 文件后，打开终端并执行以下命令：<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">    <span class="built_in">sudo</span> rpm -ivh flclash-x86_64.rpm <span class="comment"># 将文件名替换为你下载的实际文件名</span></span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p><strong>其他 Linux 发行版：</strong> FlClash 可能也提供 AppImage 或其他通用格式，请根据 Releases 页面的说明进行下载和安装。对于 AppImage，通常需要赋予执行权限后直接运行。</p>
-</li>
-</ul>
-<hr>
-<h2><span id="️-配置-flclash">⚙️ 配置 FlClash</span></h2><p>安装完成后，我们来配置 FlClash 以连接你的代理服务器。</p>
-<h3><span id="仪表盘概览">🧭 仪表盘概览</span></h3><p>启动 FlClash 后，你首先会看到仪表盘。这里直观地展示了你的网络速度、出站规则匹配情况、系统代理开关状态以及 TUN 模式（虚拟网卡）的启用状态。你还可以自定义添加内存信息等监控项。</p>
-<p><img src="/images/202504/f3cc1745398622.jpg"></p>
-<h3><span id="️-导入节点与订阅">⚙️ 导入节点与订阅</span></h3><p>“配置”选项卡是导入代理节点和订阅的关键区域：<br><img src="/images/202504/15601745398317.jpg"><br>1.  <strong>添加订阅：</strong> 点击配置页面下方的加号 <code>+</code> 按钮，FlClash 提供了多种导入方式：<br>    * <strong>从 URL 获取：</strong> 这是最常用的方式，用于导入机场服务提供的订阅链接。复制你的订阅链接，粘贴到 URL 输入框中，然后点击确定。<br>    * <strong>从文件配置：</strong> 如果你拥有包含节点信息的 YAML 或 JSON 配置文件，可以选择此方式导入。<br>    * <strong>扫描二维码：</strong> 部分服务商可能提供二维码扫描导入。</p>
-<p>2.  <strong>管理代理：</strong> 成功导入节点后，切换到“代理”选项卡，你将看到所有可用的代理服务器。</p>
-<h3><span id="基本配置">🌐 基本配置</span></h3><p><img src="/images/202504/799b1745398392.jpg"><br>在“基本配置”的“常规选项”中，你可以进行以下设置：</p>
-<ul>
-<li><strong>节点选择与测试：</strong> 方便地切换不同的代理节点，并测试其连接延迟，选择最佳节点。</li>
-<li><strong>代理端口：</strong> 设置 FlClash 使用的本地代理端口。</li>
-<li><strong>允许局域网连接：</strong> 如果你的局域网内有其他设备需要通过你的 Linux 系统代理，可以开启此功能。</li>
-</ul>
-<h3><span id="外观与高级设置">🎨 外观与高级设置</span></h3><ul>
-<li><strong>主题：</strong> FlClash 支持自定义界面颜色，选择你喜欢的主题。</li>
-<li><strong>语言：</strong> 支持中文、英文、日文、俄文等多种语言。</li>
-<li><strong>备份：</strong> 你可以将 FlClash 的配置文件备份到支持 WebDAV 的网盘，方便在不同设备间同步。</li>
-<li><strong>工具：</strong> 提供更新 IP 和路由规则的功能。</li>
-</ul>
-<hr>
-<h2><span id="体验网络自由">🚀 体验网络自由</span></h2><p>配置完成后，回到仪表盘，开启“系统代理”开关，然后点击“开始”按钮启用代理服务。现在，尝试访问一些通常无法访问的网站，例如 YouTube。如果一切配置正确，你应该能够顺利访问，享受无阻碍的网络体验了！</p>
-<hr>
-<h2><span id="总结">📝 总结</span></h2><p>FlClash 是一款强大且高度可定制的 Linux 代理工具，其基于 Clash 核心的特性使其拥有灵活的规则路由和广泛的协议支持。通过本文的教程，相信你已经掌握了在 Linux 上安装和配置 FlClash 的基本方法。快去体验更自由、更安全的网络世界吧！</p>
-<p>如果你在使用过程中遇到任何问题，欢迎在评论区留言交流！</p>
-<p><strong>关键词：</strong> FlClash, Linux 代理, Linux 翻墙, 代理教程, Clash, 网络自由, 科学上网, Linux 网络, 代理配置, Linux 软件, 订阅节点, 规则代理</p>
-<p><strong>长尾词：</strong> Linux FlClash 安装教程, Linux 代理软件配置, FlClash 订阅导入, Linux 科学上网工具, FlClash 使用指南, Linux 翻墙方法, Clash Linux 配置</p>
-<pre><code>
-**提示：**
-
-  * **发布日期**：我已将 `date` 字段设置为 `2025-04-12`。请根据旧文章的实际发布时间进行核对和修改。
-  * **图片链接**：图片链接已保持原样。如果你希望将图片保存在本地，需要手动下载图片，放到 `source/images` 文件夹，然后修改图片路径。
-</code></pre>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -667,6 +782,84 @@
       </tags>
   </entry>
   <entry>
+    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
+    <url>/post/20/</url>
+    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
+<h3><span id="目录">目录</span></h3><ul>
+<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
+<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
+<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
+<ul>
+<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
+<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
+<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
+</ul>
+<hr>
+<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
+<ul>
+<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
+</ul>
+<hr>
+<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
+<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
+<ul>
+<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
+<li>进入 <code>Releases</code> 页面。</li>
+<li>下载最新版本的 <code>.apk</code> 文件。</li>
+</ul>
+<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
+<ul>
+<li>完成应用安装。</li>
+<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
+</ul>
+<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
+<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
+<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
+<hr>
+<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
+<ul>
+<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
+<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
+</ul>
+<hr>
+<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
+<ul>
+<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
+<li>也可以加入相关的技术交流群组。</li>
+<li>视频作者表示，如有需要，可以提供远程协助。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MoonTV 部署教程 | 支持生成 TVBox JSON 文件</title>
     <url>/post/50/</url>
     <content><![CDATA[<blockquote>
@@ -797,198 +990,6 @@
       </tags>
   </entry>
   <entry>
-    <title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</title>
-    <url>/post/20/</url>
-    <content><![CDATA[<p><img src="/images/20250718/0c0b1752924340.png"></p>
-<h3><span id="目录">目录</span></h3><ul>
-<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
-<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
-<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
- <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
-<ul>
-<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
-<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
-<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
-</ul>
-<hr>
-<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
-<ul>
-<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
-</ul>
-<hr>
-<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
-<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
-<ul>
-<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
-<li>进入 <code>Releases</code> 页面。</li>
-<li>下载最新版本的 <code>.apk</code> 文件。</li>
-</ul>
-<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
-<ul>
-<li>完成应用安装。</li>
-<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
-</ul>
-<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
-<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
-<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
-<hr>
-<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
-<ul>
-<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
-<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
-</ul>
-<hr>
-<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
-<ul>
-<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
-<li>也可以加入相关的技术交流群组。</li>
-<li>视频作者表示，如有需要，可以提供远程协助。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</title>
-    <url>/post/56/</url>
-    <content><![CDATA[<p>对于NAS玩家来说，外网访问是刚需，但传统的方案如DDNS或端口映射常常伴随着域名费用、繁琐的配置，甚至安全风险。今天，我们将分享一个更简单、更安全、更重要的是<strong>完全免费</strong>的解决方案——<strong>Tailscale</strong>。</p>
-<p>本教程将详细介绍如何使用Tailscale，让你轻松实现NAS的内网穿透，告别一切复杂设置，享受丝滑流畅的远程访问体验。</p>
-<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
-<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;"><iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="[https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l](https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-
-<hr>
-<h3><span id="第一步获取tailscale-api-key"><strong>第一步：获取Tailscale API Key</strong></span></h3><p>Tailscale的部署非常简单，第一步就是获取一个用于部署的API Key。</p>
-<ol>
-<li><p><strong>登录Tailscale官网</strong>：访问 <a href="https://tailscale.com/">https://tailscale.com/</a>，你可以选择用Google或GitHub账号直接登录，非常方便。</p>
-</li>
-<li><p><strong>创建API Key</strong>：登录后，导航至**“Settings”<strong>，点击左侧的</strong>“Keys”**选项。</p>
-</li>
-<li><p>点击 <strong>“Create key”</strong>，给它取一个你喜欢的名字，然后点击创建。</p>
-</li>
-</ol>
-<hr>
-<h3><span id="第二步在飞牛nas上部署tailscale"><strong>第二步：在飞牛NAS上部署Tailscale</strong></span></h3><p>现在，我们将在飞牛NAS上部署Tailscale容器。</p>
-<ol>
-<li><p><strong>准备部署目录</strong>：在飞牛NAS的文件管理中，新建一个用于存放Compose文件的文件夹，例如 <code>tailscale</code>。</p>
-</li>
-<li><p><strong>创建Compose项目</strong>：打开Docker，进入 <strong>Compose</strong> 选项，点击 <strong>“新增项目”</strong>。</p>
-</li>
-<li><p>填写项目名称，路径选择你刚才创建的文件夹。</p>
-</li>
-<li><p>将视频简介中提供的Compose文件代码粘贴进来。</p>
-</li>
-<li><p><strong>配置API Key</strong>：在粘贴的代码中，找到对应的变量，将你第一步复制的API Key粘贴进去。</p>
-</li>
-<li><p>点击确定，然后开始构建。</p>
-</li>
-</ol>
-<p>稍等片刻，你的NAS容器就会在Tailscale的网络中上线，并自动分配一个IP地址。</p>
-<hr>
-<h3><span id="第三步客户端连接与远程访问"><strong>第三步：客户端连接与远程访问</strong></span></h3><p>现在，你的NAS已经准备好被访问了，只需在你的设备上安装Tailscale客户端。</p>
-<ol>
-<li><p><strong>下载并登录客户端</strong>：在你的手机、电脑或其他设备上下载并安装Tailscale应用。登录时，请使用你在官网登录的同一个账号。</p>
-</li>
-<li><p><strong>获取NAS IP</strong>：登录后，你会看到你的NAS服务已经出现在设备列表中。点击它，可以复制它分配的IP地址。</p>
-</li>
-<li><p><strong>远程访问</strong>：打开浏览器，输入这个IP地址，后面加上你NAS里服务的端口号（例如：<code>[IP地址]:8096</code>），你就能轻松访问了！</p>
-</li>
-</ol>
-<p>如果你有IPv6地址，那么Tailscale会利用它实现<strong>点对点直连</strong>，速度非常理想。你可以通过SSH连接到NAS，运行指定命令来确认是否处于直连状态。</p>
-<hr>
-<h3><span id="总结"><strong>总结</strong></span></h3><p>通过Tailscale，我们不仅实现了NAS的外网访问，还摆脱了域名、端口映射和防火墙规则的限制，真正做到了<strong>零成本、零配置</strong>。更重要的是，Tailscale自带的端到端加密技术，让你的远程访问更加安全可靠。</p>
-<p>希望这篇教程对你有所帮助。如果你在部署中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>🚀 Sun-Panel：私有化 NAS 导航主页部署教程</title>
-    <url>/post/21/</url>
-    <content><![CDATA[<p>本笔记介绍了如何通过 Docker 部署一个名为 <code>Sun-Panel</code> 的私有化 NAS 导航主页。该教程以“非牛系统”为例，采用“迷你行模式”进行快速部署，整个过程仅需复制粘贴两行代码。</p>
-<h2><span id="目录">目录</span></h2><ul>
-<li><a href="#%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96-content-0007">部署与初始化 (00:07)</a></li>
-<li><a href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E9%85%8D%E7%BD%AE-content-0131">核心功能配置 (01:31)</a></li>
-<li><a href="#%E9%AB%98%E7%BA%A7%E4%B8%AA%E6%80%A7%E5%8C%96%E8%AE%BE%E7%BD%AE-content-0316">高级个性化设置 (03:16)</a></li>
-<li><a href="#%E5%85%A8%E9%83%A8%E5%91%BD%E4%BB%A4">全部命令</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/nOBQeTJPErQ?si=QZ5Ai1uZIlp14XN-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="部署与初始化-0007">部署与初始化 (00:07)</span></h2><p>本章节介绍 <code>Sun-Panel</code> 的完整部署流程，从连接服务器到完成基本设置。</p>
-<h3><span id="1-部署步骤">1. 部署步骤</span></h3><p>该教程使用 <code>飞牛系统</code> 作为演示平台，通过 SSH 执行 Docker 命令进行部署。</p>
-<p>1.  <strong>连接服务器</strong>：使用 SSH 工具连接到 <code>飞牛</code> 服务器。<br>2.  <strong>切换用户</strong>：输入 <code>su</code> 或 <code>sudo -i</code> 命令切换到 <code>root</code> 用户权限。<br>3.  <strong>执行代码</strong>：复制并执行视频简介中提供的部署代码。该代码会自动拉取 <code>Sun-Panel</code> 的 Docker 镜像并创建容器。<br>4.  <strong>验证运行</strong>：代码执行成功后，回到 <code>飞牛系统</code> 的管理界面，可以看到 <code>Sun-Panel</code> 容器已处于运行状态。</p>
-<h3><span id="2-初始化设置">2. 初始化设置</span></h3><p>首次访问并进行基础账户配置。</p>
-<p>1.  <strong>访问页面</strong>：在浏览器中打开 <code>Sun-Panel</code> 的 Web 页面。<br>2.  <strong>默认登录</strong>：<br>    *   <strong>用户名</strong>：<code>admin@sun.cc</code><br>    *   <strong>密码</strong>：<code>12345678</code><br>3.  <strong>修改账户</strong>：<br>    *   登录后，点击右上角的 <strong>设置</strong> 图标。<br>    *   在账户管理中，添加一个新账户，并设置为自己熟悉的用户名和密码。<br>    *   保存新账户后，刷新页面并使用新账户登录。<br>    *   登录成功后，可返回设置将默认的 <code>admin@sun.cc</code> 账户删除，以增强安全性。</p>
-<hr>
-<h2><span id="核心功能配置-0131">核心功能配置 (01:31)</span></h2><p>完成初始化后，可以开始对导航页进行个性化配置，添加服务和整理布局。</p>
-<h3><span id="1-添加容器到首页">1. 添加容器到首页</span></h3><p><code>Sun-Panel</code> 可以集中管理和展示服务器上运行的所有 Docker 容器。</p>
-<p>*   <strong>进入 Docker 管理</strong>：在 <code>Sun-Panel</code> 侧边栏点击 <strong>Docker</strong> 选项，这里会列出服务器上所有的容器。<br>*   <strong>添加容器</strong>：<br>    1.  点击目标容器旁的 <strong>添加</strong> 按钮。<br>    2.  在弹出的窗口中，打开 <strong>显示状态</strong> 开关，以便在首页看到容器的运行状态。<br>    3.  将容器的访问地址（IP + 端口号，例如 <code>http://192.168.1.10:8080</code>）填入 <strong>默认地址</strong> 栏。<br>    4.  点击 <strong>在线获取图标</strong>，系统会自动抓取网站图标。<br>    5.  保存后，该服务就会显示在首页。<br>*   <strong>状态指示</strong>：正在运行的容器，其图标左上角会显示一个 <strong>绿色小圆点</strong>。</p>
-<h3><span id="2-获取与替换图标">2. 获取与替换图标</span></h3><p>如果在线获取的图标不清晰或获取失败，可以手动替换。</p>
-<p>*   <strong>推荐网站</strong>：视频中推荐了一个专门用于获取高质量应用图标的网站。<br>*   <strong>手动上传</strong>：在添加或编辑服务项目的窗口中，可以手动上传本地图标文件。</p>
-<h3><span id="3-分组管理">3. 分组管理</span></h3><p>为了更好地组织服务，可以创建和管理分组。</p>
-<p>*   <strong>进入分组管理</strong>：在侧边栏进入 <strong>分组管理</strong> 页面。<br>*   <strong>操作</strong>：<br>    *   可以修改默认分组的名称。<br>    *   可以点击 <strong>添加分组</strong> 来创建新的分类，例如“影音服务”、“下载工具”等。<br>    *   在添加服务时，可以选择将其归入指定的分组。</p>
-<hr>
-<h2><span id="高级个性化设置-0316">高级个性化设置 (03:16)</span></h2><p><code>Sun-Panel</code> 提供了一些高级选项，用于进一步美化和定制导航页。</p>
-<h3><span id="1-系统状态显示">1. 系统状态显示</span></h3><p>在首页添加硬件资源监控小部件。</p>
-<p>*   <strong>进入系统状态</strong>：在侧边栏进入 <strong>系统状态</strong> 设置。<br>*   <strong>添加部件</strong>：可以勾选并添加 <strong>内存</strong> 和 <strong>硬盘</strong> 的显示信息，实时监控系统资源占用情况。</p>
-<h3><span id="2-自定义分页">2. 自定义分页</span></h3><p>当服务项目非常多时，可以使用分页功能来保持页面整洁。</p>
-<p>*   <strong>启用方法</strong>：此功能通过添加自定义 CSS 代码实现。<br>*   <strong>操作步骤</strong>：<br>    1.  进入 <strong>个性化</strong> -&gt; <strong>自定义样式</strong> 页面。<br>    2.  将视频简介中提供的分页代码粘贴到 CSS 编辑框中。<br>    3.  保存后刷新页面。<br>*   <strong>效果</strong>：页面左侧会出现分页选项卡，可以将不同分组的服务置于不同的页面中，使导航页更加有序。</p>
-<hr>
-<h2><span id="全部命令">全部命令</span></h2><h3><span id="图标网址">图标网址</span></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">[https://github.com/gkyang2022/dashboard-icons](https://github.com/gkyang2022/dashboard-icons)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3><span id="docker命令">docker命令</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull hslr/sun-panel:latest</span><br><span class="line"></span><br><span class="line">docker run -d --restart=always -p 3002:3002 \</span><br><span class="line">-v ~/docker_data/sun-panel/conf:/app/conf \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">--name sun-panel \</span><br><span class="line">hslr/sun-panel:latest</span><br></pre></td></tr></table></figure>
-
-<h3><span id="自定义页脚">自定义页脚</span></h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// =========== Config Start ===========</span></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// 距离滚动偏移量</span></span><br><span class="line">  <span class="keyword">const</span> scrollOffset = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 显示风格( auto:自动(默认) | mobile:左上角显示触发按钮-移动端风格 | sidebar:常态显示侧栏)</span></span><br><span class="line">  <span class="keyword">const</span> displayStyle = <span class="string">&#x27;auto&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 移动端宽度定义</span></span><br><span class="line">  <span class="keyword">const</span> mobileWidth = <span class="number">800</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomIdName</span> = <span class="string">&#x27;sun-panel-toc-dom&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 左上角按钮 SVG 图标</span></span><br><span class="line">  <span class="keyword">const</span> svgTocMobileBtn = <span class="string">&#x27;&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)&quot;  viewBox=&quot;0 0 24 24&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M17.5 4.5c-1.95 0-4.05.4-5.5 1.5c-1.45-1.1-3.55-1.5-5.5-1.5c-1.45 0-2.99.22-4.28.79C1.49 5.62 1 6.33 1 7.14v11.28c0 1.3 1.22 2.26 2.48 1.94c.98-.25 2.02-.36 3.02-.36c1.56 0 3.22.26 4.56.92c.6.3 1.28.3 1.87 0c1.34-.67 3-.92 4.56-.92c1 0 2.04.11 3.02.36c1.26.33 2.48-.63 2.48-1.94V7.14c0-.81-.49-1.52-1.22-1.85c-1.28-.57-2.82-.79-4.27-.79M21 17.23c0 .63-.58 1.09-1.2.98c-.75-.14-1.53-.2-2.3-.2c-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5c.92 0 1.83.09 2.7.28c.46.1.8.51.8.98z&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M13.98 11.01c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.54-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39c-.08.01-.16.03-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.7-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03&quot;/&gt;&lt;/svg&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// =========== Config End ===========</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滚动容器的类名</span></span><br><span class="line">  <span class="keyword">const</span> scrollContainerElementClassName = <span class="string">&#x27;.scroll-container&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 一些函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">isMobile</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;mobile&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;pc&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> width = <span class="variable language_">window</span>.<span class="property">innerWidth</span></span><br><span class="line">    <span class="keyword">return</span> width &lt; mobileWidth</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createDom</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 检测是否已经存在TOC DOM，存在则删除</span></span><br><span class="line">    (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="title class_">SunPanelTOCDomIdName</span>)</span><br><span class="line">      <span class="keyword">if</span> (element) &#123;</span><br><span class="line">        element.<span class="title function_">remove</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDom</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="property">id</span> = <span class="title class_">SunPanelTOCDomIdName</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(<span class="title class_">SunPanelTOCDom</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style start =========</span></span><br><span class="line">    <span class="keyword">const</span> style = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;style&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomStyleId</span> = <span class="string">`#<span class="subst">$&#123;SunPanelTOCDomIdName&#125;</span>`</span></span><br><span class="line">    style.<span class="property">textContent</span> = <span class="string">`</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-mobile-btn &#123;</span></span><br><span class="line"><span class="string">        top: 20px !important;</span></span><br><span class="line"><span class="string">        left: 20px !important;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        width: 46px;</span></span><br><span class="line"><span class="string">        height: 46px;</span></span><br><span class="line"><span class="string">        background-color: #2a2a2a6b;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">        border-radius: 0.5rem;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .hidden &#123;</span></span><br><span class="line"><span class="string">        display: none !important;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">        padding: 10px;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        top: 0;</span></span><br><span class="line"><span class="string">        left: 0;</span></span><br><span class="line"><span class="string">        height: 100%;</span></span><br><span class="line"><span class="string">        overflow: hidden;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        flex-direction: column;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        transition: width 0.3s ease, background-color 0.3s ease;</span></span><br><span class="line"><span class="string">        border-top-right-radius: 20px;</span></span><br><span class="line"><span class="string">        border-bottom-right-radius: 20px;</span></span><br><span class="line"><span class="string">        background-color: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-mobile-btn-svg-container&#123;</span></span><br><span class="line"><span class="string">      width:21px;</span></span><br><span class="line"><span class="string">      height:21px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion &#123;</span></span><br><span class="line"><span class="string">        width: 200px !important;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        background-color: rgb(42 42 42 / 90%);</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar .toc-sidebar-box &#123;</span></span><br><span class="line"><span class="string">        width: 500px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-box &#123;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        position: relative;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 20px;</span></span><br><span class="line"><span class="string">        height: 6px;</span></span><br><span class="line"><span class="string">        background-color: white;</span></span><br><span class="line"><span class="string">        border-radius: 4px;</span></span><br><span class="line"><span class="string">        margin: 15px 0;</span></span><br><span class="line"><span class="string">        transition: height 0.3s ease, width 0.3s ease;</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">        white-space: nowrap;</span></span><br><span class="line"><span class="string">        transition: opacity 0.3s ease, transform 0.3s ease, margin-left 0.3s ease;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">        margin-left: 10px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        box-shadow: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        font-size: 20px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      `</span></span><br><span class="line">    <span class="comment">// 添加样式到文档头部</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(style)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style end =========</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加移动端菜单按钮</span></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtn = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="property">id</span> = <span class="string">&#x27;toc-mobile-btn&#x27;</span></span><br><span class="line">    tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;backdrop-blur-[2px]&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(tocMobileBtn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtnSvgcContainer = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">innerHTML</span> = svgTocMobileBtn</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-mobile-btn-svg-container&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="title function_">appendChild</span>(tocMobileBtnSvgcContainer)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建侧边栏容器</span></span><br><span class="line">    <span class="keyword">const</span> sidebar = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebar.<span class="property">id</span> = <span class="string">&#x27;toc-sidebar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sidebarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebarBox.<span class="property">className</span> = <span class="string">&#x27;toc-sidebar-box&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询出所有类名包含 item-group-index- 的元素</span></span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历并打印每个元素的完整类名</span></span><br><span class="line">    items.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      item.<span class="property">classList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (className.<span class="title function_">startsWith</span>(<span class="string">&#x27;item-group-index-&#x27;</span>)) &#123;</span><br><span class="line">          <span class="keyword">const</span> titleBarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarBox.<span class="property">className</span> = <span class="string">&#x27;title-bar-box&#x27;</span></span><br><span class="line">          <span class="comment">// titleBarBox.href = `#$&#123;item.id&#125;`</span></span><br><span class="line">          titleBarBox.<span class="property">dataset</span>.<span class="property">groupClassName</span> = className</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 目录条</span></span><br><span class="line">          <span class="keyword">const</span> titleBarSlip = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarSlip.<span class="property">className</span> = <span class="string">&#x27;title-bar-slip&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 创建一个链接</span></span><br><span class="line">          <span class="keyword">const</span> titleBarTitle = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarTitle.<span class="property">className</span> = <span class="string">&#x27;title-bar-title&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 获取子元素中 class=&quot;group-title&quot; 的内容</span></span><br><span class="line">          <span class="keyword">const</span> titleElement = item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.group-title&#x27;</span>)</span><br><span class="line">          <span class="keyword">const</span> titleText = titleElement ? titleElement.<span class="property">textContent</span> : item.<span class="property">id</span></span><br><span class="line">          titleBarTitle.<span class="property">textContent</span> = titleText</span><br><span class="line"></span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarSlip)</span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarTitle)</span><br><span class="line"></span><br><span class="line">          sidebarBox.<span class="title function_">appendChild</span>(titleBarBox)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    sidebar.<span class="title function_">appendChild</span>(sidebarBox)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将侧边栏添加到页面中</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(sidebar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mobileHideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">hideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">showSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化开始</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">func, wait</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> timeout</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout)</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          func.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">handleResize</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用防抖函数包装你的处理函数</span></span><br><span class="line">    <span class="keyword">const</span> debouncedHandleResize = <span class="title function_">debounce</span>(handleResize, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加事件监听器</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, debouncedHandleResize)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次触发</span></span><br><span class="line">    <span class="title function_">handleResize</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化结束</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听移动端按钮点击</span></span><br><span class="line">    tocMobileBtn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (sidebar.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 显示</span></span><br><span class="line">        <span class="title function_">showSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏失去hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏获得hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">showSidebar</span>()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC点击事件</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.title-bar-box&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">box</span>) =&gt;</span> &#123;</span><br><span class="line">      box.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 检查触发事件的元素是否有 &#x27;data-groupClassName&#x27; 属性</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取 &#x27;data-groupClass&#x27; 属性的值</span></span><br><span class="line">          <span class="keyword">const</span> groupClassName = <span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span></span><br><span class="line">          <span class="comment">// 使用属性值作为选择器查询对应的元素</span></span><br><span class="line">          <span class="keyword">const</span> targetElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">`.<span class="subst">$&#123;groupClassName&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">if</span> (targetElement) &#123;</span><br><span class="line">          <span class="comment">// 获取目标元素的 &#x27;top&#x27; 坐标</span></span><br><span class="line">            <span class="keyword">const</span> targetTop = targetElement.<span class="property">offsetTop</span></span><br><span class="line">            <span class="keyword">const</span> scrollContainerElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(scrollContainerElementClassName)</span><br><span class="line">            <span class="keyword">if</span> (scrollContainerElement) &#123;</span><br><span class="line">              scrollContainerElement.<span class="title function_">scrollTo</span>(&#123;</span><br><span class="line">                <span class="attr">top</span>: targetTop - scrollOffset,</span><br><span class="line">                <span class="attr">behavior</span>: <span class="string">&#x27;smooth&#x27;</span>, <span class="comment">// 平滑滚动</span></span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否已经存在分组，不存在将定时监听</span></span><br><span class="line">  <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="title function_">createDom</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">createDom</span>()</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
     <url>/post/1/</url>
     <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
@@ -1114,6 +1115,63 @@
       </tags>
   </entry>
   <entry>
+    <title>NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</title>
+    <url>/post/56/</url>
+    <content><![CDATA[<p>对于NAS玩家来说，外网访问是刚需，但传统的方案如DDNS或端口映射常常伴随着域名费用、繁琐的配置，甚至安全风险。今天，我们将分享一个更简单、更安全、更重要的是<strong>完全免费</strong>的解决方案——<strong>Tailscale</strong>。</p>
+<p>本教程将详细介绍如何使用Tailscale，让你轻松实现NAS的内网穿透，告别一切复杂设置，享受丝滑流畅的远程访问体验。</p>
+<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;"><iframe width="560" height="315" src="https://www.youtube.com/embed/v29vxQbbnp0?si=Au199IJdbfmUtGIy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3><span id="第一步获取tailscale-api-key"><strong>第一步：获取Tailscale API Key</strong></span></h3><p>Tailscale的部署非常简单，第一步就是获取一个用于部署的API Key。</p>
+<ol>
+<li><p><strong>登录Tailscale官网</strong>：访问 <a href="https://tailscale.com/">https://tailscale.com/</a>，你可以选择用Google或GitHub账号直接登录，非常方便。</p>
+</li>
+<li><p><strong>创建API Key</strong>：登录后，导航至**“Settings”<strong>，点击左侧的</strong>“Keys”**选项。</p>
+</li>
+<li><p>点击 <strong>“Create key”</strong>，给它取一个你喜欢的名字，然后点击创建。</p>
+</li>
+</ol>
+<hr>
+<h3><span id="第二步在飞牛nas上部署tailscale"><strong>第二步：在飞牛NAS上部署Tailscale</strong></span></h3><p>现在，我们将在飞牛NAS上部署Tailscale容器。</p>
+<ol>
+<li><p><strong>准备部署目录</strong>：在飞牛NAS的文件管理中，新建一个用于存放Compose文件的文件夹，例如 <code>tailscale</code>。</p>
+</li>
+<li><p><strong>创建Compose项目</strong>：打开Docker，进入 <strong>Compose</strong> 选项，点击 <strong>“新增项目”</strong>。</p>
+</li>
+<li><p>填写项目名称，路径选择你刚才创建的文件夹。</p>
+</li>
+<li><p>将视频简介中提供的Compose文件代码粘贴进来。</p>
+</li>
+<li><p><strong>配置API Key</strong>：在粘贴的代码中，找到对应的变量，将你第一步复制的API Key粘贴进去。</p>
+</li>
+<li><p>点击确定，然后开始构建。</p>
+</li>
+</ol>
+<p>稍等片刻，你的NAS容器就会在Tailscale的网络中上线，并自动分配一个IP地址。</p>
+<hr>
+<h3><span id="第三步客户端连接与远程访问"><strong>第三步：客户端连接与远程访问</strong></span></h3><p>现在，你的NAS已经准备好被访问了，只需在你的设备上安装Tailscale客户端。</p>
+<ol>
+<li><p><strong>下载并登录客户端</strong>：在你的手机、电脑或其他设备上下载并安装Tailscale应用。登录时，请使用你在官网登录的同一个账号。</p>
+</li>
+<li><p><strong>获取NAS IP</strong>：登录后，你会看到你的NAS服务已经出现在设备列表中。点击它，可以复制它分配的IP地址。</p>
+</li>
+<li><p><strong>远程访问</strong>：打开浏览器，输入这个IP地址，后面加上你NAS里服务的端口号（例如：<code>[IP地址]:8096</code>），你就能轻松访问了！</p>
+</li>
+</ol>
+<p>如果你有IPv6地址，那么Tailscale会利用它实现<strong>点对点直连</strong>，速度非常理想。你可以通过SSH连接到NAS，运行指定命令来确认是否处于直连状态。</p>
+<blockquote>
+<p>相关代码：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker exec -it xxxxxx tailscale status</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="总结"><strong>总结</strong></span></h3><p>通过Tailscale，我们不仅实现了NAS的外网访问，还摆脱了域名、端口映射和防火墙规则的限制，真正做到了<strong>零成本、零配置</strong>。更重要的是，Tailscale自带的端到端加密技术，让你的远程访问更加安全可靠。</p>
+<p>希望这篇教程对你有所帮助。如果你在部署中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</title>
     <url>/post/28/</url>
     <content><![CDATA[<p><img src="/images/20250809/4a471754735566.png" alt="PanSou 资源搜索工具主页截图"></p>
@@ -1196,6 +1254,69 @@
 <!-- end list -->
 
 ]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🚀 Sun-Panel：私有化 NAS 导航主页部署教程</title>
+    <url>/post/21/</url>
+    <content><![CDATA[<p>本笔记介绍了如何通过 Docker 部署一个名为 <code>Sun-Panel</code> 的私有化 NAS 导航主页。该教程以“非牛系统”为例，采用“迷你行模式”进行快速部署，整个过程仅需复制粘贴两行代码。</p>
+<h2><span id="目录">目录</span></h2><ul>
+<li><a href="#%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96-content-0007">部署与初始化 (00:07)</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E9%85%8D%E7%BD%AE-content-0131">核心功能配置 (01:31)</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E4%B8%AA%E6%80%A7%E5%8C%96%E8%AE%BE%E7%BD%AE-content-0316">高级个性化设置 (03:16)</a></li>
+<li><a href="#%E5%85%A8%E9%83%A8%E5%91%BD%E4%BB%A4">全部命令</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/nOBQeTJPErQ?si=QZ5Ai1uZIlp14XN-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="部署与初始化-0007">部署与初始化 (00:07)</span></h2><p>本章节介绍 <code>Sun-Panel</code> 的完整部署流程，从连接服务器到完成基本设置。</p>
+<h3><span id="1-部署步骤">1. 部署步骤</span></h3><p>该教程使用 <code>飞牛系统</code> 作为演示平台，通过 SSH 执行 Docker 命令进行部署。</p>
+<p>1.  <strong>连接服务器</strong>：使用 SSH 工具连接到 <code>飞牛</code> 服务器。<br>2.  <strong>切换用户</strong>：输入 <code>su</code> 或 <code>sudo -i</code> 命令切换到 <code>root</code> 用户权限。<br>3.  <strong>执行代码</strong>：复制并执行视频简介中提供的部署代码。该代码会自动拉取 <code>Sun-Panel</code> 的 Docker 镜像并创建容器。<br>4.  <strong>验证运行</strong>：代码执行成功后，回到 <code>飞牛系统</code> 的管理界面，可以看到 <code>Sun-Panel</code> 容器已处于运行状态。</p>
+<h3><span id="2-初始化设置">2. 初始化设置</span></h3><p>首次访问并进行基础账户配置。</p>
+<p>1.  <strong>访问页面</strong>：在浏览器中打开 <code>Sun-Panel</code> 的 Web 页面。<br>2.  <strong>默认登录</strong>：<br>    *   <strong>用户名</strong>：<code>admin@sun.cc</code><br>    *   <strong>密码</strong>：<code>12345678</code><br>3.  <strong>修改账户</strong>：<br>    *   登录后，点击右上角的 <strong>设置</strong> 图标。<br>    *   在账户管理中，添加一个新账户，并设置为自己熟悉的用户名和密码。<br>    *   保存新账户后，刷新页面并使用新账户登录。<br>    *   登录成功后，可返回设置将默认的 <code>admin@sun.cc</code> 账户删除，以增强安全性。</p>
+<hr>
+<h2><span id="核心功能配置-0131">核心功能配置 (01:31)</span></h2><p>完成初始化后，可以开始对导航页进行个性化配置，添加服务和整理布局。</p>
+<h3><span id="1-添加容器到首页">1. 添加容器到首页</span></h3><p><code>Sun-Panel</code> 可以集中管理和展示服务器上运行的所有 Docker 容器。</p>
+<p>*   <strong>进入 Docker 管理</strong>：在 <code>Sun-Panel</code> 侧边栏点击 <strong>Docker</strong> 选项，这里会列出服务器上所有的容器。<br>*   <strong>添加容器</strong>：<br>    1.  点击目标容器旁的 <strong>添加</strong> 按钮。<br>    2.  在弹出的窗口中，打开 <strong>显示状态</strong> 开关，以便在首页看到容器的运行状态。<br>    3.  将容器的访问地址（IP + 端口号，例如 <code>http://192.168.1.10:8080</code>）填入 <strong>默认地址</strong> 栏。<br>    4.  点击 <strong>在线获取图标</strong>，系统会自动抓取网站图标。<br>    5.  保存后，该服务就会显示在首页。<br>*   <strong>状态指示</strong>：正在运行的容器，其图标左上角会显示一个 <strong>绿色小圆点</strong>。</p>
+<h3><span id="2-获取与替换图标">2. 获取与替换图标</span></h3><p>如果在线获取的图标不清晰或获取失败，可以手动替换。</p>
+<p>*   <strong>推荐网站</strong>：视频中推荐了一个专门用于获取高质量应用图标的网站。<br>*   <strong>手动上传</strong>：在添加或编辑服务项目的窗口中，可以手动上传本地图标文件。</p>
+<h3><span id="3-分组管理">3. 分组管理</span></h3><p>为了更好地组织服务，可以创建和管理分组。</p>
+<p>*   <strong>进入分组管理</strong>：在侧边栏进入 <strong>分组管理</strong> 页面。<br>*   <strong>操作</strong>：<br>    *   可以修改默认分组的名称。<br>    *   可以点击 <strong>添加分组</strong> 来创建新的分类，例如“影音服务”、“下载工具”等。<br>    *   在添加服务时，可以选择将其归入指定的分组。</p>
+<hr>
+<h2><span id="高级个性化设置-0316">高级个性化设置 (03:16)</span></h2><p><code>Sun-Panel</code> 提供了一些高级选项，用于进一步美化和定制导航页。</p>
+<h3><span id="1-系统状态显示">1. 系统状态显示</span></h3><p>在首页添加硬件资源监控小部件。</p>
+<p>*   <strong>进入系统状态</strong>：在侧边栏进入 <strong>系统状态</strong> 设置。<br>*   <strong>添加部件</strong>：可以勾选并添加 <strong>内存</strong> 和 <strong>硬盘</strong> 的显示信息，实时监控系统资源占用情况。</p>
+<h3><span id="2-自定义分页">2. 自定义分页</span></h3><p>当服务项目非常多时，可以使用分页功能来保持页面整洁。</p>
+<p>*   <strong>启用方法</strong>：此功能通过添加自定义 CSS 代码实现。<br>*   <strong>操作步骤</strong>：<br>    1.  进入 <strong>个性化</strong> -&gt; <strong>自定义样式</strong> 页面。<br>    2.  将视频简介中提供的分页代码粘贴到 CSS 编辑框中。<br>    3.  保存后刷新页面。<br>*   <strong>效果</strong>：页面左侧会出现分页选项卡，可以将不同分组的服务置于不同的页面中，使导航页更加有序。</p>
+<hr>
+<h2><span id="全部命令">全部命令</span></h2><h3><span id="图标网址">图标网址</span></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">[https://github.com/gkyang2022/dashboard-icons](https://github.com/gkyang2022/dashboard-icons)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3><span id="docker命令">docker命令</span></h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull hslr/sun-panel:latest</span><br><span class="line"></span><br><span class="line">docker run -d --restart=always -p 3002:3002 \</span><br><span class="line">-v ~/docker_data/sun-panel/conf:/app/conf \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">--name sun-panel \</span><br><span class="line">hslr/sun-panel:latest</span><br></pre></td></tr></table></figure>
+
+<h3><span id="自定义页脚">自定义页脚</span></h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// =========== Config Start ===========</span></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// 距离滚动偏移量</span></span><br><span class="line">  <span class="keyword">const</span> scrollOffset = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 显示风格( auto:自动(默认) | mobile:左上角显示触发按钮-移动端风格 | sidebar:常态显示侧栏)</span></span><br><span class="line">  <span class="keyword">const</span> displayStyle = <span class="string">&#x27;auto&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 移动端宽度定义</span></span><br><span class="line">  <span class="keyword">const</span> mobileWidth = <span class="number">800</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomIdName</span> = <span class="string">&#x27;sun-panel-toc-dom&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 左上角按钮 SVG 图标</span></span><br><span class="line">  <span class="keyword">const</span> svgTocMobileBtn = <span class="string">&#x27;&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)&quot;  viewBox=&quot;0 0 24 24&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M17.5 4.5c-1.95 0-4.05.4-5.5 1.5c-1.45-1.1-3.55-1.5-5.5-1.5c-1.45 0-2.99.22-4.28.79C1.49 5.62 1 6.33 1 7.14v11.28c0 1.3 1.22 2.26 2.48 1.94c.98-.25 2.02-.36 3.02-.36c1.56 0 3.22.26 4.56.92c.6.3 1.28.3 1.87 0c1.34-.67 3-.92 4.56-.92c1 0 2.04.11 3.02.36c1.26.33 2.48-.63 2.48-1.94V7.14c0-.81-.49-1.52-1.22-1.85c-1.28-.57-2.82-.79-4.27-.79M21 17.23c0 .63-.58 1.09-1.2.98c-.75-.14-1.53-.2-2.3-.2c-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5c.92 0 1.83.09 2.7.28c.46.1.8.51.8.98z&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M13.98 11.01c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.54-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39c-.08.01-.16.03-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.7-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03&quot;/&gt;&lt;/svg&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// =========== Config End ===========</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滚动容器的类名</span></span><br><span class="line">  <span class="keyword">const</span> scrollContainerElementClassName = <span class="string">&#x27;.scroll-container&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 一些函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">isMobile</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;mobile&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;pc&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> width = <span class="variable language_">window</span>.<span class="property">innerWidth</span></span><br><span class="line">    <span class="keyword">return</span> width &lt; mobileWidth</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createDom</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 检测是否已经存在TOC DOM，存在则删除</span></span><br><span class="line">    (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="title class_">SunPanelTOCDomIdName</span>)</span><br><span class="line">      <span class="keyword">if</span> (element) &#123;</span><br><span class="line">        element.<span class="title function_">remove</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDom</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="property">id</span> = <span class="title class_">SunPanelTOCDomIdName</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(<span class="title class_">SunPanelTOCDom</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style start =========</span></span><br><span class="line">    <span class="keyword">const</span> style = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;style&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomStyleId</span> = <span class="string">`#<span class="subst">$&#123;SunPanelTOCDomIdName&#125;</span>`</span></span><br><span class="line">    style.<span class="property">textContent</span> = <span class="string">`</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-mobile-btn &#123;</span></span><br><span class="line"><span class="string">        top: 20px !important;</span></span><br><span class="line"><span class="string">        left: 20px !important;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        width: 46px;</span></span><br><span class="line"><span class="string">        height: 46px;</span></span><br><span class="line"><span class="string">        background-color: #2a2a2a6b;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">        border-radius: 0.5rem;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .hidden &#123;</span></span><br><span class="line"><span class="string">        display: none !important;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">        padding: 10px;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        top: 0;</span></span><br><span class="line"><span class="string">        left: 0;</span></span><br><span class="line"><span class="string">        height: 100%;</span></span><br><span class="line"><span class="string">        overflow: hidden;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        flex-direction: column;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        transition: width 0.3s ease, background-color 0.3s ease;</span></span><br><span class="line"><span class="string">        border-top-right-radius: 20px;</span></span><br><span class="line"><span class="string">        border-bottom-right-radius: 20px;</span></span><br><span class="line"><span class="string">        background-color: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-mobile-btn-svg-container&#123;</span></span><br><span class="line"><span class="string">      width:21px;</span></span><br><span class="line"><span class="string">      height:21px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion &#123;</span></span><br><span class="line"><span class="string">        width: 200px !important;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        background-color: rgb(42 42 42 / 90%);</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar .toc-sidebar-box &#123;</span></span><br><span class="line"><span class="string">        width: 500px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-box &#123;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        position: relative;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 20px;</span></span><br><span class="line"><span class="string">        height: 6px;</span></span><br><span class="line"><span class="string">        background-color: white;</span></span><br><span class="line"><span class="string">        border-radius: 4px;</span></span><br><span class="line"><span class="string">        margin: 15px 0;</span></span><br><span class="line"><span class="string">        transition: height 0.3s ease, width 0.3s ease;</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">        white-space: nowrap;</span></span><br><span class="line"><span class="string">        transition: opacity 0.3s ease, transform 0.3s ease, margin-left 0.3s ease;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">        margin-left: 10px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        box-shadow: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        font-size: 20px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      `</span></span><br><span class="line">    <span class="comment">// 添加样式到文档头部</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(style)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style end =========</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加移动端菜单按钮</span></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtn = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="property">id</span> = <span class="string">&#x27;toc-mobile-btn&#x27;</span></span><br><span class="line">    tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;backdrop-blur-[2px]&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(tocMobileBtn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtnSvgcContainer = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">innerHTML</span> = svgTocMobileBtn</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-mobile-btn-svg-container&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="title function_">appendChild</span>(tocMobileBtnSvgcContainer)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建侧边栏容器</span></span><br><span class="line">    <span class="keyword">const</span> sidebar = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebar.<span class="property">id</span> = <span class="string">&#x27;toc-sidebar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sidebarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebarBox.<span class="property">className</span> = <span class="string">&#x27;toc-sidebar-box&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询出所有类名包含 item-group-index- 的元素</span></span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历并打印每个元素的完整类名</span></span><br><span class="line">    items.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      item.<span class="property">classList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (className.<span class="title function_">startsWith</span>(<span class="string">&#x27;item-group-index-&#x27;</span>)) &#123;</span><br><span class="line">          <span class="keyword">const</span> titleBarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarBox.<span class="property">className</span> = <span class="string">&#x27;title-bar-box&#x27;</span></span><br><span class="line">          <span class="comment">// titleBarBox.href = `#$&#123;item.id&#125;`</span></span><br><span class="line">          titleBarBox.<span class="property">dataset</span>.<span class="property">groupClassName</span> = className</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 目录条</span></span><br><span class="line">          <span class="keyword">const</span> titleBarSlip = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarSlip.<span class="property">className</span> = <span class="string">&#x27;title-bar-slip&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 创建一个链接</span></span><br><span class="line">          <span class="keyword">const</span> titleBarTitle = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarTitle.<span class="property">className</span> = <span class="string">&#x27;title-bar-title&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 获取子元素中 class=&quot;group-title&quot; 的内容</span></span><br><span class="line">          <span class="keyword">const</span> titleElement = item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.group-title&#x27;</span>)</span><br><span class="line">          <span class="keyword">const</span> titleText = titleElement ? titleElement.<span class="property">textContent</span> : item.<span class="property">id</span></span><br><span class="line">          titleBarTitle.<span class="property">textContent</span> = titleText</span><br><span class="line"></span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarSlip)</span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarTitle)</span><br><span class="line"></span><br><span class="line">          sidebarBox.<span class="title function_">appendChild</span>(titleBarBox)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    sidebar.<span class="title function_">appendChild</span>(sidebarBox)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将侧边栏添加到页面中</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(sidebar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mobileHideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">hideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">showSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化开始</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">func, wait</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> timeout</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout)</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          func.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">handleResize</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用防抖函数包装你的处理函数</span></span><br><span class="line">    <span class="keyword">const</span> debouncedHandleResize = <span class="title function_">debounce</span>(handleResize, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加事件监听器</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, debouncedHandleResize)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次触发</span></span><br><span class="line">    <span class="title function_">handleResize</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化结束</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听移动端按钮点击</span></span><br><span class="line">    tocMobileBtn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (sidebar.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 显示</span></span><br><span class="line">        <span class="title function_">showSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏失去hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏获得hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">showSidebar</span>()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC点击事件</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.title-bar-box&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">box</span>) =&gt;</span> &#123;</span><br><span class="line">      box.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 检查触发事件的元素是否有 &#x27;data-groupClassName&#x27; 属性</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取 &#x27;data-groupClass&#x27; 属性的值</span></span><br><span class="line">          <span class="keyword">const</span> groupClassName = <span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span></span><br><span class="line">          <span class="comment">// 使用属性值作为选择器查询对应的元素</span></span><br><span class="line">          <span class="keyword">const</span> targetElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">`.<span class="subst">$&#123;groupClassName&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">if</span> (targetElement) &#123;</span><br><span class="line">          <span class="comment">// 获取目标元素的 &#x27;top&#x27; 坐标</span></span><br><span class="line">            <span class="keyword">const</span> targetTop = targetElement.<span class="property">offsetTop</span></span><br><span class="line">            <span class="keyword">const</span> scrollContainerElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(scrollContainerElementClassName)</span><br><span class="line">            <span class="keyword">if</span> (scrollContainerElement) &#123;</span><br><span class="line">              scrollContainerElement.<span class="title function_">scrollTo</span>(&#123;</span><br><span class="line">                <span class="attr">top</span>: targetTop - scrollOffset,</span><br><span class="line">                <span class="attr">behavior</span>: <span class="string">&#x27;smooth&#x27;</span>, <span class="comment">// 平滑滚动</span></span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否已经存在分组，不存在将定时监听</span></span><br><span class="line">  <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="title function_">createDom</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">createDom</span>()</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>教程</tag>
         <tag>Docker</tag>
@@ -1290,6 +1411,78 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+</ul>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
+</ul>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -1628,6 +1821,131 @@
       </tags>
   </entry>
   <entry>
+    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
+    <url>/post/7/</url>
+    <content><![CDATA[<p><strong>目录</strong></p>
+<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
+<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
+<p><code>iptv-api</code> 的核心优势在于：</p>
+<ul>
+<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
+<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
+<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
+<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
+</ul>
+<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
+<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
+<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
+<p><img src="/images/202503/4a471742993634.png"></p>
+<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
+<p><img src="/images/202503/fb5c1742993645.png"></p>
+<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
+<ul>
+<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
+</ul>
+<p><img src="/images/202503/10fb1742993656.png"></p>
+<ul>
+<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
+</li>
+<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
+</li>
+</ul>
+<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
+<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
+<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
+<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
+<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
+<ul>
+<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
+<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
+<li>点击“确定”即可播放。</li>
+</ul>
+<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
+<ul>
+<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
+<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
+<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
+</ul>
+<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
+<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
+    <url>/post/15/</url>
+    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
+<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
+<hr>
+<h2><span id="视频教程">📺 视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
+<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
+<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
+<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
+<hr>
+<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
+<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
+<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
+<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</title>
     <url>/post/53/</url>
     <content><![CDATA[<!-- 正文内容开始 -->
@@ -1778,159 +2096,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
-</ul>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
-</ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
-    <url>/post/7/</url>
-    <content><![CDATA[<p><strong>目录</strong></p>
-<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
-<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
-<p><code>iptv-api</code> 的核心优势在于：</p>
-<ul>
-<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
-<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
-<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
-<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
-</ul>
-<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
-<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
-<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
-<p><img src="/images/202503/4a471742993634.png"></p>
-<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
-<p><img src="/images/202503/fb5c1742993645.png"></p>
-<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
-<ul>
-<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
-</ul>
-<p><img src="/images/202503/10fb1742993656.png"></p>
-<ul>
-<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
-</li>
-<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
-</li>
-</ul>
-<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
-
-<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
-<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
-<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
-<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
-<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
-<ul>
-<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
-<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
-<li>点击“确定”即可播放。</li>
-</ul>
-<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
-<ul>
-<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
-<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
-<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
-</ul>
-<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
-<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</title>
     <url>/post/30/</url>
     <content><![CDATA[<p>对于NAS玩家来说，实现外网访问是刚需，但获取公网IP却越来越难。不过，只要你拥有一个<strong>IPv6地址</strong>，这个问题就能迎刃而解！今天，我们将分享一个绝妙的方案：<strong>获取一个免费域名，并利用Cloudflare的DDNS服务，实现随时随地访问家里的飞牛NAS</strong>。</p>
@@ -2025,50 +2190,6 @@
 </ol>
 <p>至此，整个流程已全部完成。你可以使用免费域名随时随地访问你的飞牛NAS。如果你有任何问题或建议，欢迎在评论区留言交流。</p>
 ]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</title>
-    <url>/post/15/</url>
-    <content><![CDATA[<p><img src="/images/20250506/34001746677287.png"></p>
-<p>大家好！今天我要和大家分享一个超赞的开源项目：<strong>LibreTV</strong>！这是一个轻量级且完全免费的在线视频搜索与观看工具，最棒的是，你可以将它轻松部署在各种地方。在本篇文章中，我将详细介绍如何在 <strong>CasaOS</strong> 和 <strong>Cloudflare Pages</strong> 这两个平台上部署 LibreTV，让你拥有一个便捷的个人影视中心！</p>
-<hr>
-<h2><span id="视频教程">📺 视频教程</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/NLix2Dev120?si=x3F9E6D3LCRVFwLI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="casaos-部署指南">🏠 CasaOS 部署指南</span></h2><p>如果你正在使用 CasaOS，那么部署 LibreTV 将会非常简单：</p>
-<p>1.  <strong>安装自定义应用：</strong> 在 CasaOS 的管理界面，点击右侧的 <strong>“+”</strong> 号，然后选择 <strong>“安装自定义应用”</strong>。<br>2.  <strong>导入 Compose 文件：</strong> 进入自定义应用安装页面后，点击右上角的 <strong>“导入”</strong> 按钮。将 LibreTV 的 Docker Compose 文件内容粘贴到出现的文本框中。（<strong>Compose 文件代码我会在文章末尾提供</strong>）。<br>3.  <strong>设置密码：</strong> 找到 Compose 文件中的 <code>PASSWORD</code> 这一行，将后面的默认值修改为你自己设定的密码。请务必设置一个安全的密码。<br>4.  <strong>提交配置：</strong> 修改密码完成后，点击 <strong>“提交”</strong>。<br>5.  <strong>设置 Web UI 端口：</strong> 在 <strong>“WEB UI”</strong> 这一栏，填写你希望 LibreTV 使用的端口号。你可以根据自己的网络情况修改此端口，避免冲突。<br>6.  <strong>开始安装：</strong> 填写完毕后，点击 <strong>“安装”</strong>。</p>
-<p>安装完成后，在 CasaOS 的应用列表中找到 LibreTV 的图标并打开。首次打开会要求你输入之前设置的密码，输入后即可进入 LibreTV 的主界面。</p>
-<h3><span id="配置-libretv-casaos">配置 LibreTV (CasaOS)</span></h3><p>进入 LibreTV 后，点击右上角的 <strong>设置图标</strong>。在这里，你会看到默认只选择了两个搜索源。为了获得更全面的搜索结果，<strong>强烈建议你勾选所有可用的搜索源</strong>。下方还有 <strong>“自定义 API”</strong> 选项，如果你有其他优质的影视资源站点并提供 API 接口，可以将其添加到这里扩展搜索能力。开启 <strong>“豆瓣热门推荐”</strong> 后，首页会显示豆瓣的热门影视资源，方便你发现感兴趣的内容。现在，你就可以直接点击首页推荐的视频进行播放，或者在搜索框中输入关键词进行搜索。播放速度和清晰度都非常不错。</p>
-<hr>
-<h2><span id="️-cloudflare-pages-部署指南">☁️ Cloudflare Pages 部署指南</span></h2><p>如果你希望通过 Cloudflare Pages 部署 LibreTV，请注意由于 Cloudflare 的子域名在中国大陆可能无法直接访问，你可能需要准备一个域名。</p>
-<p>1.  <strong>Fork 项目到 GitHub：</strong> 前往 LibreTV 的 GitHub 仓库 [<a href="https://github.com/LibreSpark/LibreTV">https://github.com/LibreSpark/LibreTV</a> ] 。 在 Fork 之前，请考虑给作者点个 Star ⭐ 以示支持。点击右上角的 <strong>“Fork”</strong>，选择你的 GitHub 账户并创建 Fork。<br>2.  <strong>创建 Cloudflare Pages 项目：</strong> 登录你的 Cloudflare 账户，进入左侧的 <strong>“Workers 和 Pages”</strong> 页面，点击 <strong>“创建项目”</strong>，然后选择 <strong>“Pages”</strong>。<br>3.  <strong>连接 GitHub 账户：</strong> 点击 <strong>“连接到 GitHub”</strong>，授权 Cloudflare 访问你的 GitHub 账户。找到你 Fork 的 LibreTV 项目，然后点击 <strong>“选择开始部署”</strong>。<br>4.  <strong>配置环境变量：</strong> 在项目设置中，点击下方的 <strong>“环境变量”</strong>，然后点击 <strong>“添加变量”</strong>。在 <strong>“变量名称”</strong> 中填写 <code>PASSWORD</code>（注意大小写），在 <strong>“值”</strong> 中填写你想要设置的 LibreTV 访问密码。完成后，点击 <strong>“保存并部署”</strong>。等待部署完成。<br>5.  <strong>添加自定义域名（可选）：</strong> 部署成功后，选择 <strong>“继续处理项目”</strong>，然后选择 <strong>“自定义域”</strong>。在这里添加你自己的域名，点击 <strong>“继续”</strong>，然后点击 <strong>“激活域”</strong>。等待 DNS 解析生效并显示为 “活动” 状态后，你就可以通过你的域名访问 LibreTV 了。</p>
-<p>部署完成后，你就可以通过 Cloudflare Pages 提供的 <code>.workers.dev</code> 子域名（或你的自定义域名）访问 LibreTV，使用你设置的密码登录，配置和使用步骤与 CasaOS 上的版本完全一致。</p>
-<hr>
-<h2><span id="总结">🎉 总结</span></h2><p>通过本教程，你已经成功在 CasaOS 和 Cloudflare Pages 上部署了 LibreTV。这款轻量级、免费的视频搜索与观看工具将帮助你更方便地发现和享受网络上的精彩视频内容！如果你在部署过程中遇到任何问题，欢迎在评论区留言交流。如果你觉得这篇文章对你有帮助，别忘了分享给更多有需要的朋友！</p>
-<p><strong>Compose 文件代码 (CasaOS 部署)：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">libretv:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bestzwei/libretv:latest</span>  <span class="comment"># 使用 libretv 的最新镜像</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">libretv</span>         <span class="comment"># 容器名称为 libretv</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8899:80&quot;</span>                   <span class="comment"># 将主机的 8899 端口映射到容器的 80 端口</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PASSWORD=123456</span>             <span class="comment"># 设置访问密码（留空表示不启用密码保护）</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span>                 <span class="comment"># 容器异常退出后自动重启</span></span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>教程</tag>
         <tag>NAS</tag>
@@ -2329,121 +2450,6 @@
       <tags>
         <tag>教程</tag>
         <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
-    <url>/post/25/</url>
-    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
-<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
-<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
-<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
-<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
-<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
-<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
-<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
-<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
-<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
-<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
-<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
-<ul>
-<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
-<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
-</ul>
-<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>代码修改说明：</strong></p>
-<ol>
-<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
-<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
-</ol>
-<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
-<hr>
-<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
-<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
-<ul>
-<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
-<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
-</ul>
-<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
-<ul>
-<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
-<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
-<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
-</ul>
-<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
-<hr>
-<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
-<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
-<ul>
-<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
-<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
-<li><strong>密码设置（重点）：</strong><ul>
-<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
-<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
-</ul>
-</li>
-<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
-<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
-</ul>
-<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
-<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
-<ul>
-<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
-<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
-<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
-</ul>
-<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
-<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
-<ul>
-<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
-<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
-<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
-</ul>
-<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
-<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
-</ul>
-<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
-<hr>
-<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
-<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
-<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
-<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
-<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
-</ul>
-<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
