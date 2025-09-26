@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！ | Eric's Blog</title><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6572086222612797" crossorigin="anonymous"></script><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/tags/"><i class="fa fa-tag"> 标签</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">📺 MoonTV 电视观看终极方案！OrionTV 配置教程，手机也能看！</h1><div class="post-meta">2025-07-18</div><div class="post-content"><p><img src="/images/20250718/0c0b1752924340.png"></p>
+<h3><span id="目录">目录</span></h3><ul>
+<li><a href="#%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0-content-0001">方案概述</a></li>
+<li><a href="#oriontv-%E6%A0%B8%E5%BF%83%E4%BB%8B%E7%BB%8D-content-0030">OrionTV 核心介绍</a></li>
+<li><a href="#%E8%AF%A6%E7%BB%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-content-0037">详细配置教程</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD-content-0146">其他功能</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%94%AF%E6%8C%81-content-0153">总结与支持</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/ACL2r0VeR9g?si=fbmdFwC7A0nPhU7i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="方案概述-原片-0001">方案概述 </span></h2><p>本教程旨在解决如何在智能电视（如 FTV）、电视盒子及手机等大屏或移动设备上观看 <code>MoonTV</code> 内容的问题。通过使用一款名为 <code>OrionTV</code> 的第三方安卓应用，用户可以方便地将 <code>MoonTV</code> 的影视库对接到各类安卓设备上，实现原生应用般的观影体验。</p>
+<ul>
+<li><strong>目标</strong>：在安卓电视、电视盒子和手机上使用 <code>MoonTV</code>。</li>
+<li><strong>核心工具</strong>：<code>OrionTV</code> 应用程序。</li>
+<li><strong>系统要求</strong>：仅支持安卓（<code>Android</code>）系统。</li>
+</ul>
+<hr>
+<h2><span id="oriontv-核心介绍-原片-0030">OrionTV 核心介绍 </span></h2><p><code>OrionTV</code> 是一个开源的影视播放应用，其功能和界面类似于 <code>TVbox</code>。它能够通过 API 对接 <code>MoonTV</code>，将 <code>MoonTV</code> 作为其内容源，从而在客户端上展示和播放影视库。</p>
+<ul>
+<li><strong>项目地址</strong>：可以在其 <code>GitHub</code> 项目主页找到应用和相关信息。<br><a target="_blank" rel="noopener" href="https://github.com/zimplexing/OrionTV">https://github.com/zimplexing/OrionTV</a></li>
+</ul>
+<hr>
+<h2><span id="详细配置教程-原片-0037">详细配置教程 </span></h2><p>以下是安装和配置 <code>OrionTV</code> 以对接 <code>MoonTV</code> 的详细步骤。</p>
+<h3><span id="1-下载应用">1. 下载应用</span></h3><p>首先，需要从 <code>OrionTV</code> 的官方 <code>GitHub</code> 页面下载应用程序安装包（<code>.apk</code> 文件）。</p>
+<ul>
+<li>访问 <code>OrionTV</code> 的 <code>GitHub</code> 项目。</li>
+<li>进入 <code>Releases</code> 页面。</li>
+<li>下载最新版本的 <code>.apk</code> 文件。</li>
+</ul>
+<h3><span id="2-安装与初次启动">2. 安装与初次启动</span></h3><p>将下载好的 <code>.apk</code> 文件安装到你的安卓电视、电视盒子或手机上。</p>
+<ul>
+<li>完成应用安装。</li>
+<li>打开 <code>OrionTV</code> 应用。初次打开时，界面会提示需要配置 API 地址。</li>
+</ul>
+<h3><span id="3-对接-moontv">3. 对接 MoonTV</span></h3><p>这是最关键的配置步骤，目的是让 <code>OrionTV</code> 连接到你的 <code>MoonTV</code> 服务器。</p>
+<p>1.  <strong>进入设置</strong>：点击应用主界面右上角的 <strong>齿轮图标</strong> 进入设置页面。<br>2.  <strong>填写 API 地址</strong>：在设置页面的 <code>API</code> 地址输入框中，填入你的 <code>MoonTV</code> <strong>服务的完整访问地址</strong>（例如 <code>http://192.168.x.x:xxxx</code>）。<br>3.  <strong>保存设置</strong>：输入地址后，点击 <strong>保存</strong>。<br>4.  <strong>输入登录凭证</strong>：保存后，应用会自动弹出登录窗口。在此输入你的 <code>MoonTV</code> <strong>用户名</strong>和<strong>密码</strong>。<br>5.  <strong>完成对接</strong>：成功登录后，<code>OrionTV</code> 会自动加载并显示出你 <code>MoonTV</code> 媒体库中的所有影视内容。</p>
+<p>现在，你可以浏览和播放 <code>MoonTV</code> 上的所有电影和剧集了。</p>
+<hr>
+<h2><span id="其他功能-原片-0146">其他功能 </span></h2><p><code>OrionTV</code> 除了支持点播 <code>MoonTV</code> 的内容外，还内置了 <strong>直播</strong> 功能。</p>
+<ul>
+<li><strong>直播功能</strong>：在主界面可以切换到“直播”标签页。</li>
+<li><strong>直播源</strong>：用户需要自行寻找并添加稳定的直播源才能使用此功能。</li>
+</ul>
+<hr>
+<h2><span id="总结与支持-原片-0153">总结与支持 </span></h2><p>通过 <code>OrionTV</code>，用户可以轻松地将 <code>MoonTV</code> 的服务扩展到家庭中的各种安卓设备上，获得流畅的大屏观影体验。</p>
+<ul>
+<li>如果在配置过程中遇到任何问题，可以在视频评论区留言。</li>
+<li>也可以加入相关的技术交流群组。</li>
+<li>视频作者表示，如有需要，可以提供远程协助。</li>
+</ul>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li></ul></div><div class="post-nav"><a class="pre" href="/post/21/">🚀 Sun-Panel：私有化 NAS 导航主页部署教程</a><a class="next" href="/post/19/">🚀 自建追剧天堂！MoonTV Docker 部署轻松搞定，告别全网 VIP 限制！</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://t.me/gkyan78" title="Telegram" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-telegram" style="margin-inline:5px"></i></a><a class="info-icon" href="yy562198@gmail.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-envelope" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/gkyang2022" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-github" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-youtube" style="margin-inline:5px"></i></a></div></div><div class="widget-wrap"><div class="widget nofancybox"><a href="https://xn--mes358acgm99l.com/#/register?code=fdBRebys" target="_blank" rel="noopener noreferrer"><img src="/images/ad/jsjc.png" alt="广告" style="width:100%;"/></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/56/">NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</a></li><li class="post-list-item"><a class="post-list-link" href="/post/55/">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/post/53/">在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/52/">解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/51/">IPTV 一键部署教程|自动更新 · 支持 TVBox</a></li><li class="post-list-item"><a class="post-list-link" href="/post/50/">MoonTV 部署教程 | 支持生成 TVBox JSON 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/post/1/">MoonTV最新版保姆级部署教程：解决旧版失效问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/30/">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</a></li><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇) | Eric's Blog</title><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6572086222612797" crossorigin="anonymous"></script><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/tags/"><i class="fa fa-tag"> 标签</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</h1><div class="post-meta">2025-05-10</div><div class="post-content"><p>大家好！在本系列教程的最后一部分，我们将聚焦于如何在你的群晖 NAS 上使用 Docker 来安装构建一套全自动追剧观影系统的核心应用程序。通过 Docker，我们可以更方便地部署和管理这些工具，让你的 NAS 变身智能影音中心！</p>
+<p><strong>如果你是第一次接触这个系列，强烈建议先回顾我们的第一期教程，其中对各个应用的详细设置进行了讲解：<a target="_blank" rel="noopener" href="https://youtu.be/Etv6AaNdD90">https://youtu.be/Etv6AaNdD90</a></strong></p>
+<p>本篇文章将一步步地引导你完成在群晖 Docker 中安装 qBittorrent、Jackett、Jellyfin、Radarr、Sonarr 和 Jellyseerr 的过程，为你的全自动追剧观影系统打下坚实的基础。</p>
+<hr>
+<h2><span id="视频教程">视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/-eB7wVsL1xQ?si=DW-3bAL54Pe8snq1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="️-准备工作">🛠️ 准备工作</span></h2><p>在开始之前，请确保你的群晖 NAS 上已经安装并启用了 <strong>Docker</strong> 套件。</p>
+<h3><span id="1-创建共享文件夹">1. 创建共享文件夹</span></h3><p>首先，我们需要在群晖中创建一个用于存放媒体文件的共享文件夹：</p>
+<p>1.  打开群晖的 <strong>“控制面板”</strong>，选择 <strong>“共享文件夹”</strong>，然后点击 <strong>“新增”</strong>。<br>2.  为你的媒体文件夹填写一个名称（例如：<code>Media</code>），然后完成创建向导。<br>3.  打开 <strong>“File Station”</strong>，找到刚才创建的共享文件夹，右键点击选择 <strong>“属性”</strong>，切换到 <strong>“权限”</strong> 选项卡，添加 <code>owner</code>、<code>everyone</code> 和你的账户，并赋予读写权限。<br>4.  在共享文件夹内，创建一个名为 <code>media</code> 的子文件夹，然后在 <code>media</code> 文件夹内再创建 <code>Movies</code>（电影）、<code>TV Shows</code>（电视剧）等分类文件夹。</p>
+<h3><span id="2-配置-docker-镜像源">2. 配置 Docker 镜像源</span></h3><p>为了加速 Docker 镜像的下载，建议添加国内的镜像源：</p>
+<p>1.  打开 Docker 套件，选择左侧的 <strong>“注册表”</strong>。<br>2.  点击 <strong>“设置”</strong>，然后点击 <strong>“新增”</strong>。<br>3.  在弹出的窗口中，粘贴一个可用的 Docker 镜像加速地址（例如阿里云镜像加速地址）：<code>https://docker.1ms.run</code>。点击 <strong>“确定”</strong>。</p>
+<hr>
+<h2><span id="️-安装-docker-容器">⚙️ 安装 Docker 容器</span></h2><p>接下来，我们将逐个安装所需的 Docker 容器。</p>
+<h3><span id="1-安装-jackett">1. 安装 Jackett</span></h3><p>Jackett 是一个索引器聚合工具，用于为 Radarr 和 Sonarr 提供种子搜索来源。</p>
+<p>1.  在 Docker 的 <strong>“注册表”</strong> 中搜索 <code>linuxserver/jackett</code> 并下载最新版本。<br>2.  下载完成后，在 <strong>“映像”</strong> 中双击 <code>linuxserver/jackett</code> 镜像进行安装。<br>3.  保持 <strong>“常规设置”</strong> 默认。<br>4.  在 <strong>“端口设置”</strong> 中，保持 <strong>“自动”</strong>。<br>5.  在 <strong>“存储空间设置”</strong> 中，添加以下两个文件夹映射：<br>    * 本地文件夹：<code>docker/jackett/config</code> (在 Docker 共享文件夹下创建) -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media/downloads</code> -&gt; 装载路径：<code>/downloads</code><br>6.  点击 <strong>“应用”</strong> 完成安装。</p>
+<h3><span id="2-安装-qbittorrent">2. 安装 qBittorrent</span></h3><p>qBittorrent 是我们的下载器。</p>
+<p>1.  在 <strong>“注册表”</strong> 中搜索 <code>linuxserver/qbittorrent</code> 并下载最新版本。<br>2.  下载完成后，在 <strong>“映像”</strong> 中双击 <code>linuxserver/qbittorrent</code> 镜像进行安装。<br>3.  在 <strong>“端口设置”</strong> 中，可以保持自动或自定义端口。<br>4.  在 <strong>“存储空间设置”</strong> 中，添加以下两个文件夹映射：<br>    * 本地文件夹：<code>docker/qbittorrent/config</code> -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media/downloads</code> -&gt; 装载路径：<code>/downloads</code><br>5.  <strong>重要：</strong> 在点击 <strong>“应用”</strong> 之前，<strong>取消勾选 “向导完成后运行此容器”</strong>。<br>6.  完成安装后，打开 <strong>“File Station”</strong>，找到 <code>docker/qbittorrent</code> 文件夹，下载 <code>qBittorrent.conf</code> 文件到本地，用文本编辑器打开并在末尾添加以下代码：<code>[WebUI\HostHeaderValidation=false]</code>。保存并上传覆盖原文件。<br>7.  在 Docker 的 <strong>“容器”</strong> 中找到 <code>qbittorrent</code>，选中并点击 <strong>“启动”</strong>。首次登录 Web UI 的密码可在容器的 <strong>“日志”</strong> 中查看。</p>
+<h3><span id="3-安装-radarr-和-sonarr">3. 安装 Radarr 和 Sonarr</span></h3><p>Radarr (电影管理) 和 Sonarr (电视剧管理) 的安装过程类似。</p>
+<p>1.  在 <strong>“注册表”</strong> 中搜索并下载 <code>linuxserver/radarr</code> 和 <code>linuxserver/sonarr</code> 镜像。<br>2.  双击映像进行安装，保持端口自动。<br>3.  <strong>Radarr 的存储空间设置：</strong><br>    * 本地文件夹：<code>docker/radarr/config</code> -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media/Movies</code> -&gt; 装载路径：<code>/movies</code><br>    * 本地文件夹：<code>你的共享文件夹/media/downloads</code> -&gt; 装载路径：<code>/downloads</code><br>4.  <strong>Sonarr 的存储空间设置：</strong><br>    * 本地文件夹：<code>docker/sonarr/config</code> -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media/TV Shows</code> -&gt; 装载路径：<code>/tv</code><br>    * 本地文件夹：<code>你的共享文件夹/media/downloads</code> -&gt; 装载路径：<code>/downloads</code></p>
+<h3><span id="4-安装-jellyfin">4. 安装 Jellyfin</span></h3><p>Jellyfin 是我们的媒体服务器。</p>
+<p>1.  在 <strong>“注册表”</strong> 中搜索 <code>linuxserver/jellyfin</code> 并下载最新版本。<br>2.  双击映像进行安装，保持端口自动。<br>3.  <strong>存储空间设置：</strong><br>    * 本地文件夹：<code>docker/jellyfin/config</code> -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media</code> -&gt; 装载路径：<code>/data</code></p>
+<h3><span id="5-安装-jellyseerr">5. 安装 Jellyseerr</span></h3><p>Jellyseerr 是媒体请求系统。</p>
+<p>1.  在 <strong>“注册表”</strong> 中搜索 <code>jellyfin/jellyseerr</code> 并下载最新版本。<br>2.  双击映像进行安装，保持端口自动。<br>3.  <strong>存储空间设置：</strong><br>    * 本地文件夹：<code>docker/jellyseerr/config</code> -&gt; 装载路径：<code>/config</code><br>    * 本地文件夹：<code>你的共享文件夹/media</code> -&gt; 装载路径：<code>/media</code></p>
+<hr>
+<h2><span id="️-配置应用-简述">⚙️ 配置应用 (简述)</span></h2><p>安装完成后，你需要通过浏览器访问各个容器的 Web UI 进行配置（端口可在 Docker 容器详情中查看）。主要配置包括：</p>
+<ul>
+<li><strong>qBittorrent：</strong> 设置下载路径为 <code>/downloads/media/分类文件夹</code>，启用自动管理。</li>
+<li><strong>Jellyfin：</strong> 设置中文语言，创建用户，添加媒体库，指向 <code>/data/Movies</code> 和 <code>/data/TV Shows</code> 等路径。</li>
+<li><strong>Sonarr&#x2F;Radarr：</strong> 添加根文件夹 (<code>/tv</code> 和 <code>/movies</code>)，配置 Jackett 索引器 (获取 Torznab 链接和 API Key)，配置 qBittorrent 下载客户端。</li>
+<li><strong>Jellyseerr：</strong> 设置中文，添加 Jellyfin、Radarr 和 Sonarr 服务器信息 (需要 API Key)。</li>
+</ul>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>恭喜！你已经完成了在群晖 NAS 上使用 Docker 部署全自动追剧观影系统的应用安装部分。接下来，你需要根据自己的需求进行更详细的配置。希望本教程能够帮助你打造一个智能便捷的个人影音中心！</p>
+<p><strong>相关链接：</strong></p>
+<ul>
+<li><strong>第一期视频教程：</strong> <a target="_blank" rel="noopener" href="https://youtu.be/Etv6AaNdD90">https://youtu.be/Etv6AaNdD90</a></li>
+<li><strong>Docker 镜像加速地址（可选）：</strong> <a target="_blank" rel="noopener" href="https://docker.1ms.run/">https://docker.1ms.run</a></li>
+<li><strong>修改 qBittorrent 配置文件所需代码：</strong><br>    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    [WebUI]</span><br><span class="line">    WebUI\HostHeaderValidation=false</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<p><strong>关键词：</strong> 群晖, Docker, 自动化追剧, Jellyfin, Radarr, Sonarr, Jackett, qBittorrent, NAS影音, 家庭影院, 影音教程, 自动追剧系统</p>
+<p><strong>标签：</strong> 群晖Docker教程, 群晖NAS, 自动化影音, Docker部署教程</p>
+<p>感谢阅读！希望这篇文章对你有所帮助！</p>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li></ul></div><div class="post-nav"><a class="pre" href="/post/17/">🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 &amp; Jackett 连接难题</a><a class="next" href="/post/15/">🛠️ 打造你的专属免费影院：LibreTV 部署教程 (CasaOS &amp; Cloudflare)</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://t.me/gkyan78" title="Telegram" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-telegram" style="margin-inline:5px"></i></a><a class="info-icon" href="yy562198@gmail.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-envelope" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/gkyang2022" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-github" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-youtube" style="margin-inline:5px"></i></a></div></div><div class="widget-wrap"><div class="widget nofancybox"><a href="https://xn--mes358acgm99l.com/#/register?code=fdBRebys" target="_blank" rel="noopener noreferrer"><img src="/images/ad/jsjc.png" alt="广告" style="width:100%;"/></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/56/">NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</a></li><li class="post-list-item"><a class="post-list-link" href="/post/55/">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/post/53/">在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/52/">解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/51/">IPTV 一键部署教程|自动更新 · 支持 TVBox</a></li><li class="post-list-item"><a class="post-list-link" href="/post/50/">MoonTV 部署教程 | 支持生成 TVBox JSON 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/post/1/">MoonTV最新版保姆级部署教程：解决旧版失效问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/30/">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</a></li><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
