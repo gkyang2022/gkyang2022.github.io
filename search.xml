@@ -990,131 +990,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
-    <url>/post/1/</url>
-    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
-<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
-<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
-<ol>
-<li><p>停止并删除容器</p>
-<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
-<ul>
-<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
-</li>
-<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
-</li>
-<li><p>停止后，将这两个容器都删除。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>删除Compose文件和镜像</strong></p>
-<ul>
-<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
-</li>
-<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>清理部署文件夹</strong></p>
-<ul>
-<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
-</li>
-<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
-<hr>
-<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
-<ol>
-<li><p><strong>获取新版Compose文件</strong></p>
-<ul>
-<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
-</li>
-<li><p>将该文件的全部内容复制下来。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>创建新容器</strong></p>
-<ul>
-<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
-</li>
-<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
-</li>
-<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
-</li>
-<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
-</li>
-<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
-</li>
-<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>启动部署</strong></p>
-<ul>
-<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
-</li>
-<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
-<ol>
-<li><p><strong>登录管理面板</strong></p>
-<ul>
-<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
-</li>
-<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>添加源文件</strong></p>
-<ul>
-<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
-</li>
-<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
-</li>
-<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
-<hr>
-<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</title>
     <url>/post/56/</url>
     <content><![CDATA[<p>对于NAS玩家来说，外网访问是刚需，但传统的方案如DDNS或端口映射常常伴随着域名费用、繁琐的配置，甚至安全风险。今天，我们将分享一个更简单、更安全、更重要的是<strong>完全免费</strong>的解决方案——<strong>Tailscale</strong>。</p>
@@ -1415,16 +1290,22 @@
       </tags>
   </entry>
   <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+    <title>免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</title>
+    <url>/post/54/</url>
+    <content><![CDATA[<h1><span id="前言">前言</span></h1><p>很多朋友入手NAS后，都希望能在外网随时随地访问家里的数据，但往往卡在“域名”和“DDNS”这两个环节。要么觉得付费域名成本高，要么觉得配置步骤复杂。今天就给大家分享一套零成本方案——<strong>获取免费域名+Cloudflare托管+飞牛DDNS配置</strong>，手把手教你实现在外面也能轻松访问家用NAS，全程无门槛，新手也能跟着做！</p>
+<h2><span id="一-准备工具与前提条件">一、准备工具与前提条件</span></h2><ul>
+<li><p><strong>必备工具</strong>：电脑（用于操作域名注册和Cloudflare配置）、已搭建的飞牛NAS（确保系统正常运行）、OpenWrt路由器（用于设置防火墙规则）</p>
+</li>
+<li><p><strong>网络要求</strong>：飞牛NAS需获取到<strong>IPv6地址</strong>（以“2”开头），若没有IPv6需先联系运营商开通</p>
+</li>
+<li><p><strong>辅助网站</strong>： 免费域名注册：<a href="https://domain.digitalplat.org/">domain.digitalplat.org</a></p>
+</li>
+<li><p>美国地址生成：<a href="https://www.shenfendaquan.com/">shenfendaquan.com</a></p>
+</li>
+<li><p>域名解析托管：<a href="https://www.cloudflare.com/">Cloudflare</a></p>
+</li>
 </ul>
-<style>
+<h2><span id="视频教程">视频教程：</span></h2><style>
   .video-container {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 比例 */
@@ -1441,50 +1322,109 @@
 </style>
 
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/O-eJs-666jg?si=bDmi0zoRVSzc6bTB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
+
+<h2><span id="二-获取免费域名详细步骤">二、获取免费域名（详细步骤）</span></h2><p>首先我们需要注册一个免费域名，用于后续外网访问的“地址标识”，具体操作如下：</p>
+<h3><span id="1-注册域名账号">1. 注册域名账号</span></h3><ol>
+<li><p>打开免费域名注册网站：<a href="https://domain.digitalplat.org/">domain.digitalplat.org</a></p>
+</li>
+<li><p>点击页面中的**“register a new domain”**，进入注册页面</p>
+</li>
+<li><p>点击**“Sign up”**开始注册，按提示填写信息： 邮箱：填写真实邮箱（用于激活账号）</p>
+</li>
+<li><p>电话&#x2F;地址：需填写美国地址，可通过<a href="https://www.shenfendaquan.com/">地址生成网站</a>获取，注意地址格式需包含“州,城市,街道”（提示需两个逗号分隔）</p>
+</li>
+<li><p>提交注册后，前往邮箱查收激活邮件，点击邮件中的链接完成激活（激活后“goback”按钮可能无效，需重新打开登录页面）</p>
+</li>
+</ol>
+<h3><span id="2-kyc认证与增加域名名额">2. KYC认证与增加域名名额</span></h3><ol>
+<li><p>重新打开登录页面，输入邮箱和密码登录，此时会提示KYC认证</p>
+</li>
+<li><p>在认证下拉菜单中选择**“GitHub”<strong>或</strong>“谷歌账号”**（无账号可先注册），点击“Sign in with XXX”完成关联认证</p>
+</li>
+<li><p>默认仅能申请1个免费域名，可通过给项目“点星”增加名额： 打开项目GitHub页面（通常在域名管理页有入口），点击右上角的“小星星”收藏</p>
+</li>
+<li><p>返回域名管理页，点击**“click here验证”**，验证通过后即可申请2个免费域名</p>
+</li>
+</ol>
+<h3><span id="3-注册心仪的免费域名">3. 注册心仪的免费域名</span></h3><ol>
+<li><p>点击左侧菜单栏的**“domain registration”**，进入域名注册页面</p>
+</li>
+<li><p>输入想要的域名前缀（如“fennas”“ homenas”等），选择合适的后缀（免费后缀通常有限，按需选择）</p>
+</li>
+<li><p>若提示“已被注册”，更换前缀直至显示“可使用”，完成注册</p>
+</li>
+</ol>
+<p>注意：免费域名每年需要续订，到期前在域名管理中点击对应域名，选择“renew”再点击“free renew”即可免费续期一年。</p>
+<h2><span id="三-cloudflare托管域名解析">三、Cloudflare托管域名解析</span></h2><p>注册好域名后，需要将其托管到Cloudflare进行解析，步骤如下：</p>
+<ol>
+<li><p>打开Cloudflare官网：<a href="https://www.cloudflare.com/">cloudflare.com</a>，登录&#x2F;注册账号</p>
+</li>
+<li><p>点击页面中的**“添加站点”**，将刚才注册的免费域名复制粘贴进去，点击“继续”</p>
+</li>
+<li><p>选择**“免费计划”**（Free），点击“继续前往激活”</p>
+</li>
+<li><p>复制Cloudflare提供的“Nameserver”（域名服务器）地址</p>
+</li>
+<li><p>返回免费域名注册网站的管理页，找到“Nameserver”设置，将Cloudflare的服务器地址粘贴进去，点击“保存注册”</p>
+</li>
+<li><p>回到Cloudflare页面，点击“继续”，等待解析生效（通常需要2-3分钟，当页面显示“活动”即表示解析完成）</p>
+</li>
+</ol>
+<h2><span id="四-飞牛ddns配置实现外网访问">四、飞牛DDNS配置（实现外网访问）</span></h2><p>域名解析完成后，需在飞牛NAS中配置DDNS，让域名实时指向家里的IPv6地址，具体操作：</p>
+<h3><span id="1-获取cloudflare-api令牌">1. 获取Cloudflare API令牌</span></h3><ol>
+<li><p>登录Cloudflare，点击右上角头像，选择**“我的个人资料”<strong>→</strong>“API令牌”**</p>
+</li>
+<li><p>点击**“创建令牌”**，选择第一个模板“编辑区域DNS”</p>
+</li>
+<li><p>在“区域资源”下拉菜单中选择刚才添加的域名，其他选项保持默认，点击“继续以显示摘要”</p>
+</li>
+<li><p>点击“创建令牌”，<strong>复制生成的令牌</strong>（注意：令牌仅显示一次，未复制需重新创建）</p>
+</li>
+</ol>
+<h3><span id="2-飞牛nas配置ddns">2. 飞牛NAS配置DDNS</span></h3><ol>
+<li><p>登录飞牛NAS后台，进入**“系统设置”**，确认已获取到IPv6地址（以“2”开头）</p>
+</li>
+<li><p>选择**“远程访问”<strong>→</strong>“DDNS”**，点击“新增”</p>
+</li>
+<li><p>按以下参数配置： 服务商：选择**“cldf”**（Cloudflare的缩写）</p>
+</li>
+<li><p>域名：填写刚才注册并解析的免费域名</p>
+</li>
+<li><p>用户名&#x2F;密码：均填写刚才复制的Cloudflare API令牌</p>
+</li>
+<li><p>关闭“IPV4”选项（仅用IPv6）</p>
+</li>
+<li><p>点击“测试”，若状态显示“成功”，表示DDNS配置完成</p>
+</li>
+</ol>
+<h2><span id="五-openwrt路由器防火墙规则设置">五、OpenWrt路由器防火墙规则设置</span></h2><p>最后需要在路由器中开放NAS服务端口，确保外网请求能正常到达NAS：</p>
+<ol>
+<li><p>登录OpenWrt后台，进入**“网络”<strong>→</strong>“防火墙”<strong>→</strong>“通信规则”**</p>
+</li>
+<li><p>点击页面下方的“添加”，按提示填写： 名称：自定义（如“NAS外网访问”）</p>
+</li>
+<li><p>目标地址：选择飞牛NAS的IPv6地址</p>
+</li>
+<li><p>端口：填写需要开放的服务端口（如Jellyfin用8096，多个端口用空格分隔，例：8096 3000）</p>
+</li>
+<li><p>点击“保存”，再点击“保存并应用”，防火墙规则生效</p>
+</li>
+</ol>
+<h2><span id="六-测试外网访问效果">六、测试外网访问效果</span></h2><p>配置完成后，断开手机的WiFi，使用移动网络打开浏览器，输入你的免费域名+端口号（例：fennas.xxx.com:8096），若能成功访问NAS中的服务（如Jellyfin），则表示整个方案搭建成功！</p>
+<h2><span id="总结与常见问题">总结与常见问题</span></h2><p>这套方案通过“免费域名+Cloudflare+飞牛DDNS”实现了零成本外网访问NAS，核心步骤在于域名解析的托管和DDNS的动态指向。如果遇到问题，可检查以下几点：</p>
+<ul>
+<li><p>Cloudflare解析是否显示“活动”？若长时间未生效，可重新核对Nameserver设置</p>
+</li>
+<li><p>飞牛NAS的IPv6地址是否正确？DDNS测试是否提示“成功”？</p>
+</li>
+<li><p>路由器防火墙端口是否开放正确？端口号是否与NAS服务一致？</p>
+</li>
 </ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
+<p>如果大家在操作过程中有其他疑问，欢迎在评论区留言交流，也可以分享你的折腾经验。觉得本文有用的话，别忘了点赞收藏，让更多需要的朋友看到！</p>
 ]]></content>
-      <tags>
-        <tag>软件分享</tag>
-      </tags>
   </entry>
   <entry>
     <title>🚀 告别 TVBox 卡顿，打造你的专属影库</title>
@@ -1685,22 +1625,16 @@
       </tags>
   </entry>
   <entry>
-    <title>免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</title>
-    <url>/post/54/</url>
-    <content><![CDATA[<h1><span id="前言">前言</span></h1><p>很多朋友入手NAS后，都希望能在外网随时随地访问家里的数据，但往往卡在“域名”和“DDNS”这两个环节。要么觉得付费域名成本高，要么觉得配置步骤复杂。今天就给大家分享一套零成本方案——<strong>获取免费域名+Cloudflare托管+飞牛DDNS配置</strong>，手把手教你实现在外面也能轻松访问家用NAS，全程无门槛，新手也能跟着做！</p>
-<h2><span id="一-准备工具与前提条件">一、准备工具与前提条件</span></h2><ul>
-<li><p><strong>必备工具</strong>：电脑（用于操作域名注册和Cloudflare配置）、已搭建的飞牛NAS（确保系统正常运行）、OpenWrt路由器（用于设置防火墙规则）</p>
-</li>
-<li><p><strong>网络要求</strong>：飞牛NAS需获取到<strong>IPv6地址</strong>（以“2”开头），若没有IPv6需先联系运营商开通</p>
-</li>
-<li><p><strong>辅助网站</strong>： 免费域名注册：<a href="https://domain.digitalplat.org/">domain.digitalplat.org</a></p>
-</li>
-<li><p>美国地址生成：<a href="https://www.shenfendaquan.com/">shenfendaquan.com</a></p>
-</li>
-<li><p>域名解析托管：<a href="https://www.cloudflare.com/">Cloudflare</a></p>
-</li>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
 </ul>
-<h2><span id="视频教程">视频教程：</span></h2><style>
+<style>
   .video-container {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 比例 */
@@ -1717,109 +1651,50 @@
 </style>
 
 <div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/O-eJs-666jg?si=bDmi0zoRVSzc6bTB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
-
-<h2><span id="二-获取免费域名详细步骤">二、获取免费域名（详细步骤）</span></h2><p>首先我们需要注册一个免费域名，用于后续外网访问的“地址标识”，具体操作如下：</p>
-<h3><span id="1-注册域名账号">1. 注册域名账号</span></h3><ol>
-<li><p>打开免费域名注册网站：<a href="https://domain.digitalplat.org/">domain.digitalplat.org</a></p>
-</li>
-<li><p>点击页面中的**“register a new domain”**，进入注册页面</p>
-</li>
-<li><p>点击**“Sign up”**开始注册，按提示填写信息： 邮箱：填写真实邮箱（用于激活账号）</p>
-</li>
-<li><p>电话&#x2F;地址：需填写美国地址，可通过<a href="https://www.shenfendaquan.com/">地址生成网站</a>获取，注意地址格式需包含“州,城市,街道”（提示需两个逗号分隔）</p>
-</li>
-<li><p>提交注册后，前往邮箱查收激活邮件，点击邮件中的链接完成激活（激活后“goback”按钮可能无效，需重新打开登录页面）</p>
-</li>
-</ol>
-<h3><span id="2-kyc认证与增加域名名额">2. KYC认证与增加域名名额</span></h3><ol>
-<li><p>重新打开登录页面，输入邮箱和密码登录，此时会提示KYC认证</p>
-</li>
-<li><p>在认证下拉菜单中选择**“GitHub”<strong>或</strong>“谷歌账号”**（无账号可先注册），点击“Sign in with XXX”完成关联认证</p>
-</li>
-<li><p>默认仅能申请1个免费域名，可通过给项目“点星”增加名额： 打开项目GitHub页面（通常在域名管理页有入口），点击右上角的“小星星”收藏</p>
-</li>
-<li><p>返回域名管理页，点击**“click here验证”**，验证通过后即可申请2个免费域名</p>
-</li>
-</ol>
-<h3><span id="3-注册心仪的免费域名">3. 注册心仪的免费域名</span></h3><ol>
-<li><p>点击左侧菜单栏的**“domain registration”**，进入域名注册页面</p>
-</li>
-<li><p>输入想要的域名前缀（如“fennas”“ homenas”等），选择合适的后缀（免费后缀通常有限，按需选择）</p>
-</li>
-<li><p>若提示“已被注册”，更换前缀直至显示“可使用”，完成注册</p>
-</li>
-</ol>
-<p>注意：免费域名每年需要续订，到期前在域名管理中点击对应域名，选择“renew”再点击“free renew”即可免费续期一年。</p>
-<h2><span id="三-cloudflare托管域名解析">三、Cloudflare托管域名解析</span></h2><p>注册好域名后，需要将其托管到Cloudflare进行解析，步骤如下：</p>
-<ol>
-<li><p>打开Cloudflare官网：<a href="https://www.cloudflare.com/">cloudflare.com</a>，登录&#x2F;注册账号</p>
-</li>
-<li><p>点击页面中的**“添加站点”**，将刚才注册的免费域名复制粘贴进去，点击“继续”</p>
-</li>
-<li><p>选择**“免费计划”**（Free），点击“继续前往激活”</p>
-</li>
-<li><p>复制Cloudflare提供的“Nameserver”（域名服务器）地址</p>
-</li>
-<li><p>返回免费域名注册网站的管理页，找到“Nameserver”设置，将Cloudflare的服务器地址粘贴进去，点击“保存注册”</p>
-</li>
-<li><p>回到Cloudflare页面，点击“继续”，等待解析生效（通常需要2-3分钟，当页面显示“活动”即表示解析完成）</p>
-</li>
-</ol>
-<h2><span id="四-飞牛ddns配置实现外网访问">四、飞牛DDNS配置（实现外网访问）</span></h2><p>域名解析完成后，需在飞牛NAS中配置DDNS，让域名实时指向家里的IPv6地址，具体操作：</p>
-<h3><span id="1-获取cloudflare-api令牌">1. 获取Cloudflare API令牌</span></h3><ol>
-<li><p>登录Cloudflare，点击右上角头像，选择**“我的个人资料”<strong>→</strong>“API令牌”**</p>
-</li>
-<li><p>点击**“创建令牌”**，选择第一个模板“编辑区域DNS”</p>
-</li>
-<li><p>在“区域资源”下拉菜单中选择刚才添加的域名，其他选项保持默认，点击“继续以显示摘要”</p>
-</li>
-<li><p>点击“创建令牌”，<strong>复制生成的令牌</strong>（注意：令牌仅显示一次，未复制需重新创建）</p>
-</li>
-</ol>
-<h3><span id="2-飞牛nas配置ddns">2. 飞牛NAS配置DDNS</span></h3><ol>
-<li><p>登录飞牛NAS后台，进入**“系统设置”**，确认已获取到IPv6地址（以“2”开头）</p>
-</li>
-<li><p>选择**“远程访问”<strong>→</strong>“DDNS”**，点击“新增”</p>
-</li>
-<li><p>按以下参数配置： 服务商：选择**“cldf”**（Cloudflare的缩写）</p>
-</li>
-<li><p>域名：填写刚才注册并解析的免费域名</p>
-</li>
-<li><p>用户名&#x2F;密码：均填写刚才复制的Cloudflare API令牌</p>
-</li>
-<li><p>关闭“IPV4”选项（仅用IPv6）</p>
-</li>
-<li><p>点击“测试”，若状态显示“成功”，表示DDNS配置完成</p>
-</li>
-</ol>
-<h2><span id="五-openwrt路由器防火墙规则设置">五、OpenWrt路由器防火墙规则设置</span></h2><p>最后需要在路由器中开放NAS服务端口，确保外网请求能正常到达NAS：</p>
-<ol>
-<li><p>登录OpenWrt后台，进入**“网络”<strong>→</strong>“防火墙”<strong>→</strong>“通信规则”**</p>
-</li>
-<li><p>点击页面下方的“添加”，按提示填写： 名称：自定义（如“NAS外网访问”）</p>
-</li>
-<li><p>目标地址：选择飞牛NAS的IPv6地址</p>
-</li>
-<li><p>端口：填写需要开放的服务端口（如Jellyfin用8096，多个端口用空格分隔，例：8096 3000）</p>
-</li>
-<li><p>点击“保存”，再点击“保存并应用”，防火墙规则生效</p>
-</li>
-</ol>
-<h2><span id="六-测试外网访问效果">六、测试外网访问效果</span></h2><p>配置完成后，断开手机的WiFi，使用移动网络打开浏览器，输入你的免费域名+端口号（例：fennas.xxx.com:8096），若能成功访问NAS中的服务（如Jellyfin），则表示整个方案搭建成功！</p>
-<h2><span id="总结与常见问题">总结与常见问题</span></h2><p>这套方案通过“免费域名+Cloudflare+飞牛DDNS”实现了零成本外网访问NAS，核心步骤在于域名解析的托管和DDNS的动态指向。如果遇到问题，可检查以下几点：</p>
-<ul>
-<li><p>Cloudflare解析是否显示“活动”？若长时间未生效，可重新核对Nameserver设置</p>
-</li>
-<li><p>飞牛NAS的IPv6地址是否正确？DDNS测试是否提示“成功”？</p>
-</li>
-<li><p>路由器防火墙端口是否开放正确？端口号是否与NAS服务一致？</p>
-</li>
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
 </ul>
-<p>如果大家在操作过程中有其他疑问，欢迎在评论区留言交流，也可以分享你的折腾经验。觉得本文有用的话，别忘了点赞收藏，让更多需要的朋友看到！</p>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
 ]]></content>
+      <tags>
+        <tag>软件分享</tag>
+      </tags>
   </entry>
   <entry>
     <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
@@ -2632,6 +2507,131 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
+    <url>/post/1/</url>
+    <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
+<p>本教程将手把手指导你完成整个过程，操作非常简单，即使是新手也能轻松掌握。</p>
+<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ipMT6R1X-NY?si=H8fPgLdnYMFKvE4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3><span id="第一步彻底卸载旧版moontv"><strong>第一步：彻底卸载旧版MoonTV</strong></span></h3><p>在部署新版之前，请务必完成这一步，以避免新旧版本之间的冲突。</p>
+<ol>
+<li><p>停止并删除容器</p>
+<p> 登录你的飞牛NAS，进入 Docker 管理界面。</p>
+<ul>
+<li><p>找到旧的 <strong>MoonTV</strong> 容器并点击停止。</p>
+</li>
+<li><p>如果你是按照之前的教程部署的，通常会有一个 <strong>Redis</strong> 容器，也要一并停止。</p>
+</li>
+<li><p>停止后，将这两个容器都删除。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>删除Compose文件和镜像</strong></p>
+<ul>
+<li><p>切换到 <strong>Compose</strong> 界面，找到并删除旧的 MoonTV Compose 文件。</p>
+</li>
+<li><p>进入 <strong>本地镜像</strong> 库，删除所有与 MoonTV 和 Redis 相关的镜像。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>清理部署文件夹</strong></p>
+<ul>
+<li><p>进入文件管理，找到之前用于部署 MoonTV 的文件夹。</p>
+</li>
+<li><p>将该文件夹内的所有内容清空，或者直接删除整个文件夹，然后新建一个同名文件夹。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>完成以上步骤后，你的部署环境就已清理干净，可以开始部署新版本了。</p>
+<hr>
+<h3><span id="第二步部署最新版moontv"><strong>第二步：部署最新版MoonTV</strong></span></h3><p>现在，我们来获取并部署最新的MoonTV容器。</p>
+<ol>
+<li><p><strong>获取新版Compose文件</strong></p>
+<ul>
+<li><p>访问 MoonTV 的 GitHub 项目页面（🔗 <a href="https://github.com/MoonTechLab/LunaTV">https://github.com/MoonTechLab/LunaTV</a>），找到最新的 <strong>Compose</strong> 文件代码。</p>
+</li>
+<li><p>将该文件的全部内容复制下来。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>创建新容器</strong></p>
+<ul>
+<li><p>回到飞牛NAS的 Docker 管理界面，进入 <strong>Compose</strong> 选项。</p>
+</li>
+<li><p>点击 <strong>“添加”</strong> 新的 Compose 任务。</p>
+</li>
+<li><p>为新任务命名，例如 <code>moontv-new</code>。</p>
+</li>
+<li><p>选择你之前清空或新建的文件夹作为部署路径。</p>
+</li>
+<li><p>将复制的 Compose 文件代码粘贴到文本框中。</p>
+</li>
+<li><p><strong>重要</strong>：在粘贴的代码中，找到 <code>username</code> 和 <code>password</code> 两行，并将其修改为你自己的用户名和密码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>启动部署</strong></p>
+<ul>
+<li><p>确认信息无误后，点击 <strong>“确定”</strong>。</p>
+</li>
+<li><p>Docker 将自动拉取最新的镜像并创建容器。这个过程需要一些时间，具体取决于你的网络状况。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3><span id="第三步登录与配置moontv"><strong>第三步：登录与配置MoonTV</strong></span></h3><p>部署完成后，你还需要进行一些简单的配置才能正常使用。</p>
+<ol>
+<li><p><strong>登录管理面板</strong></p>
+<ul>
+<li><p>容器构建完成后，进入 Docker 容器列表，找到新部署的 MoonTV 容器。</p>
+</li>
+<li><p>点击它，进入主界面后，点击右上角的头像，选择 <strong>“管理面板”</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>添加源文件</strong></p>
+<ul>
+<li><p>新版的MoonTV默认是没有任何源的，你需要手动添加。</p>
+</li>
+<li><p>获取最新的源文件内容（通常在项目页面有提供）。</p>
+</li>
+<li><p>将源文件内容粘贴到管理面板中的相应文本框里，然后点击 <strong>“保存”</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，你已成功部署并配置好了最新版的MoonTV！现在，你可以享受最新版本带来的流畅观影体验了。</p>
+<hr>
+<p>希望这篇教程对你有所帮助。如果你在操作过程中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
 </search>
