@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 &amp; Jackett 连接难题 | Eric's Blog</title><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6572086222612797" crossorigin="anonymous"></script><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TK6MG3JC');</script><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 &amp; Jackett 连接难题</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/tags/"><i class="fa fa-tag"> 标签</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 &amp; Jackett 连接难题</h1><div class="post-meta">2025-05-31</div><a class="disqus-comment-count" href="/post/17/#waline"><span class="waline-comment-count" id="/post/17/"></span><span> 条评论</span></a><div class="post-content"><p>大家好！👋 最近不少朋友反馈在使用飞牛OS 部署自动观影系统时，遇到了 Jellyseerr 出现 500 错误，以及 Jackett 部分索引器无法连接的问题。经过我的排查，发现这很可能是网络原因导致的，特别是 Jellyseerr 连接 TMDB 受限，以及 Jackett 索引器无法正常测速。</p>
+<p>为了解决这个问题，我尝试在飞牛OS 中部署 <strong>V2RayA</strong> 进行代理。在我自己的机器上，这个方法是能够有效解决的。今天就将这个部署过程分享给大家，希望能帮助遇到同样困扰的朋友。</p>
+<hr>
+<h2><span id="视频教程">视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/iHBhiln9zT0?si=z-VkaFREePV7PohD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="️-部署-v2raya-解决网络问题">🛠️ 部署 V2RayA 解决网络问题</span></h2><p>下面是在飞牛OS 上部署 V2RayA 的详细步骤：</p>
+<h3><span id="1-连接到飞牛os-并切换到-root-用户">1. 连接到飞牛OS 并切换到 Root 用户</span></h3><p>首先，使用 SSH 工具连接到你的飞牛OS，并切换到 root 用户模式。</p>
+<h3><span id="2-拉取-v2raya-镜像">2. 拉取 V2RayA 镜像</span></h3><p>在 root 权限下，执行以下命令拉取 V2RayA 的 Docker 镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull v2raya/v2raya</span><br></pre></td></tr></table></figure>
+
+<h3><span id="3-部署-v2raya-容器">3. 部署 V2RayA 容器</span></h3><p>使用以下 docker run 命令部署 V2RayA 容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --privileged \</span><br><span class="line">  --network=host \</span><br><span class="line">  --name v2raya \</span><br><span class="line">  -e V2RAYA_LOG_FILE=/tmp/v2raya.<span class="built_in">log</span> \</span><br><span class="line">  -e V2RAYA_V2RAY_BIN=/usr/local/bin/v2ray \</span><br><span class="line">  -e V2RAYA_NFTABLES_SUPPORT=off \</span><br><span class="line">  -e IPTABLES_MODE=legacy \</span><br><span class="line">  -v /lib/modules:/lib/modules:ro \</span><br><span class="line">  -v /etc/resolv.conf:/etc/resolv.conf \</span><br><span class="line">  -v /etc/v2raya:/etc/v2raya \</span><br><span class="line">  mzz2017/v2raya</span><br></pre></td></tr></table></figure>
+
+<h3><span id="4-配置-v2raya-代理">4. 配置 V2RayA 代理</span></h3><ol>
+<li><strong>访问 V2RayA 管理页面：</strong> 在浏览器中输入 <code>http://你的飞牛OS IP:2017</code>。</li>
+<li><strong>创建管理员账户：</strong> 首次访问需要创建管理员账户。</li>
+<li><strong>进行基本设置：</strong> 登录后，进行以下设置：<ul>
+<li><strong>系统代理：</strong> 选择 “大陆白名单模式”。</li>
+<li><strong>防止 DNS 污染：</strong> 选择 “仅防止 DNS 劫持”。</li>
+<li><strong>特殊模式：</strong> 选择 “## supervisor”。</li>
+<li>点击 “保存并应用”。</li>
+</ul>
+</li>
+<li><strong>导入节点：</strong><ul>
+<li>在左侧菜单中找到 “服务器” 或类似选项，点击 “添加” 或 “导入”。</li>
+<li>填入你的 V2Ray 节点连接信息或订阅地址，点击 “订阅” 或 “导入”。</li>
+</ul>
+</li>
+<li><strong>选择和启用节点：</strong><ul>
+<li>订阅成功后，全选节点进行 “Ping 测速”，选择速度不错的节点。</li>
+<li>选中希望使用的节点，点击左上角的 “就绪”，并确保 V2RayA 主开关处于 “开启” 状态。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="5-测试网络连接">5. 测试网络连接</span></h3><p>配置完成后，测试 Jellyseerr 是否能正常加载信息，以及 Jackett 的索引器是否能成功通过测速。</p>
+<hr>
+<h2><span id="总结">🎉 总结</span></h2><p>希望这个教程能帮助你在飞牛OS 上部署 V2RayA，解决 Jellyseerr 500 错误和 Jackett 索引器连接问题。记住，每个人的网络环境不同，这个方法可能并非适用于所有情况。欢迎在评论区分享你的经验和遇到的问题，一起交流讨论。</p>
+<p>加入我们的电报群组，获取更多交流和支持： 👉 [在此处插入您的电报群组链接]</p>
+<p>关键词： 飞牛OS, V2RayA, Jellyseerr, Jackett, 网络代理, 科学上网, Docker, 飞牛教程</p>
+<p>标签： 飞牛OS教程, V2RayA教程, Jellyseerr错误, Jackett连接, 网络问题解决</p>
+<p>感谢阅读！希望对你有所帮助！</p>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li></ul></div><div class="post-nav"><a class="pre" href="/post/18/">🎬 Emby &amp; Jellyfin 完美搭配：用油猴插件无缝调用外部播放器</a><a class="next" href="/post/16/">🎬 群晖 NAS 进阶：使用 Docker 打造全自动追剧观影系统 (最终篇)</a></div><div class="nofancybox" id="waline"></div><link rel="stylesheet" type="text/css" href="https://unpkg.com/@waline/client@v3/dist/waline.css"><script type="module">import {init} from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+init({
+  el: '#waline',
+  comment: true,
+  serverURL: 'https://pl.317520.xyz/',
+  pageSize: '30',
+  wordLimit: '500',
+  requiredMeta,
+  emoji: [
+    'https://unpkg.com/@waline/emojis/weibo',
+    'https://unpkg.com/@waline/emojis/qq',
+    'https://unpkg.com/@waline/emojis/tw-emoji',
+  ],
+});</script><script>let metaInfo = ['nick', 'mail', 'link']
+let requiredMeta = 'nick'.split(',').filter(item => {
+  return metaInfo.indexOf(item) > -1
+})
+</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://t.me/gkyan78" title="Telegram" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-telegram" style="margin-inline:5px"></i></a><a class="info-icon" href="yy562198@gmail.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-envelope" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/gkyang2022" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-github" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-youtube" style="margin-inline:5px"></i></a></div></div><div class="widget-wrap"><div class="widget nofancybox"><a href="https://xn--mes358acgm99l.com/#/register?code=fdBRebys" target="_blank" rel="noopener noreferrer"><img src="/images/ad/jsjc.png" alt="广告" style="width:100%;"/></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/56/">NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</a></li><li class="post-list-item"><a class="post-list-link" href="/post/55/">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/post/53/">在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/52/">解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/51/">IPTV 一键部署教程|自动更新 · 支持 TVBox</a></li><li class="post-list-item"><a class="post-list-link" href="/post/50/">MoonTV 部署教程 | 支持生成 TVBox JSON 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/post/1/">MoonTV最新版保姆级部署教程：解决旧版失效问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/30/">摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</a></li><li class="post-list-item"><a class="post-list-link" href="/post/28/">🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><div id="waline-comment"></div><script type="module">let commentDiv = document.getElementById("waline-comment");
+let recentCommentUrl = 'https://pl.317520.xyz/' + '/api/comment?type=recent&count=5';
+function format( date ) {
+  return new Date(date).toLocaleString()
+}
+fetch(recentCommentUrl).then((comment) => {
+  return comment.json()
+}).then((recentComments) => {
+    let comments = "<ul>";
+    recentComments.data.forEach((comment, index) => {
+    comments += `<li>${index + 1}、${format(comment.time)}`
+    comments += `<div class="waline-comment-content"><a class="block" href="${window.location.origin + comment.url + '#waline'}">${comment.comment}</a></div>`
+    comments += `<div class="waline-comment-content-author ">--${comment.nick}</div></li>`
+    });
+    comments += "</ul>";
+    let commentDiv = document.getElementById("waline-comment");
+    commentDiv.innerHTML = comments;
+});</script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
