@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>Media Help 网盘资源搜索+一键转存 | Eric's Blog</title><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6572086222612797" crossorigin="anonymous"></script><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TK6MG3JC');</script><script src="https://www.googletagmanager.com/gtag/js?id=G-QSMX6DPKBS" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QSMX6DPKBS');
+</script><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Media Help 网盘资源搜索+一键转存</h1><a id="logo" href="/.">Eric's Blog</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/tags/"><i class="fa fa-tag"> 标签</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Media Help 网盘资源搜索+一键转存</h1><div class="post-meta">2025-10-09</div><a class="disqus-comment-count" href="/post/58/#waline"><span class="waline-comment-count" id="/post/58/"></span><span> 条评论</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">前言：告别下载，一键打造你的云媒体库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">🎬 部署准备：Docker Compose 与目录创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第一步：创建项目目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">第二步：Docker Compose 部署项目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">⚙️ 核心配置：接入 Emby&#x2F;飞牛影视与网盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">1. 配置媒体服务器 API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">2. 导入资源频道配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">3. 添加你的云盘账号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">✨ 自动化设置：生成 STRM 文件与 Emby 入库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">1. 设置 STRM 生成定时任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">2. Emby&#x2F;Jellyfin 媒体库映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">3. 效果测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">总结与互动</span></a></li></ol></div></div><div class="post-content"><h2><span id="前言告别下载一键打造你的云媒体库">前言：告别下载，一键打造你的云媒体库</span></h2><p>哈喽大家好！</p>
+<p>你是否厌倦了“搜索资源 → 下载到 NAS → 手动整理入库”这一繁琐的流程？今天，我将为大家分享一个强大的 <strong>网盘资源搜索转存项目</strong>！它能够高效搜索电报分享群的资源，一键转存到你的网盘（如天翼、夸克），并自动生成媒体链接，直接同步到你的 <strong>Emby 或 Jellyfin</strong> 媒体库中！</p>
+<p>如果你有网盘会员，这个项目将彻底改变你的追剧体验，让你实现真正的影视自动化！</p>
+<hr>
+<h2><span id="部署准备docker-compose-与目录创建">🎬 部署准备：Docker Compose 与目录创建</span></h2><h3><span id="第一步创建项目目录结构">第一步：创建项目目录结构</span></h3><p>首先，我们需要在飞牛 NAS 上为项目创建必要的目录。</p>
+<ol>
+<li>登录你的飞牛 NAS，进入文件管理界面。</li>
+<li>创建一个主目录，例如命名为 <strong><code>cloud-transfer-hub</code></strong>。</li>
+<li>在主目录内，创建两个子文件夹：<ul>
+<li><strong><code>db</code></strong>：用于存放应用的数据和配置，确保数据持久化。</li>
+<li><strong><code>strm</code></strong>：<strong>关键目录！</strong> 用于存放项目生成的 <code>.strm</code> 媒体链接文件，供 Emby&#x2F;Jellyfin 识别。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第二步docker-compose-部署项目">第二步：Docker Compose 部署项目</span></h3><p>目录创建完成后，我们使用 Docker Compose 进行部署。</p>
+<ol>
+<li>打开 Docker，选择 <strong><code>Compose</code></strong>，点击 <strong>“新增项目”</strong>。</li>
+<li>填写项目名称，路径选择刚才创建的 <code>cloud-transfer-hub</code> 主目录。</li>
+<li>将下面的 Docker Compose 代码粘贴到编辑框中。（请替换为你实际使用的镜像和配置）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3.8&#x27;</span><br><span class="line">services:</span><br><span class="line">  mediahelper:</span><br><span class="line">    image: rongyunmu/mediahelp</span><br><span class="line">    container_name: mediahelper</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;3300:80&quot;      # 网页访问端口</span><br><span class="line">      - &quot;8091:8091&quot;    # 后端服务端口</span><br><span class="line">    volumes:</span><br><span class="line">      - ./db:/app/backend/db      # 数据库存储</span><br><span class="line">      - ./strm:/app/backend/strm  # strm存储</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>* **注意：** 请替换镜像名称和宿主机端口，并确保 Volumes 中的路径是正确的绝对路径。
+</code></pre>
+<ol start="4">
+<li>点击 <strong>“确定”</strong> 开始构建。</li>
+</ol>
+<hr>
+<h2><span id="️-核心配置接入-embyx2f飞牛影视与网盘">⚙️ 核心配置：接入 Emby&#x2F;飞牛影视与网盘</span></h2><p>项目构建完成后，通过 <code>你的NAS的IP地址:宿主机端口</code> 访问 Web 界面（默认用户名和密码通常是 <code>admin</code>）。</p>
+<h3><span id="1-配置媒体服务器-api">1. 配置媒体服务器 API</span></h3><p>我们需要让项目知道媒体库的位置，以便同步 <code>strm</code> 文件。</p>
+<ol>
+<li>进入项目的 <strong>“配置中心”</strong> -&gt; <strong>“系统配置”</strong>。</li>
+<li>选择添加 <strong>Emby</strong> 或 <strong>飞牛影视</strong>。</li>
+<li><strong>如果使用 Emby&#x2F;Jellyfin：</strong><ul>
+<li>打开 Emby&#x2F;Jellyfin 控制台，找到 <strong>“API 密钥”</strong>，新建一个密钥并命名。</li>
+<li>将该密钥复制粘贴到项目配置中。</li>
+</ul>
+</li>
+<li><strong>如果使用飞牛影视：</strong><ul>
+<li>填写飞牛影视的端口（默认 <code>8005</code>），以及你的用户名和密码。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="2-导入资源频道配置文件">2. 导入资源频道配置文件</span></h3><p>项目通过配置文件来确定从哪些电报群或其他源搜索资源。</p>
+<ol>
+<li>进入项目的 <strong>“资源频道设置”</strong>。</li>
+<li>将配置文件导入进来。这个文件通常由项目作者提供，我也会在文末附上相关链接，供大家下载导入。</li>
+</ol>
+<h3><span id="3-添加你的云盘账号">3. 添加你的云盘账号</span></h3><p>项目目前支持 <strong>天翼、夸克、UC</strong> 等主流网盘。</p>
+<ol>
+<li>在项目界面添加你的云盘账号，完成授权登录。</li>
+<li><strong>（关键步骤）</strong> 确定一个<strong>网盘内</strong>用于存放转存资源的媒体目录，例如 <code>/Movies</code> 或 <code>/TV Shows</code>。</li>
+</ol>
+<hr>
+<h2><span id="自动化设置生成-strm-文件与-emby-入库">✨ 自动化设置：生成 STRM 文件与 Emby 入库</span></h2><p>这是实现自动化追剧的关键步骤。</p>
+<h3><span id="1-设置-strm-生成定时任务">1. 设置 STRM 生成定时任务</span></h3><ol>
+<li>进入项目的 <strong>“定时任务”</strong>。</li>
+<li>添加 <strong><code>strm</code> 生成任务</strong>，选择你刚刚添加的云盘账号。</li>
+<li>设置任务的执行周期（例如每小时执行一次）。</li>
+<li>保存配置。此时，项目会定期检查网盘目录是否有新资源，并自动生成 <code>.strm</code> 文件到我们的 <code>strm</code> 文件夹。</li>
+</ol>
+<h3><span id="2-embyx2fjellyfin-媒体库映射">2. Emby&#x2F;Jellyfin 媒体库映射</span></h3><p>现在，我们告诉 Emby 去哪里找这些 <code>.strm</code> 文件。</p>
+<ol>
+<li>打开 Emby&#x2F;Jellyfin 控制台，进入 <strong>“媒体库”</strong>。</li>
+<li><strong>新增媒体库</strong>。</li>
+<li>将我们项目主目录下的 <strong><code>strm</code> 目录</strong>（宿主机路径）添加为媒体源。</li>
+<li>保存设置，并让 Emby 扫描媒体库。</li>
+</ol>
+<h3><span id="3-效果测试">3. 效果测试</span></h3><p>一切配置完成后，你可以在项目页面搜索一个资源，点击转存。项目会自动将其转存到网盘，并生成 <code>strm</code> 文件。稍等片刻，资源就会自动同步并出现在你的 Emby&#x2F;Jellyfin 媒体库中！</p>
+<p>这套流程让你彻底告别下载和整理，享受云端追剧的便利！</p>
+<hr>
+<h2><span id="总结与互动">总结与互动</span></h2><p>这套 <strong>资源搜索、转存与入库</strong> 的自动化方案，极大地提高了 NAS 玩家的效率。如果你有对应的网盘会员，强烈推荐你试一下，效果非常惊艳。</p>
+<p>今天的分享就到这里了，感谢大家的阅读！</p>
+<p>如果你在部署或配置过程中遇到任何问题，欢迎在下方留言讨论。如果觉得这篇教程对你有帮助，欢迎<strong>点赞、分享、并关注我的频道</strong>，我们下期再见！</p>
+<hr>
+<p><strong>相关资源链接：</strong></p>
+<ul>
+<li><strong>项目 GitHub 主页：</strong> (<a target="_blank" rel="noopener" href="https://github.com/JieWSOFT/MediaHelp">https://github.com/JieWSOFT/MediaHelp</a>)</li>
+<li><strong>资源频道配置文件下载：</strong> (<a target="_blank" rel="noopener" href="https://wwwz.lanzout.com/ilxf5380l2sd">https://wwwz.lanzout.com/ilxf5380l2sd</a>)</li>
+<li><strong>我的交流群组：</strong> (<a target="_blank" rel="noopener" href="https://t.me/Eric_FanGroup">https://t.me/Eric_FanGroup</a>)</li>
+</ul>
+</div><div id="donate"><link rel="stylesheet" type="text/css" href="/css/donate.css?v=1.0.0"><script type="text/javascript" src="/js/donate.js?v=1.0.0" successtext="复制成功！"></script><a class="pos-f tr3" id="github" href="https://github.com/Kaiyuan/donate-page" target="_blank" title="Github"></a><div id="DonateText">Donate</div><ul class="list pos-f" id="donateBox"><li id="AliPay" qr="/images/donate/AliPayQR.png"></li><li id="WeChat" qr="/images/donate/WeChatQR.png"></li></ul><div class="pos-f left-100" id="QRBox"><div id="MainBox"></div></div></div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NAS/" rel="tag">NAS</a></li></ul></div><div class="post-nav"><a class="next" href="/post/57/">比 PanSou 更强！聚合网盘搜索项目，无需 NAS 也能轻松部署</a></div><div class="nofancybox" id="waline"></div><link rel="stylesheet" type="text/css" href="https://unpkg.com/@waline/client@v3/dist/waline.css"><script type="module">import {init} from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+init({
+  el: '#waline',
+  comment: true,
+  serverURL: 'https://pl.317520.xyz/',
+  pageSize: '30',
+  wordLimit: '500',
+  requiredMeta,
+  emoji: [
+    'https://unpkg.com/@waline/emojis/weibo',
+    'https://unpkg.com/@waline/emojis/qq',
+    'https://unpkg.com/@waline/emojis/tw-emoji',
+  ],
+});</script><script>let metaInfo = ['nick', 'mail', 'link']
+let requiredMeta = 'nick'.split(',').filter(item => {
+  return metaInfo.indexOf(item) > -1
+})
+</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://t.me/gkyan78" title="Telegram" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-telegram" style="margin-inline:5px"></i></a><a class="info-icon" href="yy562198@gmail.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-envelope" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/gkyang2022" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-github" style="margin-inline:5px"></i></a><a class="info-icon" href="https://www.youtube.com/@Eric-f2v" title="YouTube" target="_blank" style="margin-inline:5px"> <i class="fa social-icon fa-youtube" style="margin-inline:5px"></i></a></div></div><div class="widget-wrap"><div class="widget nofancybox"><a href="https://xn--mes358acgm99l.com/#/register?code=fdBRebys" target="_blank" rel="noopener noreferrer"><img src="/images/ad/jsjc.png" alt="广告" style="width:100%;"/></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/post/58/">Media Help 网盘资源搜索+一键转存</a></li><li class="post-list-item"><a class="post-list-link" href="/post/57/">比 PanSou 更强！聚合网盘搜索项目，无需 NAS 也能轻松部署</a></li><li class="post-list-item"><a class="post-list-link" href="/post/56/">NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</a></li><li class="post-list-item"><a class="post-list-link" href="/post/55/">MoonTV 移动端客户端：让你的追剧体验如虎添翼！</a></li><li class="post-list-item"><a class="post-list-link" href="/post/54/">免费域名+Cloudflare+飞牛DDNS教程：外网访问家用NAS全攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/post/53/">在飞牛上使用 Lucky 配置 DDNS、反向代理与证书部署教程</a></li><li class="post-list-item"><a class="post-list-link" href="/post/52/">解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</a></li><li class="post-list-item"><a class="post-list-link" href="/post/51/">IPTV 一键部署教程|自动更新 · 支持 TVBox</a></li><li class="post-list-item"><a class="post-list-link" href="/post/50/">MoonTV 部署教程 | 支持生成 TVBox JSON 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/post/1/">MoonTV最新版保姆级部署教程：解决旧版失效问题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><div id="waline-comment"></div><script type="module">let commentDiv = document.getElementById("waline-comment");
+let recentCommentUrl = 'https://pl.317520.xyz/' + '/api/comment?type=recent&count=5';
+function format( date ) {
+  return new Date(date).toLocaleString()
+}
+fetch(recentCommentUrl).then((comment) => {
+  return comment.json()
+}).then((recentComments) => {
+    let comments = "<ul>";
+    recentComments.data.forEach((comment, index) => {
+    comments += `<li>${index + 1}、${format(comment.time)}`
+    comments += `<div class="waline-comment-content"><a class="block" href="${window.location.origin + comment.url + '#waline'}">${comment.comment}</a></div>`
+    comments += `<div class="waline-comment-content-author ">--${comment.nick}</div></li>`
+    });
+    comments += "</ul>";
+    let commentDiv = document.getElementById("waline-comment");
+    commentDiv.innerHTML = comments;
+});</script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div></div></div></div><div class="pure-u-1 pure-u-md-3-4"></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" color="0,0,0" opacity="0.5" zIndex="-2" count="50" src="https://unpkg.com/canvas-nest.js/dist/canvas-nest.js"></script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
