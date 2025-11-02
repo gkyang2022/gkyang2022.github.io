@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
+    <url>/post/26/</url>
+    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
+<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
+<h2><span id="一-升级前你需要知道的几个关键概念">一、升级前，你需要知道的几个关键概念</span></h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
+<h3><span id="1-容器与镜像父子关系">1. 容器与镜像：父子关系</span></h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
+<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
+<h3><span id="2-告别-latest-标签">2. 告别 <code>latest</code> 标签</span></h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
+<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
+<h3><span id="3-数据卷volumes升级的生命线">3. 数据卷（Volumes）：升级的生命线</span></h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
+<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
+<hr>
+<h2><span id="二-简单易行的手动升级方法">二、简单易行的手动升级方法</span></h2><h3><span id="方法一停止-删除-拉取-运行单容器升级">方法一：停止、删除、拉取、运行（单容器升级）</span></h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
+<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
+<li>找到并停止旧容器</li>
+</ol>
+<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
+<ol start="3">
+<li>拉取新镜像</li>
+</ol>
+<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>运行新容器</li>
+</ol>
+<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="方法二使用-docker-compose多容器应用升级">方法二：使用 Docker Compose（多容器应用升级）</span></h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
+<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
+<li>修改 <code>docker-compose.yml</code> 文件</li>
+</ol>
+<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
+<p><strong>更新前示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>更新后示例：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>拉取新镜像</li>
+</ol>
+<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
+
+<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
+<ol start="3">
+<li>启动并更新服务</li>
+</ol>
+<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
+<hr>
+<h2><span id="三-升级的最佳实践与注意事项">三、升级的最佳实践与注意事项</span></h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
+<ol>
+<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
+<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
+<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
+<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
+<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
+</ol>
+<h2><span id="总结">总结</span></h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>60个常用Linux命令详解：从入门到精通</title>
     <url>/post/10/</url>
     <content><![CDATA[<h1><span id="60个常用linux命令详解从入门到精通">🐧 60个常用Linux命令详解：从入门到精通 🚀</span></h1><p>作为一名Linux用户，掌握常用命令是必备技能。本文将详细介绍60个最实用的Linux命令，帮助您提高工作效率！本文适合初学者和中级用户，每个命令都配有清晰示例和解释。</p>
@@ -154,82 +228,8 @@
 <p>希望这篇指南对您有所帮助！如果有任何问题或建议，欢迎在评论区留言讨论。</p>
 ]]></content>
       <tags>
+        <tag>教程</tag>
         <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>🐳 Docker 容器升级：平滑、安全地更新你的应用</title>
-    <url>/post/26/</url>
-    <content><![CDATA[<p>Docker 容器的出现，极大地简化了应用的部署和管理。但应用更新是常态，我们不可能永远使用旧版本的容器。那么，当你的应用有了新功能，或者修复了某个关键漏洞时，该如何安全、平稳地升级你的 Docker 容器呢？</p>
-<p>本文将带你从最基础的单容器升级方法开始，逐步深入到使用 Docker Compose 管理复杂的多容器应用升级。无论你是 Docker 初学者还是经验丰富的开发者，都能在这里找到适合你的升级之道。</p>
-<h2><span id="一-升级前你需要知道的几个关键概念">一、升级前，你需要知道的几个关键概念</span></h2><p>在开始动手之前，我们先来回顾几个核心概念，它们是理解所有升级操作的基础。</p>
-<h3><span id="1-容器与镜像父子关系">1. 容器与镜像：父子关系</span></h3><p>想象一下，<strong>镜像（Image）</strong> 就像是一张应用的蓝图，它包含了运行应用所需的所有文件和依赖项。而<strong>容器（Container）</strong> 则是基于这张蓝图创建的、正在运行的实体。</p>
-<p>升级容器的本质，并不是在运行中的容器里修改代码，而是使用一张<strong>新版本的镜像蓝图</strong>，来创建一个全新的容器。</p>
-<h3><span id="2-告别-latest-标签">2. 告别 <code>latest</code> 标签</span></h3><p>如果你习惯使用 <code>docker pull my-app:latest</code>，那么升级时你可能会遇到不确定性。因为 <code>latest</code> 标签总是指向最新的版本，你无法控制具体拉取到哪个版本。</p>
-<p><strong>最佳实践</strong>是为你的镜像打上明确的版本标签，例如 <code>my-app:1.0</code> 或 <code>my-app:2023.10.26</code>。这不仅能让你清楚地知道正在运行哪个版本，也能在出现问题时轻松回滚。</p>
-<h3><span id="3-数据卷volumes升级的生命线">3. 数据卷（Volumes）：升级的生命线</span></h3><p>容器是临时的、无状态的。如果你的应用需要持久化数据（比如数据库文件、用户上传的图片、配置文件等），那么数据卷就是你唯一的救星。</p>
-<p><strong>数据卷</strong>的作用是将容器内部的特定路径，映射到宿主机上的一个目录。当旧容器被删除时，宿主机上的数据卷目录并不会受影响，新容器启动后只需要重新挂载这个数据卷，就能无缝地接管所有数据和配置。这是实现容器平滑升级的关键。</p>
-<hr>
-<h2><span id="二-简单易行的手动升级方法">二、简单易行的手动升级方法</span></h2><h3><span id="方法一停止-删除-拉取-运行单容器升级">方法一：停止、删除、拉取、运行（单容器升级）</span></h3><p>这是最基础，也是最直观的升级方式。它适用于单个容器应用，但需要短暂的停机时间。</p>
-<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
-<li>找到并停止旧容器</li>
-</ol>
-<p>首先，你需要找到正在运行的容器的名称或 ID。使用 <code>docker ps</code> 命令可以列出所有正在运行的容器。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 查看正在运行的容器，找到名称或 ID</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 停止指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker stop my-web-app</span></span><br><span class="line">docker stop [容器名或ID]</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">2.  删除旧容器</span><br><span class="line"></span><br><span class="line">容器停止后，你可以使用 `docker <span class="built_in">rm</span>` 命令将其删除。这可以释放资源，并为新容器腾出端口和容器名。</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># 删除指定名称的容器</span></span><br><span class="line"><span class="comment"># 示例：docker rm my-web-app</span></span><br><span class="line">docker <span class="built_in">rm</span> [容器名或ID]</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意</strong>：删除容器并不会删除其关联的数据卷，因此数据是安全的。</p>
-<ol start="3">
-<li>拉取新镜像</li>
-</ol>
-<p>现在，从你的仓库拉取新版本的镜像。请确保使用最新的版本标签。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取最新版本的镜像</span></span><br><span class="line"><span class="comment"># 示例：docker pull my-web-app:v2.0</span></span><br><span class="line">docker pull [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>运行新容器</li>
-</ol>
-<p>最后，使用新镜像启动一个新容器。最重要的一步是，你需要完全复用旧容器的启动参数，特别是数据卷挂载（<code>-v</code>）和端口映射（<code>-p</code>），这样才能确保数据和配置得到保留。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新运行容器，并使用新镜像</span></span><br><span class="line"><span class="comment"># --name my-web-app：给新容器指定和旧容器一样的名字</span></span><br><span class="line"><span class="comment"># -p 8080:80：将宿主机的 8080 端口映射到容器的 80 端口</span></span><br><span class="line"><span class="comment"># -v /data/my-web-app:/app/data：将宿主机的数据卷挂载到容器内，保留数据</span></span><br><span class="line"><span class="comment"># -d：后台运行容器</span></span><br><span class="line"><span class="comment"># 示例：docker run --name my-web-app -p 8080:80 -v /data/my-web-app:/app/data -d my-web-app:v2.0</span></span><br><span class="line">docker run --name [新容器名] -p [宿主机端口]:[容器端口] -v [宿主机路径]:[容器路径] -d [镜像名:新标签]</span><br></pre></td></tr></table></figure>
-
-<h3><span id="方法二使用-docker-compose多容器应用升级">方法二：使用 Docker Compose（多容器应用升级）</span></h3><p>当你的应用由多个服务（例如，一个 Web 服务和一个数据库）组成时，使用 Docker Compose 是最优雅的选择。它能通过一个配置文件管理所有服务的升级。</p>
-<h4><span id="操作步骤详解">操作步骤详解：</span></h4><ol>
-<li>修改 <code>docker-compose.yml</code> 文件</li>
-</ol>
-<p>打开你的 <code>docker-compose.yml</code> 文件，将需要升级的服务下的 <code>image</code> 字段的标签更新为新版本。</p>
-<p><strong>更新前示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v1.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>更新后示例：</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker-compose.yml (v2.0)</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="comment"># 镜像标签已更新到 v2.0</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">my-web-app:v2.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/app/data</span></span><br><span class="line">  <span class="attr">database:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/postgresql/data</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>拉取新镜像</li>
-</ol>
-<p>在 <code>docker-compose.yml</code> 所在的目录下，使用 <code>docker-compose pull</code> 命令拉取新镜像。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取配置文件中所有服务所需的新镜像</span></span><br><span class="line">docker-compose pull</span><br></pre></td></tr></table></figure>
-
-<p>此命令只会下载新镜像，不会影响正在运行的服务。</p>
-<ol start="3">
-<li>启动并更新服务</li>
-</ol>
-<p>最后，使用 <code>up</code> 命令，Docker Compose 会自动检测到镜像标签的改变，停止旧容器，使用新镜像创建新容器，并重新连接所有已有的网络和数据卷。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动并更新服务，-d 表示在后台运行</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
-
-<p><code>up</code> 命令会自动保留旧容器挂载的卷，确保数据不丢失。</p>
-<hr>
-<h2><span id="三-升级的最佳实践与注意事项">三、升级的最佳实践与注意事项</span></h2><p>无论你选择哪种升级方法，都请牢记以下几点，以确保升级过程万无一失：</p>
-<ol>
-<li><strong>始终备份你的数据</strong>：在进行任何升级操作之前，务必备份重要的数据卷。这是最重要的一道防线。</li>
-<li><strong>制定回滚计划</strong>：如果升级失败，你需要能够快速回退到之前的稳定版本。</li>
-<li><strong>利用健康检查</strong>：在生产环境中，为容器配置健康检查（<code>HEALTHCHECK</code>），确保新容器完全就绪后才接入流量。</li>
-<li><strong>日志和监控</strong>：在升级过程中，密切关注容器日志和应用监控，及时发现和解决问题。</li>
-<li><strong>测试环境先行</strong>：在将新镜像部署到生产环境之前，务必在开发或预发布环境中进行充分测试。</li>
-</ol>
-<h2><span id="总结">总结</span></h2><p>Docker 容器的升级并非难事，关键在于理解其背后的原理，并遵循一套清晰的流程。对于个人开发者或小型项目，手动升级和 Docker Compose 已经足够强大。希望这篇教程能够为你提供一份可靠的指南，让你的容器升级之路更加顺畅。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
       </tags>
   </entry>
   <entry>
@@ -419,8 +419,8 @@
 </code></pre>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
         <tag>教程</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -533,8 +533,8 @@
 <p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -606,8 +606,8 @@
 <p>📌 如果你觉得本教程对你有帮助，欢迎 <strong>点赞 &#x2F; 分享 &#x2F; 收藏</strong>，也别忘了订阅关注！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -900,6 +900,78 @@
       </tags>
   </entry>
   <entry>
+    <title>MoonTV 移动端客户端：让你的追剧体验如虎添翼！</title>
+    <url>/post/55/</url>
+    <content><![CDATA[<h2><span id="前言告别网页端掌上追剧更轻松">前言：告别网页端，掌上追剧更轻松</span></h2><p>哈喽大家好！</p>
+<p>你是不是也和我一样，在 NAS 上部署了 MoonTV，享受着强大的聚合追剧功能？但每次想在手机上观看时，都得打开浏览器输入网址，体验上总觉得有些不便。</p>
+<p>今天，我将为大家分享一个超级实用的开源客户端——<strong>MoonTV 移动端</strong>！它完美支持 <strong>安卓和 iOS</strong>，让你在手机上也能拥有丝滑流畅的追剧体验。下面，我就来手把手带大家安装和使用这款客户端，让你的追剧体验如虎添翼！</p>
+<hr>
+<h2><span id="项目地址">项目地址</span></h2><p><a href="https://github.com/MoonTechLab/Selene">Selene</a></p>
+<h2><span id="视频教程">视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/c7tMJzytpdQ?si=Ud6x-qZMOAXRZ4s_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+
+<h2><span id="核心操作moontv-移动端安装与使用">🎬 核心操作：MoonTV 移动端安装与使用</span></h2><h3><span id="第一步了解项目与下载客户端">第一步：了解项目与下载客户端</span></h3><p>这款客户端非常新，项目主页上说明它专门以 <strong>MoonTV 100 版本</strong>为后端，这意味着它可能无法兼容其他的衍生版本。我在本地使用 Katelya 进行了测试，虽然能进入页面，但无法获取到播放地址。因此，在安装前请确保你的后端是正确的 MoonTV 100 版本。</p>
+<ol>
+<li><p><strong>访问项目主页</strong>：前往该项目的 GitHub 主页。如果觉得这个项目不错，记得给作者点上一个小星星，支持一下开源社区！</p>
+</li>
+<li><p><strong>下载最新版</strong>：找到 <code>Releases</code> 页面，在这里你可以下载到最新的版本。通常会提供两个文件：</p>
+<ul>
+<li><strong>Android (安卓端)</strong>：后缀名为 <code>.apk</code>。</li>
+<li><strong>iOS (苹果端)</strong>：通常是 <code>.ipa</code> 文件，可能需要通过 TestFlight 或其他方式进行安装。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第二步客户端安装与配置">第二步：客户端安装与配置</span></h3><p>下载完成后，就可以在你的手机或模拟器上进行安装了。</p>
+<ol>
+<li><p><strong>安装应用</strong>：</p>
+<ul>
+<li><strong>安卓</strong>：直接点击 <code>.apk</code> 文件进行安装。</li>
+<li><strong>iOS</strong>：根据作者提供的安装指引进行操作。</li>
+</ul>
+</li>
+<li><p><strong>登录服务器</strong>：安装并打开应用后，会看到登录页面。在这里，你需要填写你的 MoonTV 服务器信息：</p>
+<ul>
+<li><strong>服务器地址</strong>：输入你的 MoonTV 服务器地址（例如 <code>http://你的NAS_IP地址:端口</code>）。</li>
+<li><strong>用户名和密码</strong>：填写你在 MoonTV 后端设置的用户名和密码。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第三步客户端功能体验">第三步：客户端功能体验</span></h3><p>登录成功后，你会进入一个非常简洁的客户端界面。</p>
+<ul>
+<li><strong>分类同步</strong>：客户端的分类与你的 MoonTV 网页端是完全同步的，你可以轻松找到想看的影视内容。</li>
+<li><strong>无直播功能</strong>：目前客户端暂不支持直播功能，主要聚焦于点播追剧。</li>
+<li><strong>支持更换源地址</strong>：你也可以在客户端内更换不同的源地址，增加了使用的灵活性。</li>
+</ul>
+<p>总体来说，这款客户端能够提供非常不错的移动端追剧体验，尤其是在操作流畅度和界面美观度上。</p>
+<hr>
+<h2><span id="总结让你的-nas-影视库动起来">总结：让你的 NAS 影视库“动”起来！</span></h2><p>总的来说，这款 MoonTV 客户端是一款非常实用的工具，它弥补了 MoonTV 在移动端体验上的不足。如果你经常需要在手机上追剧，那么这款应用绝对值得一试。</p>
+<p>今天的分享就到这里了，感谢大家的阅读！</p>
+<p>如果你在安装或使用过程中遇到任何问题，欢迎在评论区留言讨论。如果你觉得这篇教程对你有帮助，也请大家<strong>点赞、分享、订阅我的频道</strong>，你的支持是我持续创作的最大动力！我们下期再见！</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MoonTV 部署教程 | 支持生成 TVBox JSON 文件</title>
     <url>/post/50/</url>
     <content><![CDATA[<blockquote>
@@ -1030,78 +1102,6 @@
       </tags>
   </entry>
   <entry>
-    <title>MoonTV 移动端客户端：让你的追剧体验如虎添翼！</title>
-    <url>/post/55/</url>
-    <content><![CDATA[<h2><span id="前言告别网页端掌上追剧更轻松">前言：告别网页端，掌上追剧更轻松</span></h2><p>哈喽大家好！</p>
-<p>你是不是也和我一样，在 NAS 上部署了 MoonTV，享受着强大的聚合追剧功能？但每次想在手机上观看时，都得打开浏览器输入网址，体验上总觉得有些不便。</p>
-<p>今天，我将为大家分享一个超级实用的开源客户端——<strong>MoonTV 移动端</strong>！它完美支持 <strong>安卓和 iOS</strong>，让你在手机上也能拥有丝滑流畅的追剧体验。下面，我就来手把手带大家安装和使用这款客户端，让你的追剧体验如虎添翼！</p>
-<hr>
-<h2><span id="项目地址">项目地址</span></h2><p><a href="https://github.com/MoonTechLab/Selene">Selene</a></p>
-<h2><span id="视频教程">视频教程</span></h2><style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-   <iframe width="560" height="315" src="https://www.youtube.com/embed/c7tMJzytpdQ?si=Ud6x-qZMOAXRZ4s_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-
-<h2><span id="核心操作moontv-移动端安装与使用">🎬 核心操作：MoonTV 移动端安装与使用</span></h2><h3><span id="第一步了解项目与下载客户端">第一步：了解项目与下载客户端</span></h3><p>这款客户端非常新，项目主页上说明它专门以 <strong>MoonTV 100 版本</strong>为后端，这意味着它可能无法兼容其他的衍生版本。我在本地使用 Katelya 进行了测试，虽然能进入页面，但无法获取到播放地址。因此，在安装前请确保你的后端是正确的 MoonTV 100 版本。</p>
-<ol>
-<li><p><strong>访问项目主页</strong>：前往该项目的 GitHub 主页。如果觉得这个项目不错，记得给作者点上一个小星星，支持一下开源社区！</p>
-</li>
-<li><p><strong>下载最新版</strong>：找到 <code>Releases</code> 页面，在这里你可以下载到最新的版本。通常会提供两个文件：</p>
-<ul>
-<li><strong>Android (安卓端)</strong>：后缀名为 <code>.apk</code>。</li>
-<li><strong>iOS (苹果端)</strong>：通常是 <code>.ipa</code> 文件，可能需要通过 TestFlight 或其他方式进行安装。</li>
-</ul>
-</li>
-</ol>
-<h3><span id="第二步客户端安装与配置">第二步：客户端安装与配置</span></h3><p>下载完成后，就可以在你的手机或模拟器上进行安装了。</p>
-<ol>
-<li><p><strong>安装应用</strong>：</p>
-<ul>
-<li><strong>安卓</strong>：直接点击 <code>.apk</code> 文件进行安装。</li>
-<li><strong>iOS</strong>：根据作者提供的安装指引进行操作。</li>
-</ul>
-</li>
-<li><p><strong>登录服务器</strong>：安装并打开应用后，会看到登录页面。在这里，你需要填写你的 MoonTV 服务器信息：</p>
-<ul>
-<li><strong>服务器地址</strong>：输入你的 MoonTV 服务器地址（例如 <code>http://你的NAS_IP地址:端口</code>）。</li>
-<li><strong>用户名和密码</strong>：填写你在 MoonTV 后端设置的用户名和密码。</li>
-</ul>
-</li>
-</ol>
-<h3><span id="第三步客户端功能体验">第三步：客户端功能体验</span></h3><p>登录成功后，你会进入一个非常简洁的客户端界面。</p>
-<ul>
-<li><strong>分类同步</strong>：客户端的分类与你的 MoonTV 网页端是完全同步的，你可以轻松找到想看的影视内容。</li>
-<li><strong>无直播功能</strong>：目前客户端暂不支持直播功能，主要聚焦于点播追剧。</li>
-<li><strong>支持更换源地址</strong>：你也可以在客户端内更换不同的源地址，增加了使用的灵活性。</li>
-</ul>
-<p>总体来说，这款客户端能够提供非常不错的移动端追剧体验，尤其是在操作流畅度和界面美观度上。</p>
-<hr>
-<h2><span id="总结让你的-nas-影视库动起来">总结：让你的 NAS 影视库“动”起来！</span></h2><p>总的来说，这款 MoonTV 客户端是一款非常实用的工具，它弥补了 MoonTV 在移动端体验上的不足。如果你经常需要在手机上追剧，那么这款应用绝对值得一试。</p>
-<p>今天的分享就到这里了，感谢大家的阅读！</p>
-<p>如果你在安装或使用过程中遇到任何问题，欢迎在评论区留言讨论。如果你觉得这篇教程对你有帮助，也请大家<strong>点赞、分享、订阅我的频道</strong>，你的支持是我持续创作的最大动力！我们下期再见！</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MoonTV最新版保姆级部署教程：解决旧版失效问题</title>
     <url>/post/1/</url>
     <content><![CDATA[<p>NAS玩家们，你们是否发现之前部署的 <strong>MoonTV</strong> 无法正常使用了？这是因为官方更新了版本，导致旧版容器无法正常运行。直接升级可能会出现未知错误，因此最稳妥的方法是彻底卸载旧版，然后重新部署最新版本。</p>
@@ -1227,6 +1227,64 @@
       </tags>
   </entry>
   <entry>
+    <title>NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</title>
+    <url>/post/56/</url>
+    <content><![CDATA[<p>对于NAS玩家来说，外网访问是刚需，但传统的方案如DDNS或端口映射常常伴随着域名费用、繁琐的配置，甚至安全风险。今天，我们将分享一个更简单、更安全、更重要的是<strong>完全免费</strong>的解决方案——<strong>Tailscale</strong>。</p>
+<p>本教程将详细介绍如何使用Tailscale，让你轻松实现NAS的内网穿透，告别一切复杂设置，享受丝滑流畅的远程访问体验。</p>
+<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;"><iframe width="560" height="315" src="https://www.youtube.com/embed/v29vxQbbnp0?si=Au199IJdbfmUtGIy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h3><span id="第一步获取tailscale-api-key"><strong>第一步：获取Tailscale API Key</strong></span></h3><p>Tailscale的部署非常简单，第一步就是获取一个用于部署的API Key。</p>
+<ol>
+<li><p><strong>登录Tailscale官网</strong>：访问 <a href="https://tailscale.com/">https://tailscale.com/</a>，你可以选择用Google或GitHub账号直接登录，非常方便。</p>
+</li>
+<li><p><strong>创建API Key</strong>：登录后，导航至**“Settings”<strong>，点击左侧的</strong>“Keys”**选项。</p>
+</li>
+<li><p>点击 <strong>“Create key”</strong>，给它取一个你喜欢的名字，然后点击创建。</p>
+</li>
+</ol>
+<hr>
+<h3><span id="第二步在飞牛nas上部署tailscale"><strong>第二步：在飞牛NAS上部署Tailscale</strong></span></h3><p>现在，我们将在飞牛NAS上部署Tailscale容器。</p>
+<ol>
+<li><p><strong>准备部署目录</strong>：在飞牛NAS的文件管理中，新建一个用于存放Compose文件的文件夹，例如 <code>tailscale</code>。</p>
+</li>
+<li><p><strong>创建Compose项目</strong>：打开Docker，进入 <strong>Compose</strong> 选项，点击 <strong>“新增项目”</strong>。</p>
+</li>
+<li><p>填写项目名称，路径选择你刚才创建的文件夹。</p>
+</li>
+<li><p>将视频简介中提供的Compose文件代码粘贴进来。</p>
+</li>
+<li><p><strong>配置API Key</strong>：在粘贴的代码中，找到对应的变量，将你第一步复制的API Key粘贴进去。</p>
+</li>
+<li><p>点击确定，然后开始构建。</p>
+</li>
+</ol>
+<p>稍等片刻，你的NAS容器就会在Tailscale的网络中上线，并自动分配一个IP地址。</p>
+<hr>
+<h3><span id="第三步客户端连接与远程访问"><strong>第三步：客户端连接与远程访问</strong></span></h3><p>现在，你的NAS已经准备好被访问了，只需在你的设备上安装Tailscale客户端。</p>
+<ol>
+<li><p><strong>下载并登录客户端</strong>：在你的手机、电脑或其他设备上下载并安装Tailscale应用。登录时，请使用你在官网登录的同一个账号。</p>
+</li>
+<li><p><strong>获取NAS IP</strong>：登录后，你会看到你的NAS服务已经出现在设备列表中。点击它，可以复制它分配的IP地址。</p>
+</li>
+<li><p><strong>远程访问</strong>：打开浏览器，输入这个IP地址，后面加上你NAS里服务的端口号（例如：<code>[IP地址]:8096</code>），你就能轻松访问了！</p>
+</li>
+</ol>
+<p>如果你有IPv6地址，那么Tailscale会利用它实现<strong>点对点直连</strong>，速度非常理想。你可以通过SSH连接到NAS，运行指定命令来确认是否处于直连状态。</p>
+<h3><span id="相关代码">相关代码：</span></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line">services:</span><br><span class="line">  tailscale:</span><br><span class="line">    image: tailscale/tailscale:latest</span><br><span class="line">    hostname: your-server-name # 在Tailscale网络中显示的主机名</span><br><span class="line">    container_name: tailscaled</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/lib/tailscale:/var/lib/tailscale</span><br><span class="line">    cap_add:</span><br><span class="line">      - net_admin</span><br><span class="line">      - net_raw</span><br><span class="line">    devices:</span><br><span class="line">      - /dev/net/tun:/dev/net/tun</span><br><span class="line">    network_mode: host</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    environment:</span><br><span class="line">      # 替换成你在Tailscale管理后台生成的认证密钥</span><br><span class="line">      - TS_AUTHKEY=</span><br><span class="line">      # 如果需要，可以添加标签</span><br><span class="line">      # - TS_EXTRA_ARGS=--advertise-tags=tag:server</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">docker ps</span><br><span class="line">docker exec -it xxxxxx tailscale status</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3><span id="总结"><strong>总结</strong></span></h3><p>通过Tailscale，我们不仅实现了NAS的外网访问，还摆脱了域名、端口映射和防火墙规则的限制，真正做到了<strong>零成本、零配置</strong>。更重要的是，Tailscale自带的端到端加密技术，让你的远程访问更加安全可靠。</p>
+<p>希望这篇教程对你有所帮助。如果你在部署中遇到任何问题，欢迎在评论区留言交流。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>🔍 PanSou：一键搜索网盘和电报群资源，打造你的专属资源库！</title>
     <url>/post/28/</url>
     <content><![CDATA[<p><img src="/images/20250809/4a471754735566.png" alt="PanSou 资源搜索工具主页截图"></p>
@@ -1310,68 +1368,10 @@
 
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>NAS内网穿透终极方案：Tailscale完全免费，小白也能轻松实现外网访问</title>
-    <url>/post/56/</url>
-    <content><![CDATA[<p>对于NAS玩家来说，外网访问是刚需，但传统的方案如DDNS或端口映射常常伴随着域名费用、繁琐的配置，甚至安全风险。今天，我们将分享一个更简单、更安全、更重要的是<strong>完全免费</strong>的解决方案——<strong>Tailscale</strong>。</p>
-<p>本教程将详细介绍如何使用Tailscale，让你轻松实现NAS的内网穿透，告别一切复杂设置，享受丝滑流畅的远程访问体验。</p>
-<h3><span id="视频教程"><strong>视频教程</strong></span></h3><p>如果你更喜欢通过视频学习，可以观看下面的教程。本篇博文的内容与视频同步，方便你边看边操作。</p>
-<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;"><iframe width="560" height="315" src="https://www.youtube.com/embed/v29vxQbbnp0?si=Au199IJdbfmUtGIy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h3><span id="第一步获取tailscale-api-key"><strong>第一步：获取Tailscale API Key</strong></span></h3><p>Tailscale的部署非常简单，第一步就是获取一个用于部署的API Key。</p>
-<ol>
-<li><p><strong>登录Tailscale官网</strong>：访问 <a href="https://tailscale.com/">https://tailscale.com/</a>，你可以选择用Google或GitHub账号直接登录，非常方便。</p>
-</li>
-<li><p><strong>创建API Key</strong>：登录后，导航至**“Settings”<strong>，点击左侧的</strong>“Keys”**选项。</p>
-</li>
-<li><p>点击 <strong>“Create key”</strong>，给它取一个你喜欢的名字，然后点击创建。</p>
-</li>
-</ol>
-<hr>
-<h3><span id="第二步在飞牛nas上部署tailscale"><strong>第二步：在飞牛NAS上部署Tailscale</strong></span></h3><p>现在，我们将在飞牛NAS上部署Tailscale容器。</p>
-<ol>
-<li><p><strong>准备部署目录</strong>：在飞牛NAS的文件管理中，新建一个用于存放Compose文件的文件夹，例如 <code>tailscale</code>。</p>
-</li>
-<li><p><strong>创建Compose项目</strong>：打开Docker，进入 <strong>Compose</strong> 选项，点击 <strong>“新增项目”</strong>。</p>
-</li>
-<li><p>填写项目名称，路径选择你刚才创建的文件夹。</p>
-</li>
-<li><p>将视频简介中提供的Compose文件代码粘贴进来。</p>
-</li>
-<li><p><strong>配置API Key</strong>：在粘贴的代码中，找到对应的变量，将你第一步复制的API Key粘贴进去。</p>
-</li>
-<li><p>点击确定，然后开始构建。</p>
-</li>
-</ol>
-<p>稍等片刻，你的NAS容器就会在Tailscale的网络中上线，并自动分配一个IP地址。</p>
-<hr>
-<h3><span id="第三步客户端连接与远程访问"><strong>第三步：客户端连接与远程访问</strong></span></h3><p>现在，你的NAS已经准备好被访问了，只需在你的设备上安装Tailscale客户端。</p>
-<ol>
-<li><p><strong>下载并登录客户端</strong>：在你的手机、电脑或其他设备上下载并安装Tailscale应用。登录时，请使用你在官网登录的同一个账号。</p>
-</li>
-<li><p><strong>获取NAS IP</strong>：登录后，你会看到你的NAS服务已经出现在设备列表中。点击它，可以复制它分配的IP地址。</p>
-</li>
-<li><p><strong>远程访问</strong>：打开浏览器，输入这个IP地址，后面加上你NAS里服务的端口号（例如：<code>[IP地址]:8096</code>），你就能轻松访问了！</p>
-</li>
-</ol>
-<p>如果你有IPv6地址，那么Tailscale会利用它实现<strong>点对点直连</strong>，速度非常理想。你可以通过SSH连接到NAS，运行指定命令来确认是否处于直连状态。</p>
-<h3><span id="相关代码">相关代码：</span></h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &quot;3.8&quot;</span><br><span class="line">services:</span><br><span class="line">  tailscale:</span><br><span class="line">    image: tailscale/tailscale:latest</span><br><span class="line">    hostname: your-server-name # 在Tailscale网络中显示的主机名</span><br><span class="line">    container_name: tailscaled</span><br><span class="line">    volumes:</span><br><span class="line">      - /var/lib/tailscale:/var/lib/tailscale</span><br><span class="line">    cap_add:</span><br><span class="line">      - net_admin</span><br><span class="line">      - net_raw</span><br><span class="line">    devices:</span><br><span class="line">      - /dev/net/tun:/dev/net/tun</span><br><span class="line">    network_mode: host</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    environment:</span><br><span class="line">      # 替换成你在Tailscale管理后台生成的认证密钥</span><br><span class="line">      - TS_AUTHKEY=</span><br><span class="line">      # 如果需要，可以添加标签</span><br><span class="line">      # - TS_EXTRA_ARGS=--advertise-tags=tag:server</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">docker ps</span><br><span class="line">docker exec -it xxxxxx tailscale status</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3><span id="总结"><strong>总结</strong></span></h3><p>通过Tailscale，我们不仅实现了NAS的外网访问，还摆脱了域名、端口映射和防火墙规则的限制，真正做到了<strong>零成本、零配置</strong>。更重要的是，Tailscale自带的端到端加密技术，让你的远程访问更加安全可靠。</p>
-<p>希望这篇教程对你有所帮助。如果你在部署中遇到任何问题，欢迎在评论区留言交流。</p>
-]]></content>
   </entry>
   <entry>
     <title>🚀 Sun-Panel：私有化 NAS 导航主页部署教程</title>
@@ -1431,8 +1431,8 @@
 
 <h3><span id="自定义页脚">自定义页脚</span></h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// =========== Config Start ===========</span></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// 距离滚动偏移量</span></span><br><span class="line">  <span class="keyword">const</span> scrollOffset = <span class="number">80</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 显示风格( auto:自动(默认) | mobile:左上角显示触发按钮-移动端风格 | sidebar:常态显示侧栏)</span></span><br><span class="line">  <span class="keyword">const</span> displayStyle = <span class="string">&#x27;auto&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 移动端宽度定义</span></span><br><span class="line">  <span class="keyword">const</span> mobileWidth = <span class="number">800</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomIdName</span> = <span class="string">&#x27;sun-panel-toc-dom&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 左上角按钮 SVG 图标</span></span><br><span class="line">  <span class="keyword">const</span> svgTocMobileBtn = <span class="string">&#x27;&lt;svg xmlns=&quot;[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)&quot;  viewBox=&quot;0 0 24 24&quot;&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M17.5 4.5c-1.95 0-4.05.4-5.5 1.5c-1.45-1.1-3.55-1.5-5.5-1.5c-1.45 0-2.99.22-4.28.79C1.49 5.62 1 6.33 1 7.14v11.28c0 1.3 1.22 2.26 2.48 1.94c.98-.25 2.02-.36 3.02-.36c1.56 0 3.22.26 4.56.92c.6.3 1.28.3 1.87 0c1.34-.67 3-.92 4.56-.92c1 0 2.04.11 3.02.36c1.26.33 2.48-.63 2.48-1.94V7.14c0-.81-.49-1.52-1.22-1.85c-1.28-.57-2.82-.79-4.27-.79M21 17.23c0 .63-.58 1.09-1.2.98c-.75-.14-1.53-.2-2.3-.2c-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5c.92 0 1.83.09 2.7.28c.46.1.8.51.8.98z&quot;/&gt;&lt;path fill=&quot;currentColor&quot; d=&quot;M13.98 11.01c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.54-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39c-.08.01-.16.03-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.71-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03m0 2.66c-.32 0-.61-.2-.71-.52c-.13-.39.09-.82.48-.94c1.53-.5 3.53-.66 5.36-.45c.41.05.71.42.66.83s-.42.7-.83.66c-1.62-.19-3.39-.04-4.73.39a1 1 0 0 1-.23.03&quot;/&gt;&lt;/svg&gt;&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// ------------------------------------</span></span><br><span class="line">  <span class="comment">// =========== Config End ===========</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滚动容器的类名</span></span><br><span class="line">  <span class="keyword">const</span> scrollContainerElementClassName = <span class="string">&#x27;.scroll-container&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 一些函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">isMobile</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;mobile&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (displayStyle === <span class="string">&#x27;pc&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> width = <span class="variable language_">window</span>.<span class="property">innerWidth</span></span><br><span class="line">    <span class="keyword">return</span> width &lt; mobileWidth</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">createDom</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 检测是否已经存在TOC DOM，存在则删除</span></span><br><span class="line">    (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> element = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="title class_">SunPanelTOCDomIdName</span>)</span><br><span class="line">      <span class="keyword">if</span> (element) &#123;</span><br><span class="line">        element.<span class="title function_">remove</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDom</span> = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="property">id</span> = <span class="title class_">SunPanelTOCDomIdName</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(<span class="title class_">SunPanelTOCDom</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style start =========</span></span><br><span class="line">    <span class="keyword">const</span> style = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;style&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> <span class="title class_">SunPanelTOCDomStyleId</span> = <span class="string">`#<span class="subst">$&#123;SunPanelTOCDomIdName&#125;</span>`</span></span><br><span class="line">    style.<span class="property">textContent</span> = <span class="string">`</span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-mobile-btn &#123;</span></span><br><span class="line"><span class="string">        top: 20px !important;</span></span><br><span class="line"><span class="string">        left: 20px !important;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        width: 46px;</span></span><br><span class="line"><span class="string">        height: 46px;</span></span><br><span class="line"><span class="string">        background-color: #2a2a2a6b;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">        border-radius: 0.5rem;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .hidden &#123;</span></span><br><span class="line"><span class="string">        display: none !important;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">        padding: 10px;</span></span><br><span class="line"><span class="string">        position: fixed;</span></span><br><span class="line"><span class="string">        top: 0;</span></span><br><span class="line"><span class="string">        left: 0;</span></span><br><span class="line"><span class="string">        height: 100%;</span></span><br><span class="line"><span class="string">        overflow: hidden;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        flex-direction: column;</span></span><br><span class="line"><span class="string">        justify-content: center;</span></span><br><span class="line"><span class="string">        transition: width 0.3s ease, background-color 0.3s ease;</span></span><br><span class="line"><span class="string">        border-top-right-radius: 20px;</span></span><br><span class="line"><span class="string">        border-bottom-right-radius: 20px;</span></span><br><span class="line"><span class="string">        background-color: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-mobile-btn-svg-container&#123;</span></span><br><span class="line"><span class="string">      width:21px;</span></span><br><span class="line"><span class="string">      height:21px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion &#123;</span></span><br><span class="line"><span class="string">        width: 200px !important;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        background-color: rgb(42 42 42 / 90%);</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> #toc-sidebar .toc-sidebar-box &#123;</span></span><br><span class="line"><span class="string">        width: 500px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-box &#123;</span></span><br><span class="line"><span class="string">        display: flex;</span></span><br><span class="line"><span class="string">        align-items: center;</span></span><br><span class="line"><span class="string">        position: relative;</span></span><br><span class="line"><span class="string">        cursor: pointer;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 20px;</span></span><br><span class="line"><span class="string">        height: 6px;</span></span><br><span class="line"><span class="string">        background-color: white;</span></span><br><span class="line"><span class="string">        border-radius: 4px;</span></span><br><span class="line"><span class="string">        margin: 15px 0;</span></span><br><span class="line"><span class="string">        transition: height 0.3s ease, width 0.3s ease;</span></span><br><span class="line"><span class="string">        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 0;</span></span><br><span class="line"><span class="string">        white-space: nowrap;</span></span><br><span class="line"><span class="string">        transition: opacity 0.3s ease, transform 0.3s ease, margin-left 0.3s ease;</span></span><br><span class="line"><span class="string">        font-size: 14px;</span></span><br><span class="line"><span class="string">        color: white;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        opacity: 1;</span></span><br><span class="line"><span class="string">        margin-left: 10px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        box-shadow: none;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-slip &#123;</span></span><br><span class="line"><span class="string">        width: 40px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    <span class="subst">$&#123;SunPanelTOCDomStyleId&#125;</span> .toc-sidebar-expansion .title-bar-box:hover .title-bar-title &#123;</span></span><br><span class="line"><span class="string">        font-size: 20px;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      `</span></span><br><span class="line">    <span class="comment">// 添加样式到文档头部</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(style)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ========= Add style end =========</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加移动端菜单按钮</span></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtn = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="property">id</span> = <span class="string">&#x27;toc-mobile-btn&#x27;</span></span><br><span class="line">    tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;backdrop-blur-[2px]&#x27;</span>)</span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(tocMobileBtn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tocMobileBtnSvgcContainer = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">innerHTML</span> = svgTocMobileBtn</span><br><span class="line">    tocMobileBtnSvgcContainer.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-mobile-btn-svg-container&#x27;</span>)</span><br><span class="line">    tocMobileBtn.<span class="title function_">appendChild</span>(tocMobileBtnSvgcContainer)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建侧边栏容器</span></span><br><span class="line">    <span class="keyword">const</span> sidebar = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebar.<span class="property">id</span> = <span class="string">&#x27;toc-sidebar&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sidebarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">    sidebarBox.<span class="property">className</span> = <span class="string">&#x27;toc-sidebar-box&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查询出所有类名包含 item-group-index- 的元素</span></span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历并打印每个元素的完整类名</span></span><br><span class="line">    items.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">      item.<span class="property">classList</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (className.<span class="title function_">startsWith</span>(<span class="string">&#x27;item-group-index-&#x27;</span>)) &#123;</span><br><span class="line">          <span class="keyword">const</span> titleBarBox = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarBox.<span class="property">className</span> = <span class="string">&#x27;title-bar-box&#x27;</span></span><br><span class="line">          <span class="comment">// titleBarBox.href = `#$&#123;item.id&#125;`</span></span><br><span class="line">          titleBarBox.<span class="property">dataset</span>.<span class="property">groupClassName</span> = className</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 目录条</span></span><br><span class="line">          <span class="keyword">const</span> titleBarSlip = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarSlip.<span class="property">className</span> = <span class="string">&#x27;title-bar-slip&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 创建一个链接</span></span><br><span class="line">          <span class="keyword">const</span> titleBarTitle = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">          titleBarTitle.<span class="property">className</span> = <span class="string">&#x27;title-bar-title&#x27;</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 获取子元素中 class=&quot;group-title&quot; 的内容</span></span><br><span class="line">          <span class="keyword">const</span> titleElement = item.<span class="title function_">querySelector</span>(<span class="string">&#x27;.group-title&#x27;</span>)</span><br><span class="line">          <span class="keyword">const</span> titleText = titleElement ? titleElement.<span class="property">textContent</span> : item.<span class="property">id</span></span><br><span class="line">          titleBarTitle.<span class="property">textContent</span> = titleText</span><br><span class="line"></span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarSlip)</span><br><span class="line">          titleBarBox.<span class="title function_">appendChild</span>(titleBarTitle)</span><br><span class="line"></span><br><span class="line">          sidebarBox.<span class="title function_">appendChild</span>(titleBarBox)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    sidebar.<span class="title function_">appendChild</span>(sidebarBox)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将侧边栏添加到页面中</span></span><br><span class="line">    <span class="title class_">SunPanelTOCDom</span>.<span class="title function_">appendChild</span>(sidebar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">mobileHideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">hideSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">showSidebar</span>(<span class="params"></span>) &#123;</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)</span><br><span class="line">      sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化开始</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">func, wait</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> timeout</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeout)</span><br><span class="line">        timeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          func.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args)</span><br><span class="line">        &#125;, wait)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">handleResize</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        tocMobileBtn.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">        sidebar.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用防抖函数包装你的处理函数</span></span><br><span class="line">    <span class="keyword">const</span> debouncedHandleResize = <span class="title function_">debounce</span>(handleResize, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加事件监听器</span></span><br><span class="line">    <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, debouncedHandleResize)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 首次触发</span></span><br><span class="line">    <span class="title function_">handleResize</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line">    <span class="comment">// 监听宽度变化结束</span></span><br><span class="line">    <span class="comment">// ----------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听移动端按钮点击</span></span><br><span class="line">    tocMobileBtn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (sidebar.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;toc-sidebar-expansion&#x27;</span>)) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 显示</span></span><br><span class="line">        <span class="title function_">showSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏失去hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isMobile</span>()) &#123;</span><br><span class="line">        <span class="comment">// 隐藏</span></span><br><span class="line">        <span class="title function_">mobileHideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideSidebar</span>()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC栏获得hover</span></span><br><span class="line">    sidebar.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">showSidebar</span>()</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听TOC点击事件</span></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.title-bar-box&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">box</span>) =&gt;</span> &#123;</span><br><span class="line">      box.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="comment">// 检查触发事件的元素是否有 &#x27;data-groupClassName&#x27; 属性</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span>) &#123;</span><br><span class="line">        <span class="comment">// 获取 &#x27;data-groupClass&#x27; 属性的值</span></span><br><span class="line">          <span class="keyword">const</span> groupClassName = <span class="variable language_">this</span>.<span class="property">dataset</span>.<span class="property">groupClassName</span></span><br><span class="line">          <span class="comment">// 使用属性值作为选择器查询对应的元素</span></span><br><span class="line">          <span class="keyword">const</span> targetElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">`.<span class="subst">$&#123;groupClassName&#125;</span>`</span>)</span><br><span class="line">          <span class="keyword">if</span> (targetElement) &#123;</span><br><span class="line">          <span class="comment">// 获取目标元素的 &#x27;top&#x27; 坐标</span></span><br><span class="line">            <span class="keyword">const</span> targetTop = targetElement.<span class="property">offsetTop</span></span><br><span class="line">            <span class="keyword">const</span> scrollContainerElement = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(scrollContainerElementClassName)</span><br><span class="line">            <span class="keyword">if</span> (scrollContainerElement) &#123;</span><br><span class="line">              scrollContainerElement.<span class="title function_">scrollTo</span>(&#123;</span><br><span class="line">                <span class="attr">top</span>: targetTop - scrollOffset,</span><br><span class="line">                <span class="attr">behavior</span>: <span class="string">&#x27;smooth&#x27;</span>, <span class="comment">// 平滑滚动</span></span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否已经存在分组，不存在将定时监听</span></span><br><span class="line">  <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">  <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="title function_">createDom</span>()</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> interval = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> items = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;[class*=&quot;item-group-index-&quot;]&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> (items.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">createDom</span>()</span><br><span class="line">      <span class="built_in">clearInterval</span>(interval)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;)()</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
         <tag>NAS</tag>
       </tags>
   </entry>
@@ -2010,8 +2010,8 @@
 <hr>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -2512,8 +2512,8 @@
 <p>感谢阅读！希望这篇文章对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -2593,8 +2593,8 @@
 <p>这是一种 <strong>快速有效</strong> 的解决办法，尤其适合 <strong>Docker 部署环境</strong>。 🚀</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
@@ -2662,9 +2662,57 @@
 <p>感谢阅读！希望对你有所帮助！</p>
 ]]></content>
       <tags>
-        <tag>教程</tag>
         <tag>Docker</tag>
+        <tag>教程</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>💡 免费影视 App 推荐：资源超多，爱优腾全聚合，一个 App 搞定所有！</title>
+    <url>/post/62/</url>
+    <content><![CDATA[<h2><span id="前言一个-app-搞定所有追剧需求">前言：一个 App 搞定所有追剧需求</span></h2><p>哈喽大家好！</p>
+<p>你是否正在寻找一款资源丰富、更新快，并且能同时满足手机通勤和 TV 大屏观影需求的影视 App？今天，我为大家找到了一个完美的解决方案——这款<strong>免费影视聚合 App</strong>！</p>
+<p>它最大的亮点是完美支持 <strong>安卓手机端</strong> 和 <strong>TV 电视大屏端</strong>，尤其是 <strong>TV 版本完全无广告</strong>，体验极佳。下面，我就来带大家详细了解它的功能特点和使用技巧。</p>
+<h2><span id><img src="/images/251102/p6.webp"></span></h2><p><strong>🔥 App 下载链接：</strong></p>
+<blockquote>
+<p><a href="https://drive.google.com/file/d/1XdYYjNOKL4ybfeW8kHo5aqN8jm6m3bzj/view?usp=drive_link">安卓端下载</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://vedl.lxapp3.shop/ncat/01/dl.html?cId=d6355">其他客户端下载</a></p>
+</blockquote>
+<h2><span id="手机端资源丰富筛选便捷">📱 手机端：资源丰富，筛选便捷</span></h2><p>这款 App 在手机端的功能非常强大，适合日常碎片时间追剧。</p>
+<h3><span id="1-资源聚合与全面分类">1. 资源聚合与全面分类</span></h3><ul>
+<li><strong>资源全面</strong>：App 聚合了大量影视资源，主流平台（如爱优腾）的热门内容基本都能找到。</li>
+<li><strong>分类清晰</strong>：它的分类非常齐全，无论是电影、电视剧、综艺还是动漫，都有明确的区分。</li>
+</ul>
+<blockquote>
+<p>[在此处插入手机端“分类”或“首页”的截图]</p>
+</blockquote>
+<h3><span id="2-精细化筛选功能">2. 精细化筛选功能</span></h3><p>在筛选功能上，App 表现出色，可以帮助你快速定位想看的内容：</p>
+<ul>
+<li>用户可以根据<strong>地区、年份和类型</strong>进行精细化筛选，找剧效率极高。</li>
+</ul>
+<h3><span id="3-手机端特点说明关于广告">3. 手机端特点说明（关于广告）</span></h3><ul>
+<li><strong>注意：</strong> 和所有免费的第三方 App 一样，手机端<strong>不可避免地会弹一些广告</strong>。如果注重极致的无广告体验，建议主要使用它的 TV 版本。</li>
+</ul>
+<hr>
+<h2><span id="tv-大屏端无广告-4k-播放的极致体验">📺 TV 大屏端：无广告、4K 播放的极致体验</span></h2><p>TV 端的体验是这款 App 的核心优势，非常适合家庭大屏观影。</p>
+<h3><span id="1-界面清爽完全无广告">1. 界面清爽，完全无广告</span></h3><ul>
+<li><strong>无广告体验</strong>：App 的 TV 版本界面设计非常清爽简洁，并且<strong>播放过程中完全没有广告</strong>，提供了极佳的观影环境。</li>
+<li><strong>操作便捷</strong>：虽然在模拟器上操作可能有些不便，但在真实的智能电视上，用遥控器操作起来是非常流畅方便的。</li>
+</ul>
+<blockquote>
+<p>[在此处插入 TV 端“首页”或“播放界面”的截图]</p>
+</blockquote>
+<h3><span id="2-解锁-4k-播放的技巧">2. 解锁 4K 播放的技巧</span></h3><p>App 的播放速度很快，但如果想获得最佳的清晰度，你需要一个小小的操作：</p>
+<ul>
+<li><strong>登录并签到</strong>：TV 端默认的清晰度可能是普通高清。如果想解锁播放 <strong>4K 等更高清晰度的资源</strong>，你需要简单注册一个账号并进行<strong>登录签到</strong>。</li>
+<li><strong>操作建议</strong>：建议大家在手机端完成注册和每日签到，然后登录 TV 端，即可享受 4K 高清播放。</li>
+</ul>
+<hr>
+<h2><span id="总结与获取方式">总结与获取方式</span></h2><p>总而言之，这款影视 App 凭借其 <strong>资源丰富、TV 端无广告以及支持 4K 播放</strong> 的优势，成为了跨平台追剧的绝佳选择。无论是手机通勤，还是大屏观影，这一个 App 就能全部满足。</p>
+<p>如果你觉得这款 App 对你有帮助，不妨下载试用一下！</p>
+<p>感谢大家的阅读！如果你觉得这篇推荐对你有帮助，欢迎在下方留言讨论。我们下期再见！</p>
+]]></content>
   </entry>
   <entry>
     <title>🔥 桌面常备神器！BTsou 极速搜索小工具：聚合 20+ 资源站点</title>
