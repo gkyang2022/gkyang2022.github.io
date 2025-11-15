@@ -424,121 +424,6 @@
       </tags>
   </entry>
   <entry>
-    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
-    <url>/post/25/</url>
-    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
-<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
-<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
-<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
-<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
-<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
-<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
-<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
-<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
-</ul>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
-<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
-<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
-<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
-<ul>
-<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
-<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
-</ul>
-<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>代码修改说明：</strong></p>
-<ol>
-<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
-<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
-</ol>
-<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
-<hr>
-<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
-<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
-<ul>
-<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
-<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
-</ul>
-<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
-<ul>
-<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
-<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
-<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
-</ul>
-<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
-<hr>
-<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
-<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
-<ul>
-<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
-<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
-<li><strong>密码设置（重点）：</strong><ul>
-<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
-<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
-</ul>
-</li>
-<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
-<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
-</ul>
-<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
-<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
-<ul>
-<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
-<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
-<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
-</ul>
-<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
-<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
-<ul>
-<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
-<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
-<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
-</ul>
-<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
-<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
-<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
-</ul>
-<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
-<hr>
-<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
-<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
-<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
-<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
-<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
-</ul>
-<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-        <tag>NAS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IPTV 一键部署教程|自动更新 · 支持 TVBox</title>
     <url>/post/51/</url>
     <content><![CDATA[<p>大家好，欢迎来到我的博客 👋<br>这篇文章将带大家实操一个 GitHub 上很火的 <strong>IPTV 项目</strong>。我在自己的飞牛 NAS 上部署之后，体验效果非常不错，因此整理成教程分享给大家。  </p>
@@ -658,6 +543,121 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🖥️ Homepage：美化你的NAS主页，一页掌控所有服务！</title>
+    <url>/post/25/</url>
+    <content><![CDATA[<h2><span id="前言告别杂乱主页一页掌控所有服务">前言：告别杂乱主页，一页掌控所有服务！</span></h2><p>哈喽大家好！</p>
+<p>你是不是也和我一样，在 NAS 上部署了一大堆应用和服务，每次要用的时候都要一个个输入 IP 地址和端口号，既麻烦又容易忘记？今天，我将为大家介绍一个神器——<strong>Homepage</strong>！这是一个开源、美观且功能强大的 NAS 导航页面。</p>
+<p>本篇教程，我将手把手教你如何零基础在飞牛 NAS 上部署 Homepage。更重要的是，我将为你提供一份我精心配置好的模板文件，你只需要简单替换 IP 地址和密码，就能立刻拥有一个高颜值、功能齐全的专属导航页，实现一键管理你的所有服务！</p>
+<p>无论你是 HomeLab 爱好者还是 NAS 新手，跟着这篇教程，都能轻松搞定，让你的 NAS 管理变得井井有条，高效又美观。</p>
+<h3><span id="相关文件下载">相关文件下载</span></h3><ul>
+<li><a href="https://wwwz.lanzout.com/isPPl32lgskb">下载地址</a></li>
+<li>Homepage官网：<a href="https://gethomepage.dev/">https://gethomepage.dev/</a></li>
+<li>MD5 在线加密网站：<a href="https://www.md5hashgenerator.com/">https://www.md5hashgenerator.com/</a></li>
+<li>经纬度查询网站：<a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a></li>
+</ul>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/ZLqTxW1QDQs?si=td4GvgPI4aR6iCxZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="核心操作homepage-docker-compose-部署与配置">🎬 核心操作：Homepage Docker Compose 部署与配置</span></h2><h3><span id="第一步homepage-的-docker-compose-部署">第一步：Homepage 的 Docker Compose 部署</span></h3><p>Homepage 的部署非常简单，我们将使用 Docker Compose 来完成。</p>
+<h4><span id="1-创建文件夹">1. 创建文件夹</span></h4><p>首先，登录你的飞牛 NAS，进入文件管理界面。在合适的位置新建一个文件夹，我习惯在 <code>docker</code> 文件夹内统一管理，所以在这里新建一个名为 <strong><code>homepage</code></strong> 的文件夹。</p>
+<p>为了存放 Homepage 的配置文件，实现数据持久化，请在 <code>homepage</code> 文件夹内，再新建一个名为 <strong><code>config</code></strong> 的子文件夹。</p>
+<h4><span id="2-部署-docker-compose">2. 部署 Docker Compose</span></h4><p>文件夹创建完成后，打开 Docker，进入 <strong>“Compose”</strong> 界面。点击 <strong>“创建 Compose”</strong>，并进行以下设置：</p>
+<ul>
+<li><strong>项目名称：</strong> 填写 <code>homepage</code>。</li>
+<li><strong>项目路径：</strong> 选择我们刚才创建的 <code>/homepage</code> 文件夹。</li>
+</ul>
+<p>将以下 Docker Compose 代码粘贴到编辑框中。<strong>请注意，你需要根据自己的实际情况进行修改。</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">homepage:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ghcr.io/gethomepage/homepage:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">homepage</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">3000</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/vol1/1000/homepage/config:/app/config</span> <span class="comment"># 挂载你的配置文件目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/var/run/docker.sock:/var/run/docker.sock:ro</span> <span class="comment"># 允许Homepage监控Docker服务</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="comment"># 请根据你NAS上拥有该目录权限的用户的UID和GID进行替换</span></span><br><span class="line">      <span class="attr">PUID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">PGID:</span> <span class="number">1000</span></span><br><span class="line">      <span class="attr">TZ:</span> <span class="string">Asia/Shanghai</span> <span class="comment"># 设置你的时区</span></span><br><span class="line">      <span class="comment"># 允许来自NAS本身IP和访问你Homepage的IP的请求</span></span><br><span class="line">      <span class="attr">HOMEPAGE_ALLOWED_HOSTS:</span> <span class="number">10.0</span><span class="number">.0</span><span class="number">.134</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>代码修改说明：</strong></p>
+<ol>
+<li><strong>路径挂载 (<code>- volumes</code>)：</strong> 将 <code>/path/to/your/homepage/config</code> 替换为你刚刚创建的 <code>config</code> 文件夹的<strong>绝对路径</strong>。最简单的方法是，回到飞牛文件管理，右键点击 <code>config</code> 文件夹，选择 <strong>“复制原始路径”</strong>，然后粘贴到这里。</li>
+<li><strong>端口映射 (<code>- ports</code>)：</strong> 如果你的 <code>3000</code> 端口已被占用，请将 <code>3000</code> 修改为其他可用端口，但后面的 <code>:3000</code> 保持不变。</li>
+</ol>
+<p>修改完成后，点击 <strong>“确定”</strong>。飞牛 NAS 会自动下载镜像并部署 Homepage。等待部署完成，Homepage 服务就启动了！</p>
+<hr>
+<h3><span id="第二步核心配置文件详解与修改">第二步：核心配置文件详解与修改</span></h3><p>Homepage 部署成功后，默认页面非常基础。我们需要修改配置文件，让它变得强大起来。</p>
+<h4><span id="1-访问配置文件目录">1. 访问配置文件目录</span></h4><p>由于在飞牛的文件管理中不能直接编辑 <code>.yaml</code> 文件，我们使用 <strong>Windows 的网络共享</strong>功能来连接和编辑。</p>
+<ul>
+<li>打开 Windows 电脑，在文件资源管理器的地址栏输入 <code>\\你的NAS_IP地址</code>。</li>
+<li>输入飞牛的用户名和密码，连接成功后，进入我们刚才创建的 <code>/homepage/config</code> 文件夹。</li>
+</ul>
+<p>你会看到里面有四个核心的 <code>.yaml</code> 文件，它们是 Homepage 的大脑：</p>
+<ul>
+<li><strong><code>settings.yaml</code>：</strong> 负责全局设置，如主题、布局、语言、壁纸等。</li>
+<li><strong><code>services.yaml</code>：</strong> 核心文件，负责监控和展示你添加的 Docker 项目和服务。</li>
+<li><strong><code>widgets.yaml</code>：</strong> 用于添加小组件，如天气、日历、系统信息等。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 负责管理页面上显示的书签链接。</li>
+</ul>
+<h4><span id="2-批量替换配置文件推荐">2. 批量替换配置文件（推荐）</span></h4><p>为了节省大家的时间，我已经为大家准备好了一份<strong>精心配置好的模板文件</strong>。你可以通过视频简介中的链接下载，然后用这四个文件<strong>替换</strong>掉 <code>config</code> 文件夹中的默认文件。</p>
+<hr>
+<h3><span id="第三步解决配置错误实现深度定制">第三步：解决配置错误，实现深度定制</span></h3><p>替换完成后，你可能会发现很多服务都显示 <strong>“API 错误”</strong>。这是因为默认配置中的 IP 地址、端口和密码都不是你的。下面我们就来逐一修改，解决这些错误。</p>
+<h4><span id="1-修改-servicesyaml">1. 修改 <code>services.yaml</code></span></h4><p>这是最关键的一步，负责解决大部分错误。</p>
+<ul>
+<li><strong>打开文件：</strong> 用记事本或 VS Code 等编辑器打开 <code>services.yaml</code>。</li>
+<li><strong>修改 IP 和端口：</strong> 找到你部署的各个服务（如 Jellyfin、Sonarr 等），将配置中的 <code>IP 地址</code> 和 <code>端口号</code> 修改为你自己 NAS 上的实际地址。</li>
+<li><strong>密码设置（重点）：</strong><ul>
+<li>如果某个应用需要密码，请将配置中的密码修改成你的。</li>
+<li><strong>特别注意：</strong> 如果你的应用密码是<strong>纯数字</strong>，<strong>一定要在前后加上英文引号 <code>&quot;&quot;</code></strong>，否则 Homepage 会将其识别为数字，导致始终提示密码错误。</li>
+</ul>
+</li>
+<li><strong>API Key：</strong> 对于 Jackett 这类需要 API Key 的应用，你需要进入应用本身的设置页面，复制 API Key，然后粘贴到 <code>services.yaml</code> 的相应位置。</li>
+<li><strong>MD5 Token（可选）：</strong> 对于某些音乐服务器等应用，可能需要一个 MD5 加密的 <code>token</code>。我会在视频简介中提供一个 MD5 加密网站。你只需要填入密码和自定义的盐值，生成 token 后粘贴到配置文件中即可。</li>
+</ul>
+<p>修改完成后，保存 <code>services.yaml</code> 文件，回到 Homepage 页面刷新，你会发现大部分报错都消失了！</p>
+<h4><span id="2-添加更多小部件以-jellyfin-为例">2. 添加更多小部件（以 Jellyfin 为例）</span></h4><p>Homepage 还支持显示 Jellyfin 里的资源数量、最近播放等信息。</p>
+<ul>
+<li>打开 Homepage 的官方文档，找到 Jellyfin 的小部件代码。</li>
+<li>将这段代码复制到 <code>services.yaml</code> 文件中 Jellyfin 配置项的下方。</li>
+<li><strong>注意对齐！</strong> YAML 文件的格式对空格对齐要求很高，请确保你的新代码与上方配置块对齐。</li>
+</ul>
+<p>保存后刷新页面，你就能看到 Jellyfin 的资源统计信息了。</p>
+<h4><span id="3-添加新服务以-adguard-home-为例">3. 添加新服务（以 AdGuard Home 为例）</span></h4><p>如果你想添加我的模板中没有的服务，例如 AdGuard Home，也很简单。</p>
+<ul>
+<li>复制 <code>services.yaml</code> 中一个已有的服务配置块。</li>
+<li>将其名称、IP、端口、密码等信息修改为 AdGuard Home 的。</li>
+<li>保存后刷新，如果出现 <strong>“缺少小部件”</strong> 错误，请检查 <code>label</code> 或其他配置项是否填写正确。</li>
+</ul>
+<h4><span id="4-修改-widgetsyaml-和-bookmarksyaml">4. 修改 <code>widgets.yaml</code> 和 <code>bookmarks.yaml</code></span></h4><ul>
+<li><strong><code>widgets.yaml</code>：</strong> 用于配置天气、日期、CPU 监控等小组件。你可以通过查询你所在地的经纬度，并填入配置文件中，就能显示你本地的天气了。经纬度查询网站我也会放在视频简介中。</li>
+<li><strong><code>bookmarks.yaml</code>：</strong> 这是书签的配置文件。你可以直接在我提供的模板基础上，自由增删和修改你常用的书签链接。</li>
+</ul>
+<h3><span id="总结你的专属仪表盘大功告成">总结：你的专属仪表盘，大功告成！</span></h3><p>经过这些配置，一个高颜值、功能强大的 Homepage 就完美呈现在你眼前了。是不是感觉整个 NAS 生态都变得井井有条了？</p>
+<hr>
+<h2><span id="温馨提示与常见问题">💡 温馨提示与常见问题</span></h2><ul>
+<li><strong>密码引号：</strong> 再次强调，纯数字密码一定要加引号，否则配置会失败。</li>
+<li><strong>YAML 格式：</strong> YAML 文件对空格对齐非常敏感，任何对齐错误都会导致配置失败。建议使用专业的编辑器，或仔细检查对齐。</li>
+<li><strong>IP 地址：</strong> 所有 IP 地址都应该是你的 NAS 在本地局域网的 IP。</li>
+<li><strong>外网访问：</strong> Homepage 默认只能在你的局域网内访问。如果需要外网访问，你可以参考我之前关于 <strong>Tailscale</strong> 等内网穿透工具的教程。</li>
+</ul>
+<p>希望这篇教程能帮助你打造出理想的个人导航中心。如果你在部署或配置过程中遇到任何问题，欢迎在评论区留言或加入我的<a href="https://t.me/Eric_FanGroup">电报群组</a>，我们一起交流探讨。</p>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+        <tag>NAS</tag>
       </tags>
   </entry>
   <entry>
@@ -1437,6 +1437,78 @@
       </tags>
   </entry>
   <entry>
+    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
+    <url>/post/8/</url>
+    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
+<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
+<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
+<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
+<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
+<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
+</ul>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
+<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
+<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
+<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
+<hr>
+<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
+<hr>
+<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
+<li>ZyPlayer</li>
+<li>开源播放器</li>
+<li>影视资源</li>
+<li>免费追剧</li>
+<li>在线看剧</li>
+<li>视频播放器</li>
+<li>聚合搜索</li>
+<li>追番神器</li>
+<li>软件推荐</li>
+<li>使用教程</li>
+</ul>
+<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
+<li>ZyPlayer 聚合全网影视资源教程</li>
+<li>ZyPlayer 免费在线看剧追番方法</li>
+<li>ZyPlayer 播放器免费追剧神器推荐</li>
+<li>ZyPlayer 安装设置详细步骤</li>
+<li>ZyPlayer 资源搜索高级技巧</li>
+<li>ZyPlayer 倍速播放字幕选择教程</li>
+<li>ZyPlayer 聚合播放器使用测评</li>
+<li>ZyPlayer 开源播放器安装指南</li>
+<li>ZyPlayer 免费影视资源搜索技巧</li>
+<li>ZyPlayer 播放器画质调节教程</li>
+</ul>
+<hr>
+<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
+<pre><code>
+</code></pre>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Typecho 手动部署详细教程</title>
     <url>/post/27/</url>
     <content><![CDATA[<h2><span id="typecho-手动部署详细教程">Typecho 手动部署详细教程</span></h2><p>本教程将指导你如何在基于 Ubuntu 的 Linux 服务器（如 Mint 桌面版、Ubuntu VPS 等）上，手动安装 Nginx、PHP 和 MariaDB 环境，并部署 Typecho 博客系统。</p>
@@ -1524,78 +1596,6 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ZyPlayer：免费追剧神器，聚合全网影视资源！</title>
-    <url>/post/8/</url>
-    <content><![CDATA[<p>大家好！今天给大家推荐一款强大的开源播放器——<strong>ZyPlayer</strong>。它不仅聚合了全网的影视资源，还支持免费在线观看，让你告别会员烦恼！</p>
-<h2><span id="zyplayer-的优势"><strong>ZyPlayer 的优势</strong></span></h2><ul>
-<li><strong>免费追剧：</strong> 无需会员，畅享海量影视资源。</li>
-<li><strong>聚合搜索：</strong> 一键搜索全网资源，方便快捷。</li>
-<li><strong>开源播放器：</strong> 纯净无广告，安全可靠。</li>
-<li><strong>资源丰富：</strong> 电影、电视剧、动漫、综艺，应有尽有。</li>
-</ul>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/YT_v2TuuuoI?si=uV0WwTR6zw5oN6xM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="zyplayer-使用教程"><strong>ZyPlayer 使用教程</strong></span></h2><p>1.  <strong>安装 ZyPlayer：</strong> 前往 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装包。<br>2.  <strong>设置 ZyPlayer：</strong> 根据提示完成安装和基本设置。<br><img src="/images/202504/a66c1743471131.png"></p>
-<p>3.  <strong>搜索资源：</strong> 在搜索框输入关键词，查找想看的影视内容。<br><img src="/images/202504/2a2d1743471178.png"></p>
-<p>4.  <strong>开始播放：</strong> 选择合适的资源，即可免费在线观看。<br><img src="/images/202504/cfb61743471238.png"></p>
-<h2><span id="zyplayer-源地址"><strong>ZyPlayer 源地址</strong></span></h2><p>直播源：<code>https://ztha.top/TVBox/thdjk.json</code><br>本地源：<a href="https://317520.xyz/?resource_alias=htAyNdZbQKfQWJky">Eric</a></p>
-<hr>
-<h2><span id="总结"><strong>总结</strong></span></h2><p><strong>ZyPlayer</strong> 是一款功能强大的<strong>开源播放器</strong>，它聚合了全网的<strong>影视资源</strong>，支持<strong>免费追剧</strong>，是<strong>在线看剧</strong>的绝佳选择。无论你是<strong>追番神器</strong>爱好者，还是电影发烧友，都能在 <strong>ZyPlayer</strong> 找到属于自己的快乐！</p>
-<hr>
-<h2><span id="相关关键词"><strong>相关关键词</strong></span></h2><ul>
-<li>ZyPlayer</li>
-<li>开源播放器</li>
-<li>影视资源</li>
-<li>免费追剧</li>
-<li>在线看剧</li>
-<li>视频播放器</li>
-<li>聚合搜索</li>
-<li>追番神器</li>
-<li>软件推荐</li>
-<li>使用教程</li>
-</ul>
-<h2><span id="相关长尾词"><strong>相关长尾词</strong></span></h2><ul>
-<li>ZyPlayer 聚合全网影视资源教程</li>
-<li>ZyPlayer 免费在线看剧追番方法</li>
-<li>ZyPlayer 播放器免费追剧神器推荐</li>
-<li>ZyPlayer 安装设置详细步骤</li>
-<li>ZyPlayer 资源搜索高级技巧</li>
-<li>ZyPlayer 倍速播放字幕选择教程</li>
-<li>ZyPlayer 聚合播放器使用测评</li>
-<li>ZyPlayer 开源播放器安装指南</li>
-<li>ZyPlayer 免费影视资源搜索技巧</li>
-<li>ZyPlayer 播放器画质调节教程</li>
-</ul>
-<hr>
-<p>如果你想体验 <strong>ZyPlayer</strong> 的强大功能，请点击 <a href="https://github.com/Hiram-Wong/ZyPlayer/releases">ZyPlayer GitHub 页面</a> 下载安装！如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-<p>别忘了点赞、订阅我的频道，我会持续为大家分享更多实用软件和使用技巧！感谢大家的观看，我们下期再见！</p>
-<pre><code>
-</code></pre>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -1734,87 +1734,6 @@
 </ul>
 <p>如果大家在操作过程中有其他疑问，欢迎在评论区留言交流，也可以分享你的折腾经验。觉得本文有用的话，别忘了点赞收藏，让更多需要的朋友看到！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
-    <url>/post/7/</url>
-    <content><![CDATA[<p><strong>目录</strong></p>
-<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
-<hr>
-<style>
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 比例 */
-    height: 0;
-    overflow: hidden;
-  }
-  .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
-
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div>
-
-<hr>
-<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
-<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
-<p><code>iptv-api</code> 的核心优势在于：</p>
-<ul>
-<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
-<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
-<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
-<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
-</ul>
-<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
-<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
-<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
-<p><img src="/images/202503/4a471742993634.png"></p>
-<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
-<p><img src="/images/202503/fb5c1742993645.png"></p>
-<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
-<ul>
-<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
-</ul>
-<p><img src="/images/202503/10fb1742993656.png"></p>
-<ul>
-<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
-</li>
-<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
-</li>
-</ul>
-<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
-
-<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
-<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
-<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
-<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
-<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
-<ul>
-<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
-<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
-<li>点击“确定”即可播放。</li>
-</ul>
-<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
-<ul>
-<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
-<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
-<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
-</ul>
-<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
-<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>教程</tag>
-        <tag>Docker</tag>
-      </tags>
   </entry>
   <entry>
     <title>🚀 告别 TVBox 卡顿，打造你的专属影库</title>
@@ -2209,6 +2128,87 @@
       </tags>
   </entry>
   <entry>
+    <title>在 CasaOS 上轻松部署 IPTV 服务：一步到位指南</title>
+    <url>/post/7/</url>
+    <content><![CDATA[<p><strong>目录</strong></p>
+<p>1.  引言：告别复杂，拥抱便捷 IPTV<br>2.  准备工作：了解 <code>iptv-api</code><br>3.  逐步指南：在 CasaOS 中部署 IPTV<br>    3.1. 登录 CasaOS 并打开应用商店<br>    3.2. 搜索并选择 Docker 部署<br>    3.3. 配置 Docker 容器<br>    3.4. 查看端口占用情况<br>    3.5. 部署 Docker 容器<br>4.  验证与访问：享受您的 IPTV 服务<br>    4.1. 浏览器访问<br>    4.2. 在 PotPlayer 中使用<br>    4.3. 在 Kodi 中使用<br>5.  总结：开启您的个性化 IPTV 体验</p>
+<hr>
+<style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/PnfFcSvnhlo?si=jwp0r0avICvKAFm0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+<hr>
+<h2><span id="1-引言告别复杂拥抱便捷-iptv">1. 引言：告别复杂，拥抱便捷 IPTV</span></h2><p>您是否厌倦了在不同的设备上寻找和管理您的 IPTV 频道？是否渴望拥有一个更方便、更个性化的 IPTV 体验？今天，我们将带您了解如何在您的家庭服务器 CasaOS 上轻松搭建 IPTV 服务，告别繁琐，拥抱便捷！</p>
+<h2><span id="2-准备工作了解-iptv-api">2. 准备工作：了解 <code>iptv-api</code></span></h2><p>为了实现我们的目标，我们将使用一个非常棒的开源项目——<code>iptv-api</code>。这是一个 GitHub 上的项目，地址是 <a href="https://github.com/Guovin/iptv-api">https://github.com/Guovin/iptv-api</a>。</p>
+<p><code>iptv-api</code> 的核心优势在于：</p>
+<ul>
+<li><strong>免费开源：</strong> 您可以自由使用和定制。</li>
+<li><strong>简单易用：</strong> 提供便捷的接口来管理 IPTV 频道。</li>
+<li><strong>自动更新直播源：</strong> 无需手动维护，让您专注于享受。</li>
+<li><strong>支持多种 IPTV 格式：</strong> 兼容性广泛。</li>
+</ul>
+<p>可以说，<code>iptv-api</code> 是您在 CasaOS 上搭建 IPTV 服务的一个理想选择。</p>
+<h2><span id="3-逐步指南在-casaos-中部署-iptv">3. 逐步指南：在 CasaOS 中部署 IPTV</span></h2><p>接下来，让我们一步步地在您的 CasaOS 系统中部署 <code>iptv-api</code>。</p>
+<h3><span id="31-登录-casaos-并打开应用商店">3.1. 登录 CasaOS 并打开应用商店</span></h3><p>首先，请登录到您的 CasaOS 界面。然后，点击应用商店图标。</p>
+<p><img src="/images/202503/4a471742993634.png"></p>
+<h3><span id="32-搜索并选择-docker-部署">3.2. 搜索并选择 Docker 部署</span></h3><p>在应用商店中，使用右上角的“自定义安装”。</p>
+<p><img src="/images/202503/fb5c1742993645.png"></p>
+<h3><span id="33-配置-docker-容器">3.3. 配置 Docker 容器</span></h3><p>在 Docker 部署界面，我们需要配置容器的参数。</p>
+<ul>
+<li><strong>镜像名称：</strong> 在“镜像名称”或“Docker 镜像”字段中，输入 <code>guovin/iptv-api:latest</code>。请务必在部署前再次确认 GitHub 项目的 Docker Hub 镜像信息，以确保使用最新的稳定版本。</li>
+</ul>
+<p><img src="/images/202503/10fb1742993656.png"></p>
+<ul>
+<li><p><strong>端口映射：</strong> 这是关键的一步。我们需要将容器内部的 <code>iptv-api</code> 服务暴露到您的局域网中。在“端口”设置中，配置“主机端口”和“容器端口”。建议您设置一个方便记忆的主机端口，例如 <code>8000</code>，容器端口通常是 <code>8080</code> (请参考 <code>iptv-api</code> 的文档确认)。</p>
+</li>
+<li><p><strong>环境变量 (可选)：</strong> 您可以根据 <code>iptv-api</code> 项目的 GitHub 文档，配置一些环境变量，例如设置 API 的访问密码。</p>
+</li>
+</ul>
+<h3><span id="34-查看端口占用情况">3.4. 查看端口占用情况</span></h3><p>在设置主机端口之前，为了避免冲突，强烈建议您检查该端口是否已被其他程序占用。您可以在终端中运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> netstat -tulnp | grep &lt;端口号&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;端口号&gt;</code> 替换为您想要使用的主机端口号（例如 <code>8000</code>）。如果没有输出，则说明该端口可用。</p>
+<h3><span id="35-部署-docker-容器">3.5. 部署 Docker 容器</span></h3><p>完成以上配置后，点击“部署”或者“运行”按钮，让 Docker 开始下载并运行 <code>iptv-api</code>。</p>
+<h2><span id="4-验证与访问享受您的-iptv-服务">4. 验证与访问：享受您的 IPTV 服务</span></h2><p>部署完成后，让我们来验证并开始使用您的 IPTV 服务。</p>
+<h3><span id="41-浏览器访问">4.1. 浏览器访问</span></h3><p>您可以在 CasaOS 的应用列表中找到我们刚刚部署的 <code>iptv-api</code> 容器。点击它，或者直接在浏览器中输入您的 CasaOS 服务器的 IP 地址，加上您映射的主机端口号，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/txt</code>。当出现下面的画面就证明可以使用了。</p>
+<h3><span id="42-在-potplayer-中使用">4.2. 在 PotPlayer 中使用</span></h3><p>接下来，让我们演示如何在 PotPlayer 中使用这个 IPTV 服务。</p>
+<ul>
+<li>打开 PotPlayer，选择“打开”或“打开网址”。</li>
+<li>输入 IPTV 源地址，例如：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code> (请参考 <code>iptv-api</code> 文档获取确切地址)。</li>
+<li>点击“确定”即可播放。</li>
+</ul>
+<h3><span id="43-在-kodi-中使用">4.3. 在 Kodi 中使用</span></h3><p>最后，我们来看看如何在 Kodi 中使用。</p>
+<ul>
+<li>打开 Kodi，进入“电视”或“Live TV”部分。</li>
+<li>配置 PVR IPTV Simple Client，输入 M3U 播放列表 URL：<code>http://&lt;您的 CasaOS IP 地址&gt;:8000/api/m3u</code>。</li>
+<li>启用 PVR 客户端，您就可以在 Kodi 中观看 IPTV 了。</li>
+</ul>
+<h2><span id="5-总结开启您的个性化-iptv-体验">5. 总结：开启您的个性化 IPTV 体验</span></h2><p>恭喜您！您已经成功在 CasaOS 上部署了 <code>iptv-api</code>，并搭建了自己的 IPTV 服务。您可以享受自动更新的便捷，告别手动维护的烦恼。</p>
+<p>希望这篇指南对您有所帮助！如果您喜欢这个内容，欢迎在您的博客上分享，并留下您的评论。祝您使用愉快！</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>教程</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>摆脱公网IP限制！手把手教你获取免费域名，用Cloudflare给飞牛NAS做DDNS</title>
     <url>/post/30/</url>
     <content><![CDATA[<p>对于NAS玩家来说，实现外网访问是刚需，但获取公网IP却越来越难。不过，只要你拥有一个<strong>IPv6地址</strong>，这个问题就能迎刃而解！今天，我们将分享一个绝妙的方案：<strong>获取一个免费域名，并利用Cloudflare的DDNS服务，实现随时随地访问家里的飞牛NAS</strong>。</p>
@@ -2306,6 +2306,42 @@
       <tags>
         <tag>教程</tag>
         <tag>NAS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
+    <url>/post/9/</url>
+    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
+<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
+<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
+<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
+<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
+<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
+<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
+</ul>
+<hr>
+<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
+<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
+<ol>
+<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
+</li>
+<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
+</li>
+<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
+</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
+<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
+<li>在网易云复制主页地址</li>
+<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
+<li>粘贴链接并选择</li>
+</ol>
+<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
+<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
+<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
+]]></content>
+      <tags>
+        <tag>软件分享</tag>
       </tags>
   </entry>
   <entry>
@@ -2481,64 +2517,6 @@
       </tags>
   </entry>
   <entry>
-    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
-    <url>/post/14/</url>
-    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
-<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
-<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
-<hr>
-<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
-<hr>
-<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
-<hr>
-<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
-<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
-<hr>
-<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
-<hr>
-<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
-<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
-<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
-<p>祝您网络畅游愉快，影音娱乐无忧！</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>🎵 方格音乐深度测评：免费无损下载+网易云歌单导入全攻略</title>
-    <url>/post/9/</url>
-    <content><![CDATA[<p><a href="https://imgse.com/i/pEcbF61"><img src="https://s21.ax1x.com/2025/04/07/pEcbF61.png" alt="pEcbF61.png"></a></p>
-<h2><span id="软件核心亮点2024音乐爱好者必备">🔥 软件核心亮点（2024音乐爱好者必备）</span></h2><ul>
-<li><strong>全平台免费音乐库</strong> - 覆盖流行&#x2F;古典&#x2F;摇滚&#x2F;电子等超20种曲风流派</li>
-<li><strong>无损音质下载</strong> - 支持FLAC&#x2F;WAV格式（单曲可达32M）</li>
-<li><strong>智能频谱可视化</strong> - 7种动态频谱样式+桌面歌词黑科技</li>
-<li><strong>跨平台歌单迁移</strong> - 独家网易云音乐歌单导入功能</li>
-<li><strong>本地音乐管家</strong> - 专辑级文件夹管理+智能标签写入</li>
-</ul>
-<hr>
-<h2><span id="️-手把手教学从安装到高阶玩法">🛠️ 手把手教学：从安装到高阶玩法</span></h2><h3><span id="极速安装指南附官方安全下载通道">📥 极速安装指南（附官方安全下载通道）</span></h3><p><a href="http://fonger.top/">官方下载渠道</a></p>
-<h3><span id="个性化设置优化提升使用体验200">🎨 个性化设置优化（提升使用体验200%）</span></h3><p><a href="https://imgse.com/i/pEcb8nP"><img src="https://s21.ax1x.com/2025/04/07/pEcb8nP.png" alt="pEcb8nP.png"></a></p>
-<ol>
-<li><p><strong>音质设置</strong>  <br>   - 在线播放：选择「无损优先」模式<br>   - 默认下载：勾选「FLAC高清」选项</p>
-</li>
-<li><p><strong>视觉增强</strong>  <br>   - 频谱样式 → 霓虹脉冲模式<br>   - 歌词背景 → 动态模糊效果</p>
-</li>
-<li><p><strong>智能标签</strong>  <br>   ✅ 启用「自动写入封面元数据」  <br>   ✅ 开启「歌词内嵌到音频文件」</p>
-</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbw1s"><img src="https://s21.ax1x.com/2025/04/07/pEcbw1s.png" alt="pEcbw1s.png"></a></p>
-<h3><span id="独家技巧3步导入网易云音乐歌单">⚡ 独家技巧：3步导入网易云音乐歌单</span></h3><ol>
-<li>在网易云复制主页地址</li>
-<li>打开方格音乐 → 收藏 →「导入歌单」功能</li>
-<li>粘贴链接并选择</li>
-</ol>
-<p><a href="https://imgse.com/i/pEcbgNF"><img src="https://s21.ax1x.com/2025/04/07/pEcbgNF.png" alt="pEcbgNF.png"></a></p>
-<p>总而言之，<strong>方格音乐</strong> 是一款功能强大的<strong>免费音乐下载</strong>软件，拥有海量资源、免费听歌和<strong>无损下载</strong>等实用功能。如果你是音乐爱好者，它绝对值得一试！</p>
-<p>如果你在使用过程中遇到任何问题，或者有其他想要了解的软件，欢迎在评论区留言。</p>
-]]></content>
-      <tags>
-        <tag>软件分享</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>解决 Docker 部署 qBittorrent 后 WebUI Unauthorized 问题</title>
     <url>/post/52/</url>
     <content><![CDATA[<h2><span id="前言">前言</span></h2><p>在使用 <strong>Docker 部署 qBittorrent</strong> 的时候，有些朋友会遇到一个常见问题：<br>打开 WebUI 页面时，浏览器提示 <strong>“Unauthorized”</strong>，无法输入账号密码进入管理界面。  </p>
@@ -2596,6 +2574,28 @@
         <tag>教程</tag>
         <tag>Docker</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>机场推荐：五一福利来袭，高速稳定送Emby！</title>
+    <url>/post/14/</url>
+    <content><![CDATA[<p>哈喽各位小伙伴们！今天我要给大家安利一款我一直在使用，并且表现非常给力的机场服务！相信一些老朋友应该还记得我之前也推荐过。这次，他们带着满满的诚意和福利再次来袭！不仅有五一劳动节限时优惠，还为大家准备了一份额外的惊喜——购买包月套餐即可免费获得 Emby 的影视库账号！这绝对是网络畅游和影音娱乐的双重福利！</p>
+<p>⚡️ 稳定、快速、多线路，更有稀有冷门选择！<br>这家机场最让我满意的一点就是其稳定性！连接几乎不会掉线，让你无论是工作、学习还是娱乐都能安心畅游网络。其次就是速度！无论是浏览网页、观看高清视频还是下载大型文件，都能感受到如同本地网络般的流畅体验。</p>
+<p>更值得称赞的是，他们家的线路非常丰富，覆盖了全球多个地区。除了常见的欧美、日韩等热门线路外，还提供了许多冷门国家的线路选择！这对于有特殊网络需求，例如需要访问特定地区资源的朋友来说，简直是雪中送炭！</p>
+<hr>
+<p>🎉 五一限时优惠，不容错过！<br>现在是重点福利时间！为了庆祝五一劳动节，这家机场特别推出了限时优惠活动！具体有哪些优惠呢？<br><img src="/images/20250501/84731746453767.png"><br>大家千万不要错过这个难得的优惠机会，活动时间有限，抓紧上车，畅享高速稳定的网络体验！</p>
+<hr>
+<p>🎁 超值福利！包月即赠 Emby 影视库账号！<br>除了五一优惠，这家机场还为大家准备了一个超级给力的福利！现在，只要你购买任意包月套餐，就能免费获得 Emby 的影视库账号！ 这意味着你将拥有一个海量的个人高清影音库，涵盖了各种电影、电视剧、动漫等资源！无需自己费心搜集，就能轻松享受高品质的视听盛宴！这绝对是物超所值的福利！<br><img src="/images/20250501/66481746453821.png"></p>
+<hr>
+<p>🔗 如何参与福利？<br>想要体验高速稳定的网络和海量免费影视资源吗？点击下方链接了解更多并参与活动吧！</p>
+<p>机场官方网站&#x2F;购买链接： <a href="https://st.317520.xyz/y0u3k">https://st.317520.xyz/y0u3k</a></p>
+<hr>
+<p>✨ 总结<br>无论你是追求稳定快速的网络体验，需要访问特定地区的网络资源，还是想拥有一个海量高清影视库，这家机场都能满足你的需求！趁着这次难得的五一优惠和免费赠送 Emby 影视库的活动，赶紧入手体验一下吧！</p>
+<hr>
+<p>关键词： 稳定机场, 快速机场, 多线路机场, 冷门线路, 五一优惠, 机场推荐, Emby影视库, 免费Emby, 科学上网, 高速梯子, 稳定梯子</p>
+<p>标签： 稳定快速不掉线机场, 冷门国家线路VPN, 五一机场优惠, 购买VPN送Emby, 好用的科学上网工具, 高速稳定多线路代理</p>
+<p>感谢阅读！如果你觉得这篇文章对你有帮助，别忘了分享给你的朋友们！如果你在使用过程中有任何疑问，欢迎在下方评论区留言交流。</p>
+<p>祝您网络畅游愉快，影音娱乐无忧！</p>
+]]></content>
   </entry>
   <entry>
     <title>🚀 飞牛OS：部署 V2RayA 解决 Jellyseerr 500 &amp; Jackett 连接难题</title>
@@ -2757,6 +2757,62 @@
 ]]></content>
   </entry>
   <entry>
+    <title>🚀 告别 Portainer！Docker Copilot 图形化管理工具：实现容器一键更新与备份</title>
+    <url>/post/61/</url>
+    <content><![CDATA[<p><strong>Docker Copilot</strong> <a href="https://github.com/onlyLTY/dockerCopilot">项目地址</a></p>
+<h2><span id="前言新手友好轻松管理和更新-docker-容器">前言：新手友好，轻松管理和更新 Docker 容器</span></h2><p>哈喽大家好！</p>
+<p>你是否觉得 Portainer 界面复杂，或者厌倦了每次都要敲命令行来更新 Docker 容器？今天，我将为大家分享一个宝藏级的图形化 Docker 管理工具——<strong>Docker Copilot</strong>！</p>
+<p>它界面简洁直观，<strong>非常适合新手</strong>，最重要的是，它支持<strong>一键更新容器</strong>和<strong>一键备份</strong>！无论是飞牛系统用户还是其他 NAS 用户（如群晖、威联通等），都能轻松部署和使用。</p>
+<hr>
+<h2><span id="部署教程两种方式任你选">🎬 部署教程：两种方式任你选</span></h2><h3><span id="方式一飞牛应用商店安装最便捷">方式一：飞牛应用商店安装（最便捷）</span></h3><p>如果你是飞牛系统用户，这是最简单的方式：</p>
+<ol>
+<li>打开飞牛系统的 <strong>应用中心</strong>。</li>
+<li>搜索找到 <strong>“Docker Copilot”</strong>。</li>
+<li>点击安装，并根据提示设置你的登录密码。</li>
+</ol>
+<p><strong>(注：应用商店版本可能不是最新，如果追求最新版或使用其他 NAS，请看方式二。)</strong></p>
+<h3><span id="方式二docker-compose-通用部署通用且最新">方式二：Docker Compose 通用部署（通用且最新）</span></h3><p>这种方式适用于所有 NAS 系统，且能保证你部署的是最新版本。</p>
+<ol>
+<li><strong>创建项目目录</strong>：在你的 NAS 上，创建一个新的项目文件夹，例如命名为 <code>docker-copilot</code>。</li>
+<li><strong>获取 Compose 文件</strong>：前往 Docker Copilot 的 GitHub 主页，获取官方提供的 <code>docker-compose.yaml</code> 文件内容。</li>
+<li><strong>新增 Compose 项目</strong>：<ul>
+<li>打开 Docker，选择 <strong><code>Compose</code></strong>，点击 <strong>“新增项目”</strong>。</li>
+<li>填写项目名称，路径选择你创建的 <code>docker-copilot</code> 目录。</li>
+</ul>
+</li>
+<li><strong>粘贴并设置密码</strong>：<ul>
+<li>将 Compose 文件内容粘贴进来。</li>
+<li><strong>关键步骤</strong>：在 <strong>环境变量</strong> 部分，设置一个你自己的登录密码（通常是 <code>ADMIN_PASSWORD</code> 或类似变量），用于登录 Web 界面。</li>
+</ul>
+</li>
+<li><strong>开始构建</strong>：确认配置无误后，点击 <strong>“确定”</strong>，开始构建。部署完成后，通过 <code>你的NAS的IP地址:端口号</code> 访问 Web 界面。</li>
+</ol>
+<hr>
+<h2><span id="核心功能告别命令行图形化操作">✨ 核心功能：告别命令行，图形化操作</span></h2><p>登录 Docker Copilot 后，你会看到一个非常清爽简洁的界面，它将你的 Docker 管理工作变得异常简单。</p>
+<h3><span id="1-容器状态概览与版本更新">1. 容器状态概览与版本更新</span></h3><ul>
+<li><strong>直观列表</strong>：界面清晰地列出了系统内所有正在运行的容器。</li>
+<li><strong>版本提示</strong>：每个容器都会显示当前的镜像版本，并醒目地提示<strong>是否有最新版本可用</strong>。</li>
+<li><strong>一键批量更新</strong>：<ul>
+<li>勾选所有需要更新的容器。</li>
+<li>点击顶部的 <strong>“一键更新”</strong> 按钮。</li>
+<li>Docker Copilot 会自动完成拉取新镜像、停止旧容器、重建新容器的整个过程。</li>
+</ul>
+</li>
+<li><strong>进度跟踪</strong>：在 <strong>“进度”</strong> 页面，你可以实时查看到更新任务的详细状态，无需守在命令行前。</li>
+</ul>
+<h3><span id="2-容器配置一键备份homelab-福音">2. 容器配置一键备份（HomeLab 福音）</span></h3><ul>
+<li><strong>备份功能</strong>：在 <strong>“备份”</strong> 页面，你可以对所有容器的配置和数据进行<strong>一键备份</strong>。</li>
+<li><strong>数据安全</strong>：这对于 HomeLab 玩家来说非常重要，即使系统发生故障，你也能快速恢复容器配置，避免配置丢失。</li>
+</ul>
+<h2><span id="总结为什么选择-docker-copilot">总结：为什么选择 Docker Copilot？</span></h2><p>Docker Copilot 是一款真正从用户体验出发的 Docker 管理工具。</p>
+<ul>
+<li><strong>新手友好</strong>：界面简洁，功能聚焦，比 Portainer 更容易上手。</li>
+<li><strong>效率至上</strong>：支持容器的批量更新和一键备份，大大节省了日常维护时间。</li>
+</ul>
+<p>如果你正在寻找一个简单、直观、高效的 Docker 管理工具，那么 Docker Copilot 绝对值得你尝试。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>🚀 Docker 自动化更新神器 Watchtower：一键设置，永久告别手动维护！</title>
     <url>/post/63/</url>
     <content><![CDATA[<h2><span id="前言解放双手实现容器维护自动化">前言：解放双手，实现容器维护自动化</span></h2><p>哈喽大家好！</p>
@@ -2816,122 +2872,6 @@
 <p>从今天起，彻底告别手动更新的烦恼吧！</p>
 <p>感谢大家的阅读。如果你在部署或使用中有任何疑问，欢迎在下方留言讨论。我们下期再见！</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>🚀 告别 Portainer！Docker Copilot 图形化管理工具：实现容器一键更新与备份</title>
-    <url>/post/61/</url>
-    <content><![CDATA[<p><strong>Docker Copilot</strong> <a href="https://github.com/onlyLTY/dockerCopilot">项目地址</a></p>
-<h2><span id="前言新手友好轻松管理和更新-docker-容器">前言：新手友好，轻松管理和更新 Docker 容器</span></h2><p>哈喽大家好！</p>
-<p>你是否觉得 Portainer 界面复杂，或者厌倦了每次都要敲命令行来更新 Docker 容器？今天，我将为大家分享一个宝藏级的图形化 Docker 管理工具——<strong>Docker Copilot</strong>！</p>
-<p>它界面简洁直观，<strong>非常适合新手</strong>，最重要的是，它支持<strong>一键更新容器</strong>和<strong>一键备份</strong>！无论是飞牛系统用户还是其他 NAS 用户（如群晖、威联通等），都能轻松部署和使用。</p>
-<hr>
-<h2><span id="部署教程两种方式任你选">🎬 部署教程：两种方式任你选</span></h2><h3><span id="方式一飞牛应用商店安装最便捷">方式一：飞牛应用商店安装（最便捷）</span></h3><p>如果你是飞牛系统用户，这是最简单的方式：</p>
-<ol>
-<li>打开飞牛系统的 <strong>应用中心</strong>。</li>
-<li>搜索找到 <strong>“Docker Copilot”</strong>。</li>
-<li>点击安装，并根据提示设置你的登录密码。</li>
-</ol>
-<p><strong>(注：应用商店版本可能不是最新，如果追求最新版或使用其他 NAS，请看方式二。)</strong></p>
-<h3><span id="方式二docker-compose-通用部署通用且最新">方式二：Docker Compose 通用部署（通用且最新）</span></h3><p>这种方式适用于所有 NAS 系统，且能保证你部署的是最新版本。</p>
-<ol>
-<li><strong>创建项目目录</strong>：在你的 NAS 上，创建一个新的项目文件夹，例如命名为 <code>docker-copilot</code>。</li>
-<li><strong>获取 Compose 文件</strong>：前往 Docker Copilot 的 GitHub 主页，获取官方提供的 <code>docker-compose.yaml</code> 文件内容。</li>
-<li><strong>新增 Compose 项目</strong>：<ul>
-<li>打开 Docker，选择 <strong><code>Compose</code></strong>，点击 <strong>“新增项目”</strong>。</li>
-<li>填写项目名称，路径选择你创建的 <code>docker-copilot</code> 目录。</li>
-</ul>
-</li>
-<li><strong>粘贴并设置密码</strong>：<ul>
-<li>将 Compose 文件内容粘贴进来。</li>
-<li><strong>关键步骤</strong>：在 <strong>环境变量</strong> 部分，设置一个你自己的登录密码（通常是 <code>ADMIN_PASSWORD</code> 或类似变量），用于登录 Web 界面。</li>
-</ul>
-</li>
-<li><strong>开始构建</strong>：确认配置无误后，点击 <strong>“确定”</strong>，开始构建。部署完成后，通过 <code>你的NAS的IP地址:端口号</code> 访问 Web 界面。</li>
-</ol>
-<hr>
-<h2><span id="核心功能告别命令行图形化操作">✨ 核心功能：告别命令行，图形化操作</span></h2><p>登录 Docker Copilot 后，你会看到一个非常清爽简洁的界面，它将你的 Docker 管理工作变得异常简单。</p>
-<h3><span id="1-容器状态概览与版本更新">1. 容器状态概览与版本更新</span></h3><ul>
-<li><strong>直观列表</strong>：界面清晰地列出了系统内所有正在运行的容器。</li>
-<li><strong>版本提示</strong>：每个容器都会显示当前的镜像版本，并醒目地提示<strong>是否有最新版本可用</strong>。</li>
-<li><strong>一键批量更新</strong>：<ul>
-<li>勾选所有需要更新的容器。</li>
-<li>点击顶部的 <strong>“一键更新”</strong> 按钮。</li>
-<li>Docker Copilot 会自动完成拉取新镜像、停止旧容器、重建新容器的整个过程。</li>
-</ul>
-</li>
-<li><strong>进度跟踪</strong>：在 <strong>“进度”</strong> 页面，你可以实时查看到更新任务的详细状态，无需守在命令行前。</li>
-</ul>
-<h3><span id="2-容器配置一键备份homelab-福音">2. 容器配置一键备份（HomeLab 福音）</span></h3><ul>
-<li><strong>备份功能</strong>：在 <strong>“备份”</strong> 页面，你可以对所有容器的配置和数据进行<strong>一键备份</strong>。</li>
-<li><strong>数据安全</strong>：这对于 HomeLab 玩家来说非常重要，即使系统发生故障，你也能快速恢复容器配置，避免配置丢失。</li>
-</ul>
-<h2><span id="总结为什么选择-docker-copilot">总结：为什么选择 Docker Copilot？</span></h2><p>Docker Copilot 是一款真正从用户体验出发的 Docker 管理工具。</p>
-<ul>
-<li><strong>新手友好</strong>：界面简洁，功能聚焦，比 Portainer 更容易上手。</li>
-<li><strong>效率至上</strong>：支持容器的批量更新和一键备份，大大节省了日常维护时间。</li>
-</ul>
-<p>如果你正在寻找一个简单、直观、高效的 Docker 管理工具，那么 Docker Copilot 绝对值得你尝试。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>🚀 彻底告别广告！本地小说阅读项目 Docker 部署教程，书源自由掌控</title>
-    <url>/post/59/</url>
-    <content><![CDATA[<h2><span id="前言自建无广告小说库享受纯净阅读体验">前言：自建无广告小说库，享受纯净阅读体验</span></h2><p>哈喽大家好！</p>
-<p>你是否厌倦了手机阅读 App 中烦人的广告和不稳定的书源？今天，我将为大家带来一个完美的解决方案——一个支持本地部署的<strong>小说阅读项目</strong>！它界面简洁、完全无广告，书源自由导入，所有数据都由你自己掌控，非常适合注重隐私和阅读体验的 NAS 用户。</p>
-<p>本篇教程将手把手教你如何在飞牛 NAS 上通过 Docker Compose 部署和配置这个项目，实现真正的阅读自由！</p>
-<hr>
-<h2><span id="相关地址">相关地址：</span></h2><p> <a href="https://github.com/hectorqin/reader">项目地址</a><br> <a href="https://legado.aoaostar.com/">书源网站</a></p>
-<hr>
-<h2><span id="核心部署飞牛-nas-docker-compose-搭建">🎬 核心部署：飞牛 NAS Docker Compose 搭建</span></h2><h3><span id="第一步创建项目目录与-compose-文件">第一步：创建项目目录与 Compose 文件</span></h3><p>首先，我们为项目创建目录并准备 Compose 部署。</p>
-<ol>
-<li><strong>创建目录</strong>：登录你的飞牛 NAS，进入文件管理。创建一个新的文件夹，例如命名为 <strong><code>reader</code></strong>。</li>
-<li><strong>创建 Compose 项目</strong>：<ul>
-<li>打开 Docker，选择 <strong><code>Compose</code></strong>，点击 <strong>“新增项目”</strong>。</li>
-<li>填写项目名称，路径选择刚才创建的 <code>reader</code> 目录。</li>
-</ul>
-</li>
-</ol>
-<h3><span id="第二步修改并粘贴-compose-配置">第二步：修改并粘贴 Compose 配置</span></h3><ol>
-<li><p><strong>获取代码</strong>：前往该项目的 GitHub 主页文档，找到 <code>docker-compose.yaml</code> 文件，复制其内容。</p>
-</li>
-<li><p><strong>粘贴与修改</strong>：将代码粘贴到飞牛的 Compose 编辑框中，并进行以下关键修改：</p>
-</li>
-<li><p><strong>开始构建</strong>：确认端口、目录路径、管理员密码和邀请码修改无误后，点击 <strong>“确定”</strong>，开始构建。</p>
-</li>
-</ol>
-<hr>
-<h2><span id="️-核心配置首次登录与书源导入">⚙️ 核心配置：首次登录与书源导入</span></h2><p>项目构建完成后，通过 <code>你的NAS的IP地址:端口号</code> 访问 Web 界面。</p>
-<h3><span id="1-首次注册与管理员模式">1. 首次注册与管理员模式</span></h3><ol>
-<li><strong>注册用户</strong>：首次打开，应用没有默认管理员账户。你需要使用你在 Compose 文件中设置的 <strong><code>INVITE_CODE</code> 邀请码</strong> 注册一个新的用户。</li>
-<li><strong>进入管理模式</strong>：登录成功后，在左侧菜单栏底部找到 <strong>“进入管理模式”</strong> 按钮。点击后，输入你在 Compose 文件中设置的 <strong><code>ADMIN_PASSWORD</code> 管理员密码</strong>。</li>
-<li><strong>用户权限管理</strong>：在管理模式下，你可以进入 <strong>“用户权限管理”</strong>，修改用户的书源和书籍上限等，方便你进行家庭或个人管理。</li>
-</ol>
-<h3><span id="2-导入外部书源">2. 导入外部书源</span></h3><p>项目本身不提供书源，需要我们手动导入，但过程非常简单。</p>
-<ol>
-<li><strong>获取书源链接</strong>：<ul>
-<li>访问一些开源的书源提供网站（相关链接请自行搜索获取）。</li>
-<li>复制你想要导入的书源的链接地址。</li>
-</ul>
-</li>
-<li><strong>导入书源</strong>：<ul>
-<li>回到阅读界面，选择 <strong>“书源订阅”</strong> -&gt; <strong>“新增”</strong>。</li>
-<li>粘贴书源链接，并给订阅取一个名称，然后点击 <strong>“同步”</strong>。</li>
-</ul>
-</li>
-</ol>
-<h3><span id="3-阅读体验测试">3. 阅读体验测试</span></h3><p>书源同步完成后，你就可以在搜索框中搜索你喜爱的小说了。</p>
-<ul>
-<li><strong>测试效果</strong>：搜索结果将来自你刚刚导入的书源，可以正常打开阅读，并顺利加入书架。</li>
-<li><strong>纯净无扰</strong>：整个阅读过程界面干净，完全没有广告干扰，真正做到了阅读自由。</li>
-</ul>
-<hr>
-<h2><span id="总结你的专属小说阅读中心">总结：你的专属小说阅读中心</span></h2><p>这款本地小说阅读项目，凭借其无广告、书源自由、完全掌控的优势，为我们提供了一个完美的阅读解决方案。</p>
-<p>如果你也想拥有一个纯净、稳定的阅读环境，强烈推荐你将它部署到你的飞牛 NAS 上！</p>
-<p>感谢大家的阅读！如果你在部署或配置中有任何问题，欢迎在下方留言讨论。我们下期再见！</p>
-]]></content>
-      <tags>
-        <tag>NAS</tag>
-      </tags>
   </entry>
   <entry>
     <title>🚀 自建追剧天堂！MoonTV Docker 部署轻松搞定，告别全网 VIP 限制！</title>
@@ -3112,6 +3052,77 @@
 ]]></content>
       <tags>
         <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>📺 直播源永久稳定！开源电视直播项目，基于官方网页集成（附手机/TV 实测）</title>
+    <url>/post/64/</url>
+    <content><![CDATA[<p><img src="/images/20251115/fm.png"></p>
+<h2><span id="下载地址">下载地址</span></h2><blockquote>
+<p><a href="https://github.com/VonChange/utao">GitHub</a></p>
+</blockquote>
+<p>大家好欢迎来到我的频道，今天给大家分享一个开源的电视直播项目，这是他的主页，项目名称叫油桃TV，现在他已经有两千多颗星星了，证明还是不少人在使用并且觉得不错的，，他其实本质上是一个浏览器，只是把各大电视台的官方网页集成在了里面，也正因为如此他的直播地址会一直稳定有效。并且它在播放的时候会自动调整为全屏播放，下面我来为大家演示。我先 在模拟器上进行测试，然后再到电视上测试实际效果。整个过程不会快进，只会跳过爱优腾这些平台上的广告时间，让大家看到真实的使用效果，大家也可以在时间戳上跳转到电视端测试效果。我的感觉是电视端的没有模拟器上的流畅。可能是我的电视盒子有点老的关系，我的盒子还是两年前的mibox2代。。 大家看完如果感兴趣的话也可以去下载试一试。下面大家就一起来看下测试效果吧。</p>
+<p><img src="/images/20251115/3.png"><br><img src="/images/20251115/1.png"><br><img src="/images/20251115/2.png"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>🚀 彻底告别广告！本地小说阅读项目 Docker 部署教程，书源自由掌控</title>
+    <url>/post/59/</url>
+    <content><![CDATA[<h2><span id="前言自建无广告小说库享受纯净阅读体验">前言：自建无广告小说库，享受纯净阅读体验</span></h2><p>哈喽大家好！</p>
+<p>你是否厌倦了手机阅读 App 中烦人的广告和不稳定的书源？今天，我将为大家带来一个完美的解决方案——一个支持本地部署的<strong>小说阅读项目</strong>！它界面简洁、完全无广告，书源自由导入，所有数据都由你自己掌控，非常适合注重隐私和阅读体验的 NAS 用户。</p>
+<p>本篇教程将手把手教你如何在飞牛 NAS 上通过 Docker Compose 部署和配置这个项目，实现真正的阅读自由！</p>
+<hr>
+<h2><span id="相关地址">相关地址：</span></h2><p> <a href="https://github.com/hectorqin/reader">项目地址</a><br> <a href="https://legado.aoaostar.com/">书源网站</a></p>
+<hr>
+<h2><span id="核心部署飞牛-nas-docker-compose-搭建">🎬 核心部署：飞牛 NAS Docker Compose 搭建</span></h2><h3><span id="第一步创建项目目录与-compose-文件">第一步：创建项目目录与 Compose 文件</span></h3><p>首先，我们为项目创建目录并准备 Compose 部署。</p>
+<ol>
+<li><strong>创建目录</strong>：登录你的飞牛 NAS，进入文件管理。创建一个新的文件夹，例如命名为 <strong><code>reader</code></strong>。</li>
+<li><strong>创建 Compose 项目</strong>：<ul>
+<li>打开 Docker，选择 <strong><code>Compose</code></strong>，点击 <strong>“新增项目”</strong>。</li>
+<li>填写项目名称，路径选择刚才创建的 <code>reader</code> 目录。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="第二步修改并粘贴-compose-配置">第二步：修改并粘贴 Compose 配置</span></h3><ol>
+<li><p><strong>获取代码</strong>：前往该项目的 GitHub 主页文档，找到 <code>docker-compose.yaml</code> 文件，复制其内容。</p>
+</li>
+<li><p><strong>粘贴与修改</strong>：将代码粘贴到飞牛的 Compose 编辑框中，并进行以下关键修改：</p>
+</li>
+<li><p><strong>开始构建</strong>：确认端口、目录路径、管理员密码和邀请码修改无误后，点击 <strong>“确定”</strong>，开始构建。</p>
+</li>
+</ol>
+<hr>
+<h2><span id="️-核心配置首次登录与书源导入">⚙️ 核心配置：首次登录与书源导入</span></h2><p>项目构建完成后，通过 <code>你的NAS的IP地址:端口号</code> 访问 Web 界面。</p>
+<h3><span id="1-首次注册与管理员模式">1. 首次注册与管理员模式</span></h3><ol>
+<li><strong>注册用户</strong>：首次打开，应用没有默认管理员账户。你需要使用你在 Compose 文件中设置的 <strong><code>INVITE_CODE</code> 邀请码</strong> 注册一个新的用户。</li>
+<li><strong>进入管理模式</strong>：登录成功后，在左侧菜单栏底部找到 <strong>“进入管理模式”</strong> 按钮。点击后，输入你在 Compose 文件中设置的 <strong><code>ADMIN_PASSWORD</code> 管理员密码</strong>。</li>
+<li><strong>用户权限管理</strong>：在管理模式下，你可以进入 <strong>“用户权限管理”</strong>，修改用户的书源和书籍上限等，方便你进行家庭或个人管理。</li>
+</ol>
+<h3><span id="2-导入外部书源">2. 导入外部书源</span></h3><p>项目本身不提供书源，需要我们手动导入，但过程非常简单。</p>
+<ol>
+<li><strong>获取书源链接</strong>：<ul>
+<li>访问一些开源的书源提供网站（相关链接请自行搜索获取）。</li>
+<li>复制你想要导入的书源的链接地址。</li>
+</ul>
+</li>
+<li><strong>导入书源</strong>：<ul>
+<li>回到阅读界面，选择 <strong>“书源订阅”</strong> -&gt; <strong>“新增”</strong>。</li>
+<li>粘贴书源链接，并给订阅取一个名称，然后点击 <strong>“同步”</strong>。</li>
+</ul>
+</li>
+</ol>
+<h3><span id="3-阅读体验测试">3. 阅读体验测试</span></h3><p>书源同步完成后，你就可以在搜索框中搜索你喜爱的小说了。</p>
+<ul>
+<li><strong>测试效果</strong>：搜索结果将来自你刚刚导入的书源，可以正常打开阅读，并顺利加入书架。</li>
+<li><strong>纯净无扰</strong>：整个阅读过程界面干净，完全没有广告干扰，真正做到了阅读自由。</li>
+</ul>
+<hr>
+<h2><span id="总结你的专属小说阅读中心">总结：你的专属小说阅读中心</span></h2><p>这款本地小说阅读项目，凭借其无广告、书源自由、完全掌控的优势，为我们提供了一个完美的阅读解决方案。</p>
+<p>如果你也想拥有一个纯净、稳定的阅读环境，强烈推荐你将它部署到你的飞牛 NAS 上！</p>
+<p>感谢大家的阅读！如果你在部署或配置中有任何问题，欢迎在下方留言讨论。我们下期再见！</p>
+]]></content>
+      <tags>
+        <tag>NAS</tag>
       </tags>
   </entry>
 </search>
