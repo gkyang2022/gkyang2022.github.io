@@ -2736,9 +2736,28 @@
 <li><strong>自由扩展</strong>：支持管理员后台手动添加或删除 API 接口源。</li>
 </ul>
 <hr>
-<h2><span id="视频教程">视频教程</span></h2><blockquote>
-<p>制作中</p>
-</blockquote>
+<h2><span id="视频教程">视频教程</span></h2><style>
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<div class="video-container">
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/wO0_UUt2AFk?si=QajXpGiKaNfn1FPD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+
+
 <h2><span id="2-部署前准备">2. 部署前准备</span></h2><p>在部署之前，由于冬瓜TV 需要抓取影视元数据，你必须拥有一个 <strong>TMDB API Key</strong>。</p>
 <ul>
 <li><strong>获取方式</strong>：访问 <a href="https://www.themoviedb.org/">The Movie Database (TMDB)</a> 注册账号，在设置 -&gt; API 中免费申请。</li>
